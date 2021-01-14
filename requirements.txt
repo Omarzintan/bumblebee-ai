@@ -1,0 +1,14 @@
+SpeechRecognition
+wikipedia
+gtts
+selenium
+playsound
+wolframalpha
+pyobjc
+pyaudio
+pyttsx3
+ezgmail
+pydub
+precise-runner
+pvporcupine
+flask
