@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+    "name": "Currenturl",
+    "description": "Fetches current tab url.",
+    "version": "0.1",
+    "author": "Omar Zintan",
+    "browser_action": {
+        "default_icon": "hexagon.svg",
+        "default_title": "Observes current url."
+    },
+    "permissions": ["tabs", "activeTab",
+                    "http://127.0.0.1:5000/*", "storage"],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    }
+}
+       
