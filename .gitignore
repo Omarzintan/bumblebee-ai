@@ -1,0 +1,15 @@
+# Do not push these files
+credentials.json
+token.json
+experimentation
+work_study
+research-files
+bumblebee_app
+database
+notes.org
+__pycache__
+*~
+*#
+**#
+*.pyc
+.DS_Store
