@@ -99,9 +99,7 @@ def start_server():
                 logging.info(data)
 
 def stop_server():
-    global server_proc
     os.killpg(os.getpgid(server_proc.pid), signal.SIGTERM)
-    server_proc = ''
     print('Server stopped')
 
 '''Wake bumblebee up.'''
