@@ -9,7 +9,7 @@ class Keywords:
             "search_google": ['google'],
             "search_youtube": ['youtube'],
             "time": ['time'],
-            "greet": ['hello', 'what\'s up', 'hey', 'yo'],
+            "greet": ['hello', 'what\'s up', 'hey'],
             "help": ['about yourself', 'help me', 'who are you', 'what are you'],
             "notepad": ['open notepad'],
             "send_email": ['send email'],
@@ -20,8 +20,10 @@ class Keywords:
             "open_shell": ['open shell'],
             "clock_in": ['clock in', 'let\'s work', 'start work'],
             "clock_out": ['clock out', 'done working', 'stop work'],
-            "stop_listening": ['stop listening', 'shutdown'],
+            "stop_listening": ['stop listening', 'shutdown', 'shut down'],
         }
 
     def get_keywords(self, key_name):
+        if key_name == 'all':
+            return self.keywords
         return self.keywords[key_name]
