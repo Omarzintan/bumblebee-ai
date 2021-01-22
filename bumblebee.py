@@ -29,6 +29,7 @@ from features import research
 from features import employment
 from features import wake_word_detector
 from features.keywords import Keywords
+from features import configs
 
 ''' Function to capture requests/questions.'''
 def talk():
@@ -362,6 +363,11 @@ def turn_on():
 
         else:
             respond('I do not know how to do this yet.')
+
+def run():
+    for config in configs.config_actions:
+        print(config)
+        config.action('name')
         
 if __name__ == '__main__':    
     global research_topic
@@ -376,4 +382,5 @@ if __name__ == '__main__':
     currently_working=''
     while(1):
         if wake_word_detector.run():
-            turn_on()
+            #turn_on()
+            run()
