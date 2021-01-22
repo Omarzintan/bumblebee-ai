@@ -23,7 +23,7 @@ class Keywords:
             "stop_listening": ['stop listening', 'shutdown', 'shut down'],
         }
 
-    def get_keywords(self, key_name):
+    def get(self, key_name):
         if key_name == 'all':
             return self.keywords
         return self.keywords[key_name]

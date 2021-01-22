@@ -116,13 +116,13 @@ def turn_on():
         text = ''
         text = infinite_speaking_chances(text)
 
-        if any(word in text for word in keywords.get_keywords('sleep')):
+        if any(word in text for word in keywords.get('sleep')):
             respond('Ok. I\'ll be listening for your command.')
             break
 
-        if any(word in text for word in keywords.get_keywords('search_wikipedia')):
+        if any(word in text for word in keywords.get('search_wikipedia')):
             respond('Searching Wikipedia')
-            for word in keywords.get_keywords('search_wikipedia'):
+            for word in keywords.get('search_wikipedia'):
                 text = text.replace(word, '')
             try:
                 results = wikipedia.summary(text, sentences = 3)
@@ -131,18 +131,18 @@ def turn_on():
             except:
                 respond('I could not find anything related to your search on Wikipedia.')
           
-        elif any(word in text for word in keywords.get_keywords('time')):
+        elif any(word in text for word in keywords.get('time')):
             strTime = datetime.datetime.now().strftime('%H:%M:%S')
             respond(f'the time is {strTime}')
 
-        elif any(word in text for word in keywords.get_keywords('search_google')):
-            for word in keywords.get_keywords('search_google'):
+        elif any(word in text for word in keywords.get('search_google')):
+            for word in keywords.get('search_google'):
                 text = text.replace(word, '')
             google.search(text)
             respond('I have opened a browser window with your search on {}.'.format(text))
 
-        elif any(word in text for word in keywords.get_keywords('search_wolframalpha')):
-            for word in keywords.get_keywords('search_wolframalpha'):
+        elif any(word in text for word in keywords.get('search_wolframalpha')):
+            for word in keywords.get('search_wolframalpha'):
                 text = text.replace(word, '')
             app_id = wak.get_key()
             client = wolframalpha.Client(app_id)
@@ -158,13 +158,13 @@ def turn_on():
                 except:
                     respond('Sorry I could not perform your search.')
 
-        elif any(word in text for word in keywords.get_keywords('search_youtube')):
-            for word in keywords.get_keywords('search_youtube'):
+        elif any(word in text for word in keywords.get('search_youtube')):
+            for word in keywords.get('search_youtube'):
                 text = text.replace(word, '')
             youtube.search(text)
             respond('I have opened Youtube with a search on {}'.format(text))
 
-        elif any(word in text for word in keywords.get_keywords('help')):
+        elif any(word in text for word in keywords.get('help')):
             response = """
             My name is Bumblebee. I am Zintan\'s assistant.
             I can do many things such as telling the time, googling 
@@ -172,23 +172,23 @@ def turn_on():
             clock you into work as well as track your browser activity
             in Google Chrome. Look at the list of commands to help.
             """
-            list_of_commands = keywords.get_keywords('all')
+            list_of_commands = keywords.get('all')
             respond(response)
             pprint.pprint(list_of_commands)
 
-        elif any(word in text for word in keywords.get_keywords('greet')):
+        elif any(word in text for word in keywords.get('greet')):
             respond(greeting.greet(text))
 
-        elif any(word in text for word in keywords.get_keywords('notepad')):
+        elif any(word in text for word in keywords.get('notepad')):
             mynotepad.notepad()
             
-        elif any(word in text for word in keywords.get_keywords('add_contact')):
+        elif any(word in text for word in keywords.get('add_contact')):
             respond('What is the name of the contact.')
             name = talk()
             respond('Please type the email address of the contact.')
             email = input('type it here.')
             
-        elif any(word in text for word in keywords.get_keywords('send_email')):
+        elif any(word in text for word in keywords.get('send_email')):
             # get name of email contact
             respond('Who do you want to send the email to?')
             name = ''
@@ -254,11 +254,11 @@ def turn_on():
             else:
                 respond('Okay.')
 
-        elif any(word in text for word in keywords.get_keywords('stop_research')):
+        elif any(word in text for word in keywords.get('stop_research')):
             respond('Stopping research server.')
             stop_server()
             
-        elif any(word in text for word in keywords.get_keywords('start_research')):
+        elif any(word in text for word in keywords.get('start_research')):
             global research_topic
             respond('What is the topic of your research?')
             topic = ''
@@ -280,10 +280,10 @@ def turn_on():
             # start python flask server in new thread
             Thread(target=start_server).start()
         
-        elif any(word in text for word in keywords.get_keywords('open_shell')):
+        elif any(word in text for word in keywords.get('open_shell')):
             shell.MyPrompt().cmdloop()
 
-        elif any(word in text for word in keywords.get_keywords('store_research_data')):
+        elif any(word in text for word in keywords.get('store_research_data')):
             respond('Storing research data.')
             try:
                 filename = research_topic
@@ -295,7 +295,7 @@ def turn_on():
             except:
                 respond('Failed to store research data.')
             
-        elif any(word in text for word in keywords.get_keywords('clock_in')):
+        elif any(word in text for word in keywords.get('clock_in')):
             global currently_working
             global employer
             global work_start_time
@@ -332,7 +332,7 @@ def turn_on():
                 employment.clock_in(employer, work_start_time.strftime('%d-%m-%Y, %H:%M:%S'))
                 respond('You\'ve been clocked in for {}.'.format(employer))
             
-        elif any(word in text for word in keywords.get_keywords('clock_out')):
+        elif any(word in text for word in keywords.get('clock_out')):
             if not currently_working:
                 respond('You\'ve not been clocked in.')
                 continue
@@ -343,7 +343,7 @@ def turn_on():
             employment.clock_out(employer, work_stop_time.strftime('%d-%m-%Y, %H:%M:%S'), duration)
             respond('You\'ve been clocked out.')
         
-        elif any(word in text for word in keywords.get_keywords('stop_listening')):
+        elif any(word in text for word in keywords.get('stop_listening')):
             respond('To get me back you will have to boot me back up. Are you sure?')
             approve = ''
             approve = infinite_speaking_chances(approve)
