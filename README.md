@@ -21,7 +21,9 @@ Starred Features
 browser and stores how long I spend on each tab. The information is then stored in a file whose name Bumblebee requests before staring research mode. The information is stored in a format that is easily
 readable. This feature makes conducting research easier since I will not have to worry about bookmarking certain pages or having to go through my whole history in order to find a site I visited weeks ago.
 Research mode can be turned on/off on demand and so it doesn't store all the sites I visit all of the time.
- I
+(More information about how research mode works will be provided soon)
+
+* see the keywords.py file in features to see what keywords Bumblebee responds to.  
 
 
 
