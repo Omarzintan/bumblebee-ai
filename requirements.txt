@@ -12,3 +12,4 @@ pydub
 precise-runner
 pvporcupine
 flask
+py-imessage
