@@ -3,7 +3,7 @@ Virtual Assistant in Python
 
 About
 This is Bumblebee version 1. She is a virtual assistant made with Python. Bumblebee was made with the intention of automating certain boring or otherwise tedious tasks that I perform on a daily basis.
-Bumblebee was also made with the goal of being easily extendible. (This is very much a work in progress as there are many more features I would like to implement with time.
+Bumblebee was also made with the goal of being easily extendible. (This is very much a work in progress as there are many more features I would like to implement with time.)
 So far, this version of Bumblebee has proven to work well with Python3.8 on MacOS Big Sur. (There was a problem with running on Python3.9 which I will look into soon)
 
 Features
