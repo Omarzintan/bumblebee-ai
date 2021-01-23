@@ -29,6 +29,7 @@ from features import research
 from features import employment
 from features import wake_word_detector
 from features.keywords import Keywords
+from helpers import get_root_directory
 
 ''' Function to capture requests/questions.'''
 def talk():
@@ -36,7 +37,7 @@ def talk():
     sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
     with sr.Microphone() as source:
         input.adjust_for_ambient_noise(source)
-        playsound.playsound(os.environ.get('BUMBLEBEE_PATH')+'sounds/tone-beep.wav', True)
+        playsound.playsound(get_root_directory()+'sounds/tone-beep.wav', True)
         audio = input.listen(source)
         data = ''
         try:
@@ -51,7 +52,7 @@ def respond(output):
     num = 0
     print(output)
     num += 1
-    file = os.environ.get('BUMBLEBEE_PATH')+str(num)+'.wav'
+    file = get_root_directory()+str(num)+'.wav'
     engine = pyttsx3.init()
     engine.setProperty('voice', 'com.apple.speech.synthesis.voice.tessa')
     engine.save_to_file(output, file)
@@ -75,12 +76,12 @@ def infinite_speaking_chances(input):
 def start_server():
     global server_proc
     
-    logging.basicConfig(filename=os.environ.get('BUMBLEBEE_PATH')+'server.log', level=logging.INFO)
+    logging.basicConfig(filename=get_root_directory()+'server.log', level=logging.INFO)
 
     # log the date and time in log file
     logging.info(datetime.datetime.now().strftime('%d:%m:%Y, %H:%M:%S'))
     # Create the subprocess for the flask server.
-    server_proc = subprocess.Popen([os.environ.get('PYTHON3_ENV'), os.environ.get('BUMBLEBEE_PATH')+'server.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
+    server_proc = subprocess.Popen([os.environ.get('PYTHON3_ENV'), get_root_directory()+'server.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
                    
     # Logging stdout and stderr from flask server in a way that preserves order.
     sel = selectors.DefaultSelector()
