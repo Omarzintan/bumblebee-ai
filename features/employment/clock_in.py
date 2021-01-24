@@ -1,6 +1,7 @@
 from features.features import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.employment import helpers
+import features.global_vars as global_vars
 import difflib
 import datetime
 

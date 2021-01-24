@@ -14,6 +14,7 @@ stop_research_server = stop_server.StopServer(keywords.get('stop_research'))
 store_research_data = store_data.StoreData(keywords.get('store_research_data'))
 send_email = send_email.SendEmail(keywords.get('send_email'))
 clock_in = clock_in.ClockIn(keywords.get('clock_in'))
+clock_out = clock_out.ClockOut(keywords.get('clock_out'))
 
 config_actions = [
     #getEmail,
@@ -21,8 +22,9 @@ config_actions = [
     #start_research_server,
     #store_research_data,
     #stop_research_server,
-    #send_email
-    clock_in
+    #send_email,
+    clock_in,
+    clock_out
     ]
 
  #print(config_actions)
