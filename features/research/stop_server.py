@@ -11,6 +11,7 @@ class StopServer(BaseFeature):
     def action(self, spoken_text):
         bs.respond('Stopping research server.')
         self.stop_server()
+        return
 
     def stop_server(self):
         print(glocal_vars.server_proc)

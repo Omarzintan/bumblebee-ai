@@ -15,6 +15,8 @@ class StoreData(BaseFeature):
             res = requests.post(os.getenv('SERVER_URL')+'/store_data', params={'filename': filename})
             res.raise_for_status()
             bs.respond('Research data stored successfully at {}.txt'.format(filename))
+            return
         except:
             print("Unexpected error:", sys.exc_info())
             bs.respond('Failed to store research data.')
+            return

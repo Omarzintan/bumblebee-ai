@@ -18,3 +18,4 @@ class GoogleSearch(BaseFeature):
             spoken_text = spoken_text.replace(word, '')
         wb.open('https://google.com/search?q={}'.format(spoken_text))
         bumble_speech.respond('I have opened a browser window with your search on {}.'.format(spoken_text))
+        return
