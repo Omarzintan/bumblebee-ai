@@ -20,7 +20,7 @@ class BumbleSpeech():
                 data = input.recognize_google(audio)
                 print('You said, ' + data)
             except sr.UnknownValueError:
-                respond('Sorry I did not hear you, please repeat.')
+                self.respond('Sorry I did not hear you, please repeat.')
         return data
 
     ''' Respond to requests/questions.'''
@@ -36,3 +36,14 @@ class BumbleSpeech():
         playsound.playsound(file, True)
         os.remove(file)
 
+    '''Give user chance to repeat when bumblebee doesn't hear properly.'''    
+    def infinite_speaking_chances(self, input):
+        while input == '':
+            input = self.hear().lower()
+        return input
+
+    '''Check for cancel command from user.'''    
+    def interrupt_check(self, input):
+        if "stop" in input or "cancel" in input:
+            self.respond("Okay.")
+            return True

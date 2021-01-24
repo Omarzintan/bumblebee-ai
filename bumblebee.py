@@ -368,6 +368,7 @@ def run():
     for config in configs.config_actions:
         print(config)
         config.action('name')
+        time.sleep(5)
         
 if __name__ == '__main__':    
     global research_topic
