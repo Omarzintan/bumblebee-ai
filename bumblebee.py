@@ -229,7 +229,7 @@ def turn_on():
             # edit email
             respond('Would you like to edit this?')
             edit = ''
-            edit = inifinite_speaking_chances(edit)
+            edit = infinite_speaking_chances(edit)
             if interrupt_check(edit):
                 continue
             if 'yes' in edit or 'yeah' in edit:
