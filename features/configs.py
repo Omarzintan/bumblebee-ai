@@ -4,6 +4,8 @@ from features.google import *
 from features.research import *
 from features.myemail import *
 from features.employment import *
+from features.mywolframalpha import *
+from features.control import *
 
 keywords = Keywords()
 
@@ -15,6 +17,9 @@ store_research_data = store_data.StoreData(keywords.get('store_research_data'))
 send_email = send_email.SendEmail(keywords.get('send_email'))
 clock_in = clock_in.ClockIn(keywords.get('clock_in'))
 clock_out = clock_out.ClockOut(keywords.get('clock_out'))
+wolfram_search = wolfram_search.WolframalphaSearch(keywords.get('search_wolframalpha'))
+sleep = sleep.Sleep(keywords.get('sleep'))
+stop_listening = stop_listening.StopListening(keywords.get('stop_listening'))
 
 config_actions = [
     #getEmail,
@@ -23,8 +28,11 @@ config_actions = [
     #store_research_data,
     #stop_research_server,
     #send_email,
-    clock_in,
-    clock_out
+    #clock_in,
+    #clock_out,
+    #wolfram_search,
+    sleep,
+    stop_listening
     ]
 
  #print(config_actions)

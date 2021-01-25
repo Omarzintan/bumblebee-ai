@@ -32,32 +32,4 @@ class StartServer(BaseFeature):
         bs.respond('Starting server for research on {}'.format(topic))
         glocal_vars.research_topic = topic
         # start python flask server in new thread
-        threading.Thread(target=self.start_server).start()
-
-
-    '''Starts the flask server for research mode.'''
-    def start_server(self):
-        logging.basicConfig(filename=os.environ.get('BUMBLEBEE_PATH')+'server.log', level=logging.INFO)
-
-        # log the date and time in log file
-        logging.info(datetime.datetime.now().strftime('%d:%m:%Y, %H:%M:%S'))
-        # Create the subprocess for the flask server.
-        glocal_vars.server_proc = subprocess.Popen([os.environ.get('PYTHON3_ENV'), os.environ.get('BUMBLEBEE_PATH')+'server.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
-                   
-        # Logging stdout and stderr from flask server in a way that preserves order.
-        sel = selectors.DefaultSelector()
-        sel.register(glocal_vars.server_proc.stdout, selectors.EVENT_READ)
-        sel.register(glocal_vars.server_proc.stderr, selectors.EVENT_READ)
-
-        while True:
-            for key, _ in sel.select():
-                data = key.fileobj.read1().decode()
-                if not data:
-                    exit()
-                if key.fileobj is glocal_vars.server_proc.stdout:
-                    # Send stdout to log file
-                    logging.info(data)                
-                else:
-                    # Send stderr to log file
-                    logging.info(data)
-
+        threading.Thread(target=helpers.start_server).start()
