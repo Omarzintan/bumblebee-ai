@@ -58,6 +58,7 @@ def stop_server():
     print(glocal_vars.server_proc.pid)
     try:
         os.killpg(os.getpgid(glocal_vars.server_proc.pid), signal.SIGTERM)
+        glocal_vars.server_proc = ''
         print('Server stopped')
         return
     except:

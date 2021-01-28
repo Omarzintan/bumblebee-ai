@@ -1,5 +1,4 @@
 from features.keywords import Keywords
-from features.contacts import *
 from features.google import *
 from features.research import *
 from features.myemail import *
@@ -15,7 +14,6 @@ from features.time import *
 
 keywords = Keywords()
 
-getEmail = getemail.GetEmail(['get email'])
 google_search = google_search.GoogleSearch(keywords.get('search_google'))
 start_research_server = start_server.StartServer(keywords.get('start_research'))
 stop_research_server = stop_server.StopServer(keywords.get('stop_research'))
@@ -34,23 +32,20 @@ open_notepad = open_notepad.OpenNotepad(keywords.get('open_notepad'))
 get_time = get_time.GetTime(keywords.get('time'))
 
 config_actions = [
-    #getEmail,
-    #google_search,
-    #start_research_server,
-    #store_research_data,
-    #stop_research_server,
-    #send_email,
-    #clock_in,
-    #clock_out,
-    #wolfram_search,
-    #sleep,
-    #stop_listening,
-    #greet,
-    #youtube_search,
-    #wiki_search,
-    #bumble_help,
-    #open_notepad,
+    google_search,
+    start_research_server,
+    store_research_data,
+    stop_research_server,
+    send_email,
+    clock_in,
+    clock_out,
+    wolfram_search,
+    sleep,
+    stop_listening,
+    greet,
+    youtube_search,
+    wiki_search,
+    bumble_help,
+    open_notepad,
     get_time
 ]
-
- #print(config_actions)

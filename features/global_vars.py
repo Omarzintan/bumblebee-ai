@@ -6,3 +6,4 @@ bumble_speech = BumbleSpeech()
 currently_working = False
 employer = ''
 work_start_time = ''
+sleep = 0
