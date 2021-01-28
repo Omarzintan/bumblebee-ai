@@ -11,7 +11,7 @@ class Keywords:
             "time": ['time'],
             "greet": ['hello', 'what\'s up', 'hey'],
             "help": ['about yourself', 'help me', 'who are you', 'what are you'],
-            "notepad": ['open notepad'],
+            "open_notepad": ['open notepad'],
             "send_email": ['send email'],
             "add_contact": ['add email contact', 'add contact'],
             "stop_research": ['stop research', 'exit research mode', 'done researching'],

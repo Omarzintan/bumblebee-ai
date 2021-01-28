@@ -9,6 +9,9 @@ from features.control import *
 from features.greeting import *
 from features.youtube import *
 from features.mywikipedia import *
+from features.bumblebee_help import *
+from features.mynotepad import *
+from features.time import *
 
 keywords = Keywords()
 
@@ -26,6 +29,9 @@ stop_listening = stop_listening.StopListening(keywords.get('stop_listening'))
 greet = greeting.Greeting(keywords.get('greet'))
 youtube_search = youtube_search.YoutubeSearch(keywords.get('search_youtube'))
 wiki_search = wiki_search.WikipediaSearch(keywords.get('search_wikipedia'))
+bumble_help = bumble_help.BumbleHelp(keywords.get('help'))
+open_notepad = open_notepad.OpenNotepad(keywords.get('open_notepad'))
+get_time = get_time.GetTime(keywords.get('time'))
 
 config_actions = [
     #getEmail,
@@ -36,12 +42,15 @@ config_actions = [
     #send_email,
     #clock_in,
     #clock_out,
-    wolfram_search,
+    #wolfram_search,
     #sleep,
     #stop_listening,
     #greet,
     #youtube_search,
-    #wiki_search
-    ]
+    #wiki_search,
+    #bumble_help,
+    #open_notepad,
+    get_time
+]
 
  #print(config_actions)
