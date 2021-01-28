@@ -1,20 +1,11 @@
 #!python3
+from features.features import BaseFeature
+from features.global_vars import bumble_speech as bs
+from features.greeting import glocal_vars, helpers
 
-import random
+class Greeting(BaseFeature):
+    def __init__(self, keywords):
+        self.keywords = keywords
 
-greetings = [
-    'Hey there!',
-    'Wassup',
-    'Yeo',
-    'Hello',
-    'How be?',
-    'Good day.'
-]
-
-'''
-Returns a random greeting.
-Argument: <string> input
-Return type: <string>
-'''
-def greet(input):
-    return random.choice(greetings)
+    def action(self, spoken_text):
+        bs.respond(helpers.greet(spoken_text))

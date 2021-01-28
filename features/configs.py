@@ -6,6 +6,9 @@ from features.myemail import *
 from features.employment import *
 from features.mywolframalpha import *
 from features.control import *
+from features.greeting import *
+from features.youtube import *
+from features.mywikipedia import *
 
 keywords = Keywords()
 
@@ -20,6 +23,9 @@ clock_out = clock_out.ClockOut(keywords.get('clock_out'))
 wolfram_search = wolfram_search.WolframalphaSearch(keywords.get('search_wolframalpha'))
 sleep = sleep.Sleep(keywords.get('sleep'))
 stop_listening = stop_listening.StopListening(keywords.get('stop_listening'))
+greet = greeting.Greeting(keywords.get('greet'))
+youtube_search = youtube_search.YoutubeSearch(keywords.get('search_youtube'))
+wiki_search = wiki_search.WikipediaSearch(keywords.get('search_wikipedia'))
 
 config_actions = [
     #getEmail,
@@ -30,9 +36,12 @@ config_actions = [
     #send_email,
     #clock_in,
     #clock_out,
-    #wolfram_search,
-    sleep,
-    stop_listening
+    wolfram_search,
+    #sleep,
+    #stop_listening,
+    #greet,
+    #youtube_search,
+    #wiki_search
     ]
 
  #print(config_actions)

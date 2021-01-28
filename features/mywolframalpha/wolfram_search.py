@@ -1,25 +1,30 @@
 from features.features import BaseFeature
 from features.global_vars import bumble_speech as bs
+from features.mywolframalpha import helpers
 from database import wolframalpha_key as wak
 import wolframalpha
+from features.keywords import Keywords
+from features.mywikipedia import *
+import sys
 
 class WolframalphaSearch(BaseFeature):
     def __init__(self, keywords):
         self.keywords = keywords
 
     def action(self, spoken_text):
-        for word in self.keywords:
-            spoken_text = spoken_text.replace(word, '')
+        search_query = helpers.get_search_query(spoken_text, self.keywords)
         app_id = wak.get_key()
         client = wolframalpha.Client(app_id)
         try:
-            res = client.query(spoken_text)
+            bs.respond('Searching Wolframalpha')
+            res = client.query(search_query)
             answer = next(res.results).text
             bs.respond('The answer is ' + answer)
         except:
-            try:
-                answer = wikipedia.summary(question, sentences = 2)
-                bs.respond('According to Wikipedia')
-                bs.respond(answer)
-            except:
-                bs.respond('Sorry I could not perform your search.')
+            # Trying Wikipedia
+            bs.respond('I found nothing on Wolframalpha. Trying Wikipedia')
+            keywords = Keywords()
+            wiki_keywords = keywords.get('search_wikipedia')
+            wiki_search_obj = wiki_search.WikipediaSearch(wiki_keywords)
+            wiki_search_obj.action(spoken_text)
+            return
