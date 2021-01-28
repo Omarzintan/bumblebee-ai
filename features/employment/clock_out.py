@@ -11,7 +11,7 @@ class ClockOut(BaseFeature):
 
     def action(self, spoken_text):
         if not global_vars.currently_working:
-            respond('You\'ve not been clocked in.')
+            bs.respond('You\'ve not been clocked in.')
             return
         global_vars.currently_working = False
         work_stop_time = datetime.datetime.now()
