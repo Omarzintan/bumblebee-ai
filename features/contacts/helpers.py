@@ -1,8 +1,6 @@
 #!python3
 import json, os
 
-# To be Deprecated soon.
-
 '''
 Open my contacts.json file and load it as json. ADD TO GLOBALS
 '''
