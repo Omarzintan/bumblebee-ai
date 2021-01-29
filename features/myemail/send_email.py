@@ -5,6 +5,7 @@ from features.contacts import helpers as contact_help
 import difflib
 import ezgmail
 import json
+import os
 
 class SendEmail(BaseFeature):
     def __init__(self, keywords):
@@ -68,7 +69,7 @@ class SendEmail(BaseFeature):
             return
         if approve == 'yes':
             # send email
-            ezgmail.init()
+            ezgmail.init(tokenFile=os.getenv('BUMBLEBEE_PATH')+'token.json', credentialsFile=os.getenv('BUMBLEBEE_PATH')+'credentials.json')
             message += "\n\n\n Bumblebee (Zintan's ai assistant)"
             ezgmail.send(recipient, subject, message)
             bs.respond('I have sent the email.')
