@@ -2,7 +2,7 @@
 import json, os
 
 '''
-Open my contacts.json file and load it as json.
+Open my contacts.json file and load it as json. ADD TO GLOBALS
 '''
 f = open(os.environ.get('BUMBLEBEE_PATH')+'database/contacts.json')
 data = json.load(f)
@@ -25,3 +25,5 @@ def get_email(name):
         if name == contact['name'].lower():
             return contact['email']
     return ''
+
+
