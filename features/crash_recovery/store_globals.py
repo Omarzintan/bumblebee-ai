@@ -1,4 +1,5 @@
 from features import global_vars
+from features.global_vars import bumble_speech as bs
 from features.research import helpers as research_help
 from features.research import glocal_vars as research_glocal
 import json, pickle
@@ -46,6 +47,7 @@ def start_gracefully():
 def exit_gracefully():
     print('Exiting gracefully.')
     if research_glocal.server_proc:
+        bs.respond('Closing research server gracefully.')
         research_help.store_data()
         research_help.stop_server()
     if global_vars.currently_working:
