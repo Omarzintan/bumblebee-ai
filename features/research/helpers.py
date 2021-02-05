@@ -10,7 +10,7 @@ import subprocess
 import signal
 import logging, selectors
 import datetime
-from helpers import get_root_directory
+from helpers import bumblebee_root
 
 '''
 Opens a Tkinter window to allow the user to edit the research topic as heard.
@@ -70,12 +70,12 @@ def stop_server():
     
 '''Starts the flask server for research mode.'''
 def start_server():
-        logging.basicConfig(filename=get_root_directory()+'server.log', level=logging.INFO)
+        logging.basicConfig(filename=bumblebee_root+'server.log', level=logging.INFO)
 
         # log the date and time in log file
         logging.info(datetime.datetime.now().strftime('%d:%m:%Y, %H:%M:%S'))
         # Create the subprocess for the flask server.
-        glocal_vars.server_proc = subprocess.Popen([os.environ.get('PYTHON3_ENV'), get_root_directory()+'server.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
+        glocal_vars.server_proc = subprocess.Popen([os.environ.get('PYTHON3_ENV'), bumblebee_root+'server.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
                    
         # Logging stdout and stderr from flask server in a way that preserves order.
         sel = selectors.DefaultSelector()

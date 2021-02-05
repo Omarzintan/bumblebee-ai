@@ -2,7 +2,7 @@
 import json, os
 import sys
 import logging
-from helpers import get_root_directory, get_logger
+from helpers import bumblebee_root, get_logger
 
 logger = get_logger(__name__)
 
@@ -14,7 +14,7 @@ empty_data_dict = {
 }
 
 try:
-    f = open(get_root_directory()+'database/contacts.json')
+    f = open(bumblebee_root+'database/contacts.json')
     data = json.load(f)
 except Exception as e:
     data = empty_data_dict
