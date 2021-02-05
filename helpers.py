@@ -2,15 +2,6 @@ import os
 import logging
 from colorlog import ColoredFormatter
 
-def get_root_directory():
-    '''Gets the root directory of the project. Source: https://www.kite.com/python/answers/how-to-get-the-path-of-the-root-project-structure-in-python'''
-    bumblebee_root_dir = os.getenv('BUMBLEBEE_PATH')
-    if not bumblebee_root_dir:
-        top_level_filename = "bumblebee.py"
-        bumblebee_root_dir = os.path.dirname(os.path.abspath(top_level_filename))
-        
-    return bumblebee_root_dir + "/"
-
 def get_logger(name, with_formatting=True, dest=None, format_string=None, log_level=logging.DEBUG):
     '''Get logger with specific format string. Raises exception if error occurs.
     Sources: https://www.machinelearningplus.com/python/python-logging-guide/, 
@@ -34,3 +25,17 @@ def get_logger(name, with_formatting=True, dest=None, format_string=None, log_le
         
     logger.addHandler(handler)
     return logger
+
+logger  = get_logger(__name__)
+
+def get_root_directory():
+    '''Gets the root directory of the project. Source: https://www.kite.com/python/answers/how-to-get-the-path-of-the-root-project-structure-in-python'''
+    bumblebee_root_dir = os.getenv('BUMBLEBEE_PATH')
+    if not bumblebee_root_dir:
+        logger.debug("No BUMBLEBEE_PATH is set in environment. Computing root directory instead.")
+        top_level_filename = "bumblebee.py"
+        bumblebee_root_dir = os.path.dirname(os.path.abspath(top_level_filename))
+        
+    return bumblebee_root_dir + "/" 
+
+bumblebee_root = get_root_directory()
