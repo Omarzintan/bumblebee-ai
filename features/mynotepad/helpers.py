@@ -30,7 +30,7 @@ def notepad():
 
     # Button Creation
     printButton = Button(root, text = "Done", command = printInput)
-    printButton.pack(side = Bottom)
+    printButton.pack(side = BOTTOM)
 
     # Label Creation
     lbl = Label(root, text = "")
