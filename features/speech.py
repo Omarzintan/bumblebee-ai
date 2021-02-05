@@ -4,6 +4,7 @@ import speech_recognition as sr
 import os
 import playsound
 import pyttsx3
+from helpers import get_root_directory
 
 
 class BumbleSpeech():
@@ -13,7 +14,7 @@ class BumbleSpeech():
         sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
         with sr.Microphone() as source:
             input.adjust_for_ambient_noise(source)
-            playsound.playsound(os.environ.get('BUMBLEBEE_PATH')+'sounds/tone-beep.wav', True)
+            playsound.playsound(get_root_directory()+'sounds/tone-beep.wav', True)
             audio = input.listen(source)
             data = ''
             try:
@@ -28,7 +29,7 @@ class BumbleSpeech():
         num = 0
         print(output)
         num += 1
-        file = os.environ.get('BUMBLEBEE_PATH')+str(num)+'.wav'
+        file = get_root_directory()+str(num)+'.wav'
         engine = pyttsx3.init()
         engine.setProperty('voice', 'com.apple.speech.synthesis.voice.tessa')
         engine.save_to_file(output, file)
