@@ -4,6 +4,7 @@ from features.global_vars import bumble_speech as bs
 from features.keywords import Keywords
 from features import configs
 from features import global_vars
+from features.crash_recovery import store_globals as cr
 
 def run():
     bs.respond('Hey.')
@@ -24,6 +25,10 @@ def run():
         
 if __name__ == '__main__':    
     while(1):
-        if wake_word_detector.run():
-            global_vars.sleep = 0
-            run()
+        try:
+            cr.start_gracefully()
+            if wake_word_detector.run():
+                global_vars.sleep = 0
+                run()
+        except IOError:
+            cr.exit_gracefully()
