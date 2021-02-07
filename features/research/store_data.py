@@ -1,7 +1,6 @@
 from features.features import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.research import glocal_vars, helpers
-import requests
 import os, sys
 
 class StoreData(BaseFeature):
