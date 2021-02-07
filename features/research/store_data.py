@@ -10,10 +10,7 @@ class StoreData(BaseFeature):
 
     def action(self, spoken_text):
         try:
-            filename = glocal_vars.research_topic
-            filename = filename.replace(' ', '-')
-            res = requests.post(os.getenv('SERVER_URL')+'/store_data', params={'filename': filename})
-            res.raise_for_status()
+            filename = helpers.store_data()
             bs.respond('Research data stored successfully at {}.txt'.format(filename))
             return
         except:

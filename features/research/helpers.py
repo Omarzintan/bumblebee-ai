@@ -11,6 +11,7 @@ import signal
 import logging, selectors
 import datetime
 from helpers import bumblebee_root
+import requests
 
 '''
 Opens a Tkinter window to allow the user to edit the research topic as heard.
@@ -93,3 +94,11 @@ def start_server():
                 else:
                     # Send stderr to log file
                     logging.info(data)
+
+''' Sends request to research server to store research data.'''
+def store_data():
+    filename = glocal_vars.research_topic
+    filename = filename.replace(' ', '-')
+    res = requests.post(os.getenv('SERVER_URL')+'/store_data', params={'filename': filename})
+    res.raise_for_status()
+    return filename
