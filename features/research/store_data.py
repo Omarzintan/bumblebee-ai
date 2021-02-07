@@ -10,7 +10,7 @@ class StoreData(BaseFeature):
 
     def action(self, spoken_text):
         try:
-            request, filename = helpers.store_data()
+            filename = helpers.store_data()
             bs.respond('Research data stored successfully at {}.txt'.format(filename))
             return
         except:

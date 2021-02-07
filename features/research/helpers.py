@@ -100,4 +100,4 @@ def store_data():
     filename = filename.replace(' ', '-')
     res = requests.post(os.getenv('SERVER_URL')+'/store_data', params={'filename': filename})
     res.raise_for_status()
-    return res, filename
+    return filename
