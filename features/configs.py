@@ -11,6 +11,7 @@ from features.mywikipedia import *
 from features.bumblebee_help import *
 from features.mynotepad import *
 from features.time import *
+from features.zoom import *
 
 keywords = Keywords()
 
@@ -30,6 +31,7 @@ wiki_search = wiki_search.WikipediaSearch(keywords.get('search_wikipedia'))
 bumble_help = bumble_help.BumbleHelp(keywords.get('help'))
 open_notepad = open_notepad.OpenNotepad(keywords.get('open_notepad'))
 get_time = get_time.GetTime(keywords.get('time'))
+add_zoom = add_zoom.AddZoom(keywords.get('add_zoom'))
 
 config_actions = [
     google_search,
@@ -47,5 +49,6 @@ config_actions = [
     wiki_search,
     bumble_help,
     open_notepad,
-    get_time
+    get_time,
+    add_zoom
 ]

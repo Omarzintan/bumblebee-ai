@@ -21,6 +21,7 @@ class Keywords:
             "clock_in": ['clock in', 'let\'s work', 'start work'],
             "clock_out": ['clock out', 'done working', 'stop work'],
             "stop_listening": ['stop listening', 'shutdown', 'shut down'],
+            "add_zoom": ['add zoom link']
         }
 
     def get(self, key_name):
