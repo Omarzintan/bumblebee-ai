@@ -1,11 +1,24 @@
 #!python3
 import json, os
+import sys
+import logging
+from helpers import bumblebee_root, get_logger
+
+logger = get_logger(__name__)
 
 '''
 Open my contacts.json file and load it as json. ADD TO GLOBALS
 '''
-f = open(os.environ.get('BUMBLEBEE_PATH')+'database/contacts.json')
-data = json.load(f)
+empty_data_dict = {
+    "contacts": []
+}
+
+try:
+    f = open(bumblebee_root+'database/contacts.json')
+    data = json.load(f)
+except Exception as e:
+    data = empty_data_dict
+    logger.warning('No contacts.json found in database directory. Contacts feature may not work as expected.')
 
 '''
 Returns all the names in my conctacts.json file.

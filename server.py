@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import time
 import os, sys
 import textwrap
+from helpers import bumblebee_root
 
 '''
 This file contains server code to be used by bumblebee.py research mode.
@@ -134,10 +135,10 @@ def store_data():
     filename = request.args.get('filename')
     
     # Store files in ./research-files
-    os.makedirs(os.environ.get('BUMBLEBEE_PATH')+'research-files', exist_ok=True)
+    os.makedirs(bumblebee_root+'research-files', exist_ok=True)
     
     # Open the file
-    file = open(os.environ.get('BUMBLEBEE_PATH')+os.path.join('research-files', filename+'.txt'), 'a+')
+    file = open(bumblebee_root+os.path.join('research-files', filename+'.txt'), 'a+')
 
     # Write data to the file
     for key in parent_url_timestamp.keys():

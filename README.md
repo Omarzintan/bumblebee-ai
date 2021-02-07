@@ -26,4 +26,8 @@ Research mode can be turned on/off on demand and so it doesn't store all the sit
 * see the keywords.py file in features to see what keywords Bumblebee responds to.  
 
 
+Troubleshooting
+1. Bumblebee says "Listening..." but does not respond to wake-word? 
+  - If on MacOS Terminal, you will have to make sure audio permissions are enabled through System Preferences and try again.
+  - For VSCode, make sure that audio permissions are enabled for MacOS terminal through System Preferences, and then launch Bumblebee through MacOS Terminal app. See [here](https://github.com/microsoft/vscode/issues/95062#issuecomment-625553211) for detailed steps.
 
