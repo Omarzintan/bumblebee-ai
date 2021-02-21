@@ -1,7 +1,7 @@
 '''Open zoom link in a web browser'''
 from features.features import BaseFeature
 from features.global_vars import bumble_speech as bs
-from features.zoom import glocal_vars, helpers
+from features.zoom import helpers
 
 class OpenZoom(BaseFeature):
     def __init__(self, keywords):
@@ -9,8 +9,13 @@ class OpenZoom(BaseFeature):
 
     def action(self, spoken_text):
         # get class name from the query
-        # search database for class details (in helpers)
-        # if class has password, copy password to clipboard (in helpers)
-            # if (has_password(): bs.respond(copied password to clipboard)
+        name = helpers.get_search_query(spoken_text, self.keywords)
         # open zoom link in browser
-        pass
+        print(name)
+        link_found, has_password = helpers.open_zoom(name)
+        print(link_found, has_password)
+        if link_found:
+            bs.respond('I have opened the zoom link in a browser window.')
+            if has_password:
+                bs.respond('I have copied the password to the clip board. Press ctrl+v to paste it.')
+        return

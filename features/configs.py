@@ -32,6 +32,7 @@ bumble_help = bumble_help.BumbleHelp(keywords.get('help'))
 open_notepad = open_notepad.OpenNotepad(keywords.get('open_notepad'))
 get_time = get_time.GetTime(keywords.get('time'))
 add_zoom = add_zoom.AddZoom(keywords.get('add_zoom'))
+open_zoom = open_zoom.OpenZoom(keywords.get('open_zoom'))
 
 config_actions = [
     google_search,
@@ -50,5 +51,6 @@ config_actions = [
     bumble_help,
     open_notepad,
     get_time,
-    add_zoom
+    add_zoom,
+    open_zoom
 ]

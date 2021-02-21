@@ -1,10 +1,13 @@
 from tkinter import *
 import json
 from tinydb import TinyDB, Query
+import pyperclip as pc
+import webbrowser
 
 zoom_db = TinyDB('zoom_db.json')
 '''
 Opens a Tkinter window to allow the user to add a zoom link to the database.
+Arguments: None
 Return type: <JSON> zoom_details_json
 '''
 def add_zoom_details():
@@ -29,10 +32,12 @@ def add_zoom_details():
 
     # retrieve zoom details from window.
     def saveInput():
+        global zoom_db
         zoom_details["name"] = str(name_entry.get())
         zoom_details["link"] = str(link_entry.get())
         zoom_details["password"] = str(password_entry.get())
         zoom_db.insert(zoom_details)
+        print(zoom_db.all())
         root.destroy()
 
     def clear():
@@ -49,3 +54,52 @@ def add_zoom_details():
     root.mainloop()
 
     return zoom_details
+
+'''Returns all items in zoom_db'''
+def show_database():
+    for item in zoom_db:
+        print(item)
+
+'''Removes all items from zoom_db.'''
+def clear_database():
+    global zoom_db
+    zoom_db.trunctate()
+
+'''Searches for specific item based on its name'''
+def search_db(name):
+    Item = Query()
+    results_list = zoom_db.search(Item.name == name)
+    return results_list
+
+'''
+Opens zoom link based on given name.
+Arguments: <string> name
+Return type: <boolean> found, <boolean> has_password
+'''
+def open_zoom(name):
+    print(zoom_db.all())
+    has_password = False
+    found = False
+    search_results = search_db(name)
+    print('search:', search_results)
+    if not search_results:
+        return found, has_password
+    found = True
+    # current policy is to use the first search result from search_db
+    result = search_results[0]
+    if result.password:
+        has_password = True
+        # copy password to clipboard
+        pc.copy(result.password)
+    webbrowser.open(result.link)
+    return found, has_password
+
+'''
+Parse spoken text to retrieve a search query for Zoom.
+Arguments: <string> spoken_text, <list> keywords
+Return type: <string> spoken_text (now stripped down to only the search query.)
+'''
+def get_search_query(spoken_text, keywords):
+    for word in keywords:
+        spoken_text = spoken_text.replace(word, '')
+    return spoken_text
