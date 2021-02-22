@@ -105,5 +105,5 @@ def get_search_query(spoken_text, keywords):
     for word in keywords:
         spoken_text = spoken_text.replace(word, '')
          # Need to remove all whitespace, otherwise the zoom_db search will return nothing.
-         spoken_text = spoken_text.replace(' ', '')
+        spoken_text = spoken_text.replace(' ', '')
     return spoken_text
