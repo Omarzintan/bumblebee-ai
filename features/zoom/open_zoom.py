@@ -14,8 +14,9 @@ class OpenZoom(BaseFeature):
         print(name)
         link_found, has_password = helpers.open_zoom(name)
         print(link_found, has_password)
-        if link_found:
-            bs.respond('I have opened the zoom link in a browser window.')
-            if has_password:
-                bs.respond('I have copied the password to the clip board. Press ctrl+v to paste it.')
+        if not link_found:
+            bs.respond('I could not find this zoom link.')
+        bs.respond('I have opened the zoom link in a browser window.')
+        if has_password:
+            bs.respond('I have copied the password to the clip board. Press ctrl+v to paste it.')
         return

@@ -3,8 +3,9 @@ import json
 from tinydb import TinyDB, Query
 import pyperclip as pc
 import webbrowser
+import os
 
-zoom_db = TinyDB('zoom_db.json')
+zoom_db = TinyDB(os.getenv('BUMBLEBEE_PATH')+'features/zoom/zoom_db.json')
 '''
 Opens a Tkinter window to allow the user to add a zoom link to the database.
 Arguments: None
@@ -67,7 +68,9 @@ def clear_database():
 
 '''Searches for specific item based on its name'''
 def search_db(name):
+    global zoom_db
     Item = Query()
+    print('searching: ', zoom_db)
     results_list = zoom_db.search(Item.name == name)
     return results_list
 
@@ -77,7 +80,6 @@ Arguments: <string> name
 Return type: <boolean> found, <boolean> has_password
 '''
 def open_zoom(name):
-    print(zoom_db.all())
     has_password = False
     found = False
     search_results = search_db(name)
@@ -87,11 +89,11 @@ def open_zoom(name):
     found = True
     # current policy is to use the first search result from search_db
     result = search_results[0]
-    if result.password:
+    if result['password']:
         has_password = True
         # copy password to clipboard
         pc.copy(result.password)
-    webbrowser.open(result.link)
+    webbrowser.open(result['link'])
     return found, has_password
 
 '''
@@ -102,4 +104,6 @@ Return type: <string> spoken_text (now stripped down to only the search query.)
 def get_search_query(spoken_text, keywords):
     for word in keywords:
         spoken_text = spoken_text.replace(word, '')
+         # Need to remove all whitespace, otherwise the zoom_db search will return nothing.
+         spoken_text = spoken_text.replace(' ', '')
     return spoken_text
