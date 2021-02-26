@@ -5,7 +5,7 @@ import pyperclip as pc
 import webbrowser
 import os
 
-zoom_db = TinyDB(os.getenv('BUMBLEBEE_PATH')+'features/zoom/zoom_db.json')
+zoom_db = TinyDB(os.getenv('BUMBLEBEE_PATH')+'database/zoom_db.json')
 '''
 Opens a Tkinter window to allow the user to add a zoom link to the database.
 Arguments: None
@@ -34,11 +34,10 @@ def add_zoom_details():
     # retrieve zoom details from window.
     def saveInput():
         global zoom_db
-        zoom_details["name"] = str(name_entry.get())
-        zoom_details["link"] = str(link_entry.get())
+        zoom_details["name"] = str(name_entry.get().lower())
+        zoom_details["link"] = str(link_entry.get().lower())
         zoom_details["password"] = str(password_entry.get())
         zoom_db.insert(zoom_details)
-        print(zoom_db.all())
         root.destroy()
 
     def clear():
@@ -70,7 +69,6 @@ def clear_database():
 def search_db(name):
     global zoom_db
     Item = Query()
-    print('searching: ', zoom_db)
     results_list = zoom_db.search(Item.name == name)
     return results_list
 
@@ -83,7 +81,6 @@ def open_zoom(name):
     has_password = False
     found = False
     search_results = search_db(name)
-    print('search:', search_results)
     if not search_results:
         return found, has_password
     found = True
@@ -104,6 +101,6 @@ Return type: <string> spoken_text (now stripped down to only the search query.)
 def get_search_query(spoken_text, keywords):
     for word in keywords:
         spoken_text = spoken_text.replace(word, '')
-         # Need to remove all whitespace, otherwise the zoom_db search will return nothing.
+         # Need to remove whitespace before and after the wanted query, otherwise the zoom_db search will return nothing.
         spoken_text = spoken_text.strip()
     return spoken_text

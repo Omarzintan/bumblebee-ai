@@ -11,9 +11,7 @@ class OpenZoom(BaseFeature):
         # get class name from the query
         name = helpers.get_search_query(spoken_text, self.keywords)
         # open zoom link in browser
-        print(name)
-        link_found, has_password = helpers.open_zoom(name)
-        print(link_found, has_password)
+        link_found, has_password = helpers.open_zoom(name.lower())
         if not link_found:
             bs.respond('I could not find this zoom link.')
             return
