@@ -14,3 +14,5 @@ pvporcupine
 flask
 py-imessage
 colorlog
+TinyDB
+pyperclip

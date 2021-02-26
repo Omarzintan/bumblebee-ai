@@ -15,7 +15,7 @@ def run():
         text = bs.infinite_speaking_chances(text)
 
         for config in configs.config_actions:
-            if any(word in text for word in config.keywords):
+            if any(word in text.lower() for word in config.keywords):
                 action_found = True
                 config.action(text)
                 break

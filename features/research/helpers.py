@@ -3,8 +3,6 @@
 from tkinter import *
 import json
 import os, sys
-from features.features import BaseFeature
-from features.global_vars import bumble_speech as bs
 from features.research import glocal_vars
 import subprocess
 import signal
