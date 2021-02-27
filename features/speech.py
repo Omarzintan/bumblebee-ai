@@ -6,19 +6,30 @@ import playsound
 import pyttsx3
 from helpers import bumblebee_root
 
-
+silent_mode = False
 class BumbleSpeech():
+    '''Function to set silent mode.'''
+    def set_silent_mode(self, bool_val):
+        global silent_mode
+        if not isinstance(bool_val, (bool)):
+            return -1
+        silent_mode = bool_val
+        return 0
+    
     ''' Function to capture requests/questions.'''
     def hear(self):
-        input = sr.Recognizer()
+        if silent_mode:
+            data = input('type your response here: ')
+            return data
+        input_speech = sr.Recognizer()
         sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
         with sr.Microphone() as source:
-            input.adjust_for_ambient_noise(source)
+            input_speech.adjust_for_ambient_noise(source)
             playsound.playsound(bumblebee_root+'sounds/tone-beep.wav', True)
-            audio = input.listen(source)
+            audio = input_speech.listen(source)
             data = ''
             try:
-                data = input.recognize_google(audio)
+                data = input_speech.recognize_google(audio)
                 print('You said, ' + data)
             except sr.UnknownValueError:
                 self.respond('Sorry I did not hear you, please repeat.')
@@ -26,6 +37,9 @@ class BumbleSpeech():
 
     ''' Respond to requests/questions.'''
     def respond(self, output):
+        if silent_mode:
+            print(output)
+            return
         num = 0
         print(output)
         num += 1
@@ -36,6 +50,7 @@ class BumbleSpeech():
         engine.runAndWait()
         playsound.playsound(file, True)
         os.remove(file)
+        return
 
     '''Give user chance to repeat when bumblebee doesn't hear properly.'''    
     def infinite_speaking_chances(self, input):
