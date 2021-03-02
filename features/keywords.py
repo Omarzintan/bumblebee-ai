@@ -23,7 +23,7 @@ class Keywords:
             "stop_listening": ['stop listening', 'shutdown', 'shut down'],
             "add_zoom": ['add zoom link', 'new zoom link'],
             "open_zoom": ['take me to'],
-            "silent_mode": ['silent mode'],
+            "silent_mode_on": ['silent mode', 'turn on silent mode', 'start silent mode'],
             "silent_mode_off": ['turn off silent mode', 'voice mode', 'exit silent mode', 'stop silent mode']
         }
 
