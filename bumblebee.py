@@ -22,7 +22,6 @@ def run():
         if not action_found:
             bs.respond('I do not know how to do this yet.')
         
-        
 if __name__ == '__main__':    
     while(1):
         try:

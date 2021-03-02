@@ -25,6 +25,7 @@ def run():
             input=True,
             frames_per_buffer=porcupine.frame_length)
         print('[Listening...]')
+        # add banners for wifi and mode:
         while True:
             pcm = audio_stream.read(porcupine.frame_length)
             pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
