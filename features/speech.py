@@ -21,6 +21,7 @@ class BumbleSpeech():
         if silent_mode:
             data = input('type your response here: ')
             return data
+
         input_speech = sr.Recognizer()
         sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
         with sr.Microphone() as source:
@@ -40,6 +41,7 @@ class BumbleSpeech():
         if silent_mode:
             print(output)
             return
+
         num = 0
         print(output)
         num += 1

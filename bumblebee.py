@@ -6,7 +6,6 @@ from features import configs
 from features import global_vars
 from features.crash_recovery import store_globals as cr
 
-
 def run():
     bs.respond('Hey.')
     while(global_vars.sleep == 0):
@@ -22,7 +21,6 @@ def run():
                 break
         if not action_found:
             bs.respond('I do not know how to do this yet.')
-        
         
 if __name__ == '__main__':    
     while(1):
