@@ -35,6 +35,7 @@ get_time = get_time.GetTime(keywords.get('time'))
 add_zoom = add_zoom.AddZoom(keywords.get('add_zoom'))
 open_zoom = open_zoom.OpenZoom(keywords.get('open_zoom'))
 silent_mode = silent_mode.SilentMode(keywords.get('silent_mode'))
+silent_mode_off = silent_mode_off.SilentModeOff(keywords.get('silent_mode_off'))
 
 config_actions = [
     google_search,
@@ -55,5 +56,6 @@ config_actions = [
     get_time,
     add_zoom,
     open_zoom,
-    silent_mode
+    silent_mode,
+    silent_mode_off
 ]
