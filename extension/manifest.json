@@ -9,10 +9,11 @@
         "default_title": "Observes current url."
     },
     "permissions": ["tabs", "activeTab",
-                    "http://127.0.0.1:5000/*", "storage"],
+                    "http://127.0.0.1:5000/*", "storage",
+                    "webNavigation"
+                   ],
     "background": {
         "scripts": ["background.js"],
         "persistent": false
     }
 }
-       

@@ -1,7 +1,8 @@
 // Listener for when a new tab is activated
 chrome.tabs.onActivated.addListener(function (activeInfo) {
     chrome.tabs.get(activeInfo.tabId, function (tab) {
-        y = tab.url;
+
+        tab_url = tab.url;
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
@@ -9,14 +10,13 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
             }
         };
         xhttp.open("POST", "http://127.0.0.1:5000/send_url");
-        xhttp.send("url=" + y);
+        xhttp.send("url=" + tab_url);
     });
 });
 
 // Listener for when user switches between tabs
 chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
     if (tab.active && change.url) {
-
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 & this.status == 200) {
@@ -41,7 +41,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab)
 });
 
 chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
-    // since tab is not available insice onRemoved,
+    // since tab is not available inside onRemoved,
     // we have to use the mapping we created above to get the removed tab url:
     console.log(tabToUrl[tabId]);
 
@@ -57,5 +57,3 @@ chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
     // Remove information for the now non-existent tab
     delete tabToUrl[tabId];
 });
-
-

@@ -2,7 +2,9 @@ from flask import Flask, jsonify, request
 import time
 import os, sys
 import textwrap
+import requests
 from helpers import bumblebee_root
+from logging.config import fileConfig
 
 '''
 This file contains server code to be used by bumblebee.py research mode.
@@ -10,6 +12,8 @@ The server works hand in hand with a chrome extension to implement research mode
 '''
 
 app = Flask(__name__)
+fileConfig(bumblebee_root+'logging.cfg')
+
 url_timestamp = {}
 url_viewtime = {}
 parent_url_viewtime = {}
@@ -17,7 +21,6 @@ parent_url_timestamp = {}
 prev_url = ""
 prev_parent_url = ""
 num_lines = 0
-
 
 '''
 Strips long url into a shorter url that only consists of the parent url.
@@ -89,7 +92,7 @@ def send_url():
     if prev_url != '' and prev_parent_url != '':
         # Time spent is the current time - the timestamp of the previous url
         time_spent = int(time.time() - parent_url_timestamp[prev_parent_url][prev_url])
-        
+
         # The url_viewtime of the previous url is then updated with time_spent
         parent_url_viewtime[prev_parent_url][prev_url] += time_spent
         
@@ -103,7 +106,7 @@ def send_url():
 
     # Update the parent url_viewtime dictionary
     parent_url_viewtime[parent_url] = url_viewtime
-    
+
     prev_url = url
     prev_parent_url = parent_url
 
@@ -117,42 +120,17 @@ Sends success message on success
 @app.route('/quit_url', methods=['POST'])
 def quit_url():
     resp_json = request.get_data()
-    sys.stdout.write("Url closed: %" % resp_json.decode())
+    sys.stdout.write("Url closed: %s \n" % resp_json.decode())
     return jsonify({'message': 'quit success!'}), 200
 
 '''
-Responsible for storing all the tab information into a .txt file for future use.
-Sends success message on success.
+Returns all tab info collected so far.
+To be called by helper function in research feature.
 '''
-@app.route('/store_data', methods=['POST'])
+@app.route('/store_data', methods=['GET'])
 def store_data():
-    global parent_url_timestamp
-    global parent_url_viewtime
-    
-    resp_json = request.get_data()
-    # Get the file name
-    params = resp_json.decode()
-    filename = request.args.get('filename')
-    
-    # Store files in ./research-files
-    os.makedirs(bumblebee_root+'research-files', exist_ok=True)
-    
-    # Open the file
-    file = open(bumblebee_root+os.path.join('research-files', filename+'.txt'), 'a+')
+    return jsonify({'message': 'success', 'parent_urls':list(parent_url_timestamp.keys()), 'url_viewtimes':parent_url_viewtime}), 200
 
-    # Write data to the file
-    for key in parent_url_timestamp.keys():
-        total_viewtime = 0
-        file.write('{}:\n'.format(key))
-        wrapper = textwrap.TextWrapper(initial_indent='\t', subsequent_indent='\t') # Makes formating text easier
-        for url in parent_url_viewtime[key].keys():
-            wrapped = wrapper.fill('{}: viewtime = {}'.format(url, parent_url_viewtime[key][url]))
-            file.write(wrapped+'\n')
-            total_viewtime+=parent_url_viewtime[key][url]
-        file.write('total_viewtime for {} = {}\n'.format(key, total_viewtime))        
-    file.close()
-
-    return jsonify({'message':'success'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

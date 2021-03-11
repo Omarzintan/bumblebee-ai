@@ -10,7 +10,7 @@ class StoreData(BaseFeature):
     def action(self, spoken_text):
         try:
             filename = helpers.store_data()
-            bs.respond('Research data stored successfully at {}.txt'.format(filename))
+            bs.respond('Research data stored successfully at {}.md'.format(filename))
             return
         except:
             print("Unexpected error:", sys.exc_info())
