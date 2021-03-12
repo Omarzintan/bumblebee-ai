@@ -5,6 +5,7 @@ import os, sys
 import playsound
 import pyttsx3
 from helpers import bumblebee_root
+from colorama import Fore
 
 silent_mode = False
 class BumbleSpeech():
@@ -19,7 +20,7 @@ class BumbleSpeech():
     ''' Function to capture requests/questions.'''
     def hear(self):
         if silent_mode:
-            input_data = input('type your response here: ')
+            input_data = input(Fore.WHITE + 'type your response here: ')
             return input_data
 
             
@@ -31,7 +32,7 @@ class BumbleSpeech():
             input_data = ''
             try:
                 input_data = input_speech.recognize_google(audio)
-                print('You said, ' + input_data)
+                print(Fore.WHITE + 'You said, ' + input_data)
             except sr.UnknownValueError:
                 self.respond('Sorry I did not hear you, please repeat.')
             except sr.RequestError:
@@ -44,11 +45,11 @@ class BumbleSpeech():
     ''' Respond to requests/questions.'''
     def respond(self, output):
         if silent_mode:
-            print(output)
+            print(Fore.YELLOW + output)
             return
 
         num = 0
-        print(output)
+        print(Fore.YELLOW + output)
         num += 1
         file = bumblebee_root+str(num)+'.wav'
         engine = pyttsx3.init()

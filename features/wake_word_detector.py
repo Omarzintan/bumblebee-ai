@@ -4,6 +4,7 @@ import pyaudio
 import struct
 import os
 import sys
+from colorama import Fore
 
 '''
 This code was adapted from porcupine demos on github: https://github.com/Picovoice/porcupine/blob/master/demo/python/porcupine_demo_mic.py
@@ -24,7 +25,7 @@ def run():
             format=pyaudio.paInt16,
             input=True,
             frames_per_buffer=porcupine.frame_length)
-        print('[Listening...]')
+        print(Fore.CYAN + '[Listening...]')
         # add banners for wifi and mode:
         while True:
             pcm = audio_stream.read(porcupine.frame_length)
@@ -35,7 +36,7 @@ def run():
                 # Word detected
                 return True
     except KeyboardInterrupt:
-        print('Stopping...')
+        print(Fore.CYAN + 'Stopping...')
     finally:
         if porcupine is not None:
             porcupine.delete()
@@ -46,7 +47,7 @@ def run():
 
 
 def stop():
-    print('Stopping...')
+    print(Fore.CYAN + 'Stopping...')
     if porcupine is not None:
         porcupine.delete()
     if audio_stream is not None:

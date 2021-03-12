@@ -19,3 +19,4 @@ pyperclip
 mdutils
 beautifulsoup4
 validators
+colorama
