@@ -28,8 +28,8 @@ class BumbleSpeech():
         input_speech = sr.Recognizer()
         sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
         with sr.Microphone() as source:
-            input_speech.adjust_for_ambient_noise(source)
             playsound.playsound(bumblebee_root+'sounds/tone-beep.wav', True)
+            input_speech.adjust_for_ambient_noise(source)
             audio = input_speech.listen(source)
             input_data = ''
             try:
@@ -37,6 +37,11 @@ class BumbleSpeech():
                 print('You said, ' + input_data)
             except sr.UnknownValueError:
                 self.respond('Sorry I did not hear you, please repeat.')
+            except sr.RequestError:
+                # This happens when there is not internet connection.
+                self.respond('No internet connection found.')
+                self.respond('Starting silent mode.')
+                self.set_silent_mode(True)
         return input_data
 
     ''' Respond to requests/questions.'''
