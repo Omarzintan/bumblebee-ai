@@ -5,7 +5,6 @@ import os, sys
 import playsound
 import pyttsx3
 from helpers import bumblebee_root
-import pdb
 
 silent_mode = False
 class BumbleSpeech():
@@ -20,7 +19,6 @@ class BumbleSpeech():
     ''' Function to capture requests/questions.'''
     def hear(self):
         if silent_mode:
-            #pdb.set_trace()
             input_data = input('type your response here: ')
             return input_data
 
