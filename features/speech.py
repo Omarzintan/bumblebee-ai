@@ -29,7 +29,6 @@ class BumbleSpeech():
         sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
         with sr.Microphone() as source:
             playsound.playsound(bumblebee_root+'sounds/tone-beep.wav', True)
-            input_speech.adjust_for_ambient_noise(source)
             audio = input_speech.listen(source)
             input_data = ''
             try:
