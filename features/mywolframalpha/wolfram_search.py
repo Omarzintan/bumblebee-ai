@@ -17,7 +17,8 @@ class WolframalphaSearch(BaseFeature):
         client = wolframalpha.Client(app_id)
         try:
             bs.respond('Searching Wolframalpha')
-            res = client.query(search_query)
+            res = client.query(search_query, width=400)
+            print(type(next(res.results)))
             answer = next(res.results).text
             bs.respond('The answer is ' + answer)
         except:
