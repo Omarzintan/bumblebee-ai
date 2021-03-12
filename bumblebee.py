@@ -21,7 +21,8 @@ def run():
                 config.action(text)
                 break
         if not action_found:
-            bs.respond('I do not know how to do this yet.')
+            # for generic conversations
+            configs.wolfram_search.action(text)
         
 if __name__ == '__main__':    
     while(1):
