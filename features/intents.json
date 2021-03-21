@@ -1,154 +1,154 @@
 {
-  "intents": [
-    {
-      "tag": "search_google",
-      "patterns": [
-        "google",
-        "open a google search on",
-        "google search",
-        "show me on google"
-      ]
-    },
-    {
-      "tag": "help",
-      "patterns": [
-        "tell me about yourself",
-        "identify yourself",
-        "who are you?",
-        "what are you?"
-      ]
-    },
-    {
-      "tag": "clock_in",
-      "patterns": [
-        "clock in",
-        "lets work",
-        "start work",
-        "clock me in"
-      ]
-    },
-    {
-      "tag": "clock_out",
-      "patterns": [
-        "clock out",
-        "done working",
-        "stop work",
-        "clock me out of work"
-      ]
-    },
-    {
-      "tag": "greet",
-      "patterns": [
-        "hello",
-        "what's up",
-        "hey",
-        "are you there?",
-        "anyone home?",
-        "yo"
-      ]
-    },
-    {
-      "tag": "search_grepapp",
-      "patterns": [
-        "grep search",
-        "search github",
-        "do a grep search",
-        "search on github"
-      ]
-    },
-    {
-      "tag": "send_email",
-      "patterns": [
-        "send an email",
-        "send an email to"
-      ]
-    },
-    {
-      "tag": "open_notepad",
-      "patterns": [
-        "open notepad"
-      ]
-    },
-    {
-      "tag": "search_wikipedia",
-      "patterns": [
-        "wikipedia"
-      ]
-    },
-    {
-      "tag": "search_wolframalpha",
-      "patterns": [
-        "calculate",
-        "what is",
-        "i wonder why",
-        "compute"
-      ]
-    },
-    {
-      "tag": "start_research_server",
-      "patterns": [
-        "start research",
-        "research modelet's do research",
-        "start research server"
-      ]
-    },
-    {
-      "tag": "stop_research_server",
-      "patterns": [
-        "stop research",
-        "exit research mode",
-        "done researching"
-      ]
-    },
-    {
-      "tag": "store_research_data",
-      "patterns": [
-        "store data",
-        "save my research",
-        "save tabs",
-        "save my data"
-      ]
-    },
-    {
-      "tag": "silent_mode_on",
-      "patterns": [
-        "silent mode",
-        "turn on silent mode",
-        "start silent mode"
-      ]
-    },
-    {
-      "tag": "silent_mode_off",
-      "patterns": [
-        "turn off silent mode",
-        "voice mode",
-        "exit silent mode",
-        "stop silent mode"
-      ]
-    },
-    {
-      "tag": "search_youtube",
-      "patterns": [
-        "youtube",
-        "open a youtube search on",
-        "show me a video about",
-        "find a video on"
-      ]
-    },
-    {
-      "tag": "add_zoom_link",
-      "patterns": [
-        "add zoom link",
-        "new zoom link",
-        "add a new zoom class"
-      ]
-    },
-    {
-      "tag": "open_zoom_link",
-      "patterns": [
-        "take me to",
-        "time for class"
-      ]
-    }
-  ]
+    "intents": [
+        {
+            "tag": "search_google",
+            "patterns": [
+                "google",
+                "open a google search on",
+                "google search",
+                "show me on google"
+            ]
+        },
+        {
+            "tag": "help",
+            "patterns": [
+                "tell me about yourself",
+                "identify yourself",
+                "who are you?",
+                "what are you?"
+            ]
+        },
+        {
+            "tag": "clock_in",
+            "patterns": [
+                "clock in",
+                "let's work",
+                "start work",
+                "clock me in"
+            ]
+        },
+        {
+            "tag": "clock_out",
+            "patterns": [
+                "clock out",
+                "done working",
+                "stop work",
+                "clock me out of work"
+            ]
+        },
+        {
+            "tag": "greet",
+            "patterns": [
+                "hello",
+                "what's up",
+                "hey",
+                "are you there?",
+                "anyone home?",
+                "yo"
+            ]
+        },
+        {
+            "tag": "search_grepapp",
+            "patterns": [
+                "grep search",
+                "search github",
+                "do a grep search",
+                "search on github"
+            ]
+        },
+        {
+            "tag": "send_email",
+            "patterns": [
+                "send an email",
+                "send an email to"
+            ]
+        },
+        {
+            "tag": "open_notepad",
+            "patterns": [
+                "open notepad"
+            ]
+        },
+        {
+            "tag": "search_wikipedia",
+            "patterns": [
+                "wikipedia"
+            ]
+        },
+        {
+            "tag": "search_wolframalpha",
+            "patterns": [
+                "calculate",
+                "what is",
+                "i wonder why",
+                "compute"
+            ]
+        },
+        {
+            "tag": "start_research_server",
+            "patterns": [
+                "start research",
+                "research modelet's do research",
+                "start research server"
+            ]
+        },
+        {
+            "tag": "stop_research_server",
+            "patterns": [
+                "stop research",
+                "exit research mode",
+                "done researching"
+            ]
+        },
+        {
+            "tag": "store_research_data",
+            "patterns": [
+                "store data",
+                "save my research",
+                "save tabs",
+                "save my data"
+            ]
+        },
+        {
+            "tag": "silent_mode_on",
+            "patterns": [
+                "silent mode",
+                "turn on silent mode",
+                "start silent mode"
+            ]
+        },
+        {
+            "tag": "silent_mode_off",
+            "patterns": [
+                "turn off silent mode",
+                "voice mode",
+                "exit silent mode",
+                "stop silent mode"
+            ]
+        },
+        {
+            "tag": "search_youtube",
+            "patterns": [
+                "youtube",
+                "open a youtube search on",
+                "show me a video about",
+                "find a video on"
+            ]
+        },
+        {
+            "tag": "add_zoom_link",
+            "patterns": [
+                "add zoom link",
+                "new zoom link",
+                "add a new zoom class"
+            ]
+        },
+        {
+            "tag": "open_zoom_link",
+            "patterns": [
+                "take me to",
+                "time for class"
+            ]
+        }
+    ]
 }
