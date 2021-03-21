@@ -1,11 +1,15 @@
 #!python3
-from features.features import BaseFeature
+'''THIS IS DEPRECATED AND WILL BE REPLACED WITH A CHATBOT'''
+
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 import random
 
-class Greeting(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "greet"
+        self.patterns = ["hello", "what\"s up", "hey", "are you there?", "anyone home?", "yo"]
+        self.index
 
     def action(self, spoken_text):
         bs.respond(self.greet())

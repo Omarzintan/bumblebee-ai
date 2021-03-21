@@ -1,11 +1,13 @@
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.keywords import Keywords
 import pprint
 
-class BumbleHelp(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "help"
+        self.patterns = ["tell me about yourself", "identify yourself", "who are you?", "what are you?"]
+        self.index
 
     def action(self, spoken_text):
         keywords = Keywords()
@@ -16,7 +18,7 @@ class BumbleHelp(BaseFeature):
         clock you into work as well as track your browser activity
         in Google Chrome. Look at the list of commands to help.
         """
-        list_of_commands = keywords.get('all')
+        list_of_commands = keywords.get('all') # THIS WILL NEED TO CHANGE
         bs.respond(response)
         pprint.pprint(list_of_commands)
         return

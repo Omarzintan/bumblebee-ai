@@ -1,4 +1,4 @@
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.contacts import helpers as contact_help
 import difflib
@@ -9,9 +9,11 @@ from tkinter import *
 import json
 
 
-class SendEmail(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "send_email"
+        self.patterns = ["send an email", "send an email to"]
+        self.index
 
     def action(self, spoken_text):
         bs.respond('Who do you want to send the email to?')
@@ -85,7 +87,7 @@ class SendEmail(BaseFeature):
     Arguments: <string> recipient, <string> subject, <string> message
     Return type: <string> summary
     '''
-    def summary_email(recipient, subject, message):
+    def summary_email(self, recipient, subject, message):
         summary = 'To: {}\nSubject: {}\nMessage: {}'.format(recipient, subject, message)
         return summary
 
@@ -94,7 +96,7 @@ class SendEmail(BaseFeature):
     Arguments: <string> recipient, <string> subject, <string> message
     Return type: <JSON> email_details_json
     '''
-    def email_edit(recipient, subject, message):
+    def email_edit(self, recipient, subject, message):
         root = Tk()
         root.geometry("300x300")
         root.minsize(height=350, width=500)

@@ -1,12 +1,14 @@
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.research import glocal_vars, helpers
 import os, sys
 import signal
 
-class StopServer(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = 'stop_research_server'
+        self.patterns =  ["stop research", "exit research mode", "done researching"]
+        self.index
 
     def action(self, spoken_text):
         bs.respond('Stopping research server.')

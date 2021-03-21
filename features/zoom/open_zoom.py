@@ -1,11 +1,18 @@
 '''Open zoom link in a web browser'''
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.zoom import helpers
+from tinydb import TinyDB, Query
+import pyperclip as pc
+import webbrowser
+import os
 
-class OpenZoom(BaseFeature):
+
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "open_zoom_link"
+        self.patterns = ["take me to", "time for class"]
+        self.index
 
     def action(self, spoken_text):
         # get class name from the query
@@ -33,7 +40,7 @@ class OpenZoom(BaseFeature):
     Arguments: <string> name
     Return type: <boolean> found, <boolean> has_password
     '''
-    def open_zoom(name):
+    def open_zoom(self, name):
         has_password = False
         found = False
 
@@ -57,7 +64,7 @@ class OpenZoom(BaseFeature):
     Arguments: <string> spoken_text, <list> keywords
     Return type: <string> spoken_text (now stripped down to only the search query.)
     '''
-    def get_search_query(spoken_text, keywords):
+    def get_search_query(self, spoken_text, keywords):
         for word in keywords:
             spoken_text = spoken_text.replace(word, '')
             # Need to remove whitespace before and after the wanted query, otherwise the zoom_db search will return nothing.

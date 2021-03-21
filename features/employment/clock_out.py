@@ -1,4 +1,4 @@
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.employment import helpers
 import features.global_vars as global_vars
@@ -7,9 +7,11 @@ import os
 from helpers import bumblebee_root
 
 
-class ClockOut(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "clock_out"
+        self.patterns = ["clock out", "done working", "stop work", "clock me out of work"]
+        self.index
 
     def action(self, spoken_text):
         if not global_vars.currently_working:

@@ -1,4 +1,4 @@
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.employment import helpers
 import features.global_vars as global_vars
@@ -8,9 +8,11 @@ import os
 from helpers import bumblebee_root
 
 
-class ClockIn(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "clock_in"
+        self.patterns = ["clock in", "lets work", "start work", "clock me in"]
+        self.index
 
     def action(self, spoken_text):
         bs.respond('Is this for Peggy or Osborn?')

@@ -1,12 +1,14 @@
 #!python3
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.youtube import helpers
 import webbrowser
 
-class YoutubeSearch(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "search_youtube"
+        self.patterns = ["youtube", "open a youtube search on", "show me a video about", "find a video on"]
+        self.index
 
     def action(self, spoken_text):
         query = self.search(spoken_text, self.keywords)

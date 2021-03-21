@@ -1,18 +1,20 @@
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.mynotepad import helpers
 from tkinter import *
 
-class OpenNotepad(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "open_notepad"
+        self.patterns = ["open notepad"]
+        self.index
 
     def action(self, spoken_text):
         self.notepad()
         return
 
     '''Notepad for future use maybe'''
-    def notepad():
+    def notepad(self):
         root = Tk()
         root.geometry("300x300")
         root.minsize(height=400, width=350)

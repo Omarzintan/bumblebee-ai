@@ -1,4 +1,4 @@
-from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.zoom import helpers
 import sys
@@ -6,9 +6,11 @@ from tkinter import *
 import json
 
 
-class AddZoom(BaseFeature):
+class Feature(BaseFeature):
     def __init__(self, keywords):
-        self.keywords = keywords
+        self.tag_name = "add_zoom_link"
+        self.patterns = ["add zoom link", "new zoom link", "add a new zoom class"]
+        self.index
 
     def action(self, spoken_text):
         try:

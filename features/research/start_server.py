@@ -1,4 +1,5 @@
-from features.features import BaseFeature
+#from features.features import BaseFeature
+from features.default import BaseFeature
 from features.global_vars import bumble_speech as bs
 from features.research import glocal_vars, helpers
 import json
@@ -9,9 +10,11 @@ import sys
 import os
 import datetime
 
-class StartServer(BaseFeature):
-    def __init__(self, keywords):
-        self.keywords = keywords
+class Feature(BaseFeature):
+    def __init__(self):
+        self.tag_name = "start_research_server"
+        self.patterns = ["start research", "research mode" "let's do research", "start research server"]
+        self.index
         
     def action(self, spoken_text):
         bs.respond('What is the topic of your research?')
