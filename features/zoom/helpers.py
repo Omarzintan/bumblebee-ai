@@ -34,16 +34,17 @@ def add_zoom_details():
     # retrieve zoom details from window.
     def saveInput():
         global zoom_db
+        Entry = Query()
         zoom_details["name"] = str(name_entry.get().lower())
         zoom_details["link"] = str(link_entry.get().lower())
         zoom_details["password"] = str(password_entry.get())
-        zoom_db.insert(zoom_details)
+        zoom_db.upsert(zoom_details, Entry.name == zoom_details["name"])
         root.destroy()
 
     def clear():
-        name_entry.delet(0, "end")
-        link_entry.delet(0, "end")
-        password_entry.delet(0, "end")
+        name_entry.delete(0, "end")
+        link_entry.delete(0, "end")
+        password_entry.delete(0, "end")
         
     # Buttons for saving and clearing
     saveButton = Button(content, text="Save", command=saveInput)

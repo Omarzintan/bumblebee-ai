@@ -1,6 +1,5 @@
 from features.features import BaseFeature
 from features.global_vars import bumble_speech as bs
-from features.mywikipedia import helpers
 import wikipedia
 import sys
 
@@ -9,7 +8,7 @@ class WikipediaSearch(BaseFeature):
         self.keywords = keywords
 
     def action(self, spoken_text):
-        search_query = helpers.get_search_query(spoken_text, self.keywords)
+        search_query = self.get_search_query(spoken_text, self.keywords)
         try:
             results = wikipedia.summary(search_query, sentences = 3)
             bs.respond('According to Wikipedia')
@@ -18,3 +17,13 @@ class WikipediaSearch(BaseFeature):
         except:
             bs.respond('I could not find anything on Wikipedia related to your search.')
             return
+
+    '''
+    Parses spoken text to retrieve a search query for Wikipedia
+    Argument: <string> spoken_text, <list> keywords
+    Return type: <string> spoken_text (this is actually the search query as retrieved from spoken_text.
+    '''
+    def get_search_query(spoken_text, keywords):
+        for word in keywords:
+            spoken_text = spoken_text.replace(word, '')
+        return spoken_text

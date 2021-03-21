@@ -14,7 +14,7 @@ from mdutils import MdUtils
 from bs4 import BeautifulSoup
 import validators
 
-research_db = TinyDB(os.getenv('BUMBLEBEE_PATH')+'database/research_db.json')
+research_db = TinyDB(os.getenv('BUMBLEBEE_PATH')+'database/research_db.json') # THIS WILL BE INITIALIZED IN Bumblebee class
 
 '''
 Opens a Tkinter window to allow the user to edit the research topic as heard.
