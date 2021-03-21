@@ -24,7 +24,7 @@ if __name__ == "__main__":
             tag["patterns"] = feature_object.patterns
             intents['intents'].append(tag)
 
-        intents_json = json.dumps(intents, indent=2)
+        intents_json = json.dumps(intents, indent=4)
         
         with open('features/intents.json', 'w') as f:
             f.write(intents_json)
