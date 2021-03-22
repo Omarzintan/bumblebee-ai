@@ -12,25 +12,25 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "start_research_server"
         self.patterns = ["start research", "research mode" "let's do research", "start research server"]
-        self.index
+        super().__init__()
         
     def action(self, spoken_text):
-        bs.respond('What is the topic of your research?')
+        self.bs.respond('What is the topic of your research?')
         topic = ''
-        topic = bs.infinite_speaking_chances(topic)
-        if bs.interrupt_check(topic):
+        topic = self.bs.infinite_speaking_chances(topic)
+        if self.bs.interrupt_check(topic):
             return
-        bs.respond('Starting research mode on {}'.format(topic))
-        bs.respond('Would you like to edit this?')
+        self.bs.respond('Starting research mode on {}'.format(topic))
+        self.bs.respond('Would you like to edit this?')
         edit = ''
-        edit = bs.infinite_speaking_chances(edit)
-        if bs.interrupt_check(edit):
+        edit = self.bs.infinite_speaking_chances(edit)
+        if self.bs.interrupt_check(edit):
             return
         if 'yes' in edit or 'yeah' in edit:
             edited_topic = self.topic_edit(topic)
             edited_json = json.loads(edited_topic)
             topic = edited_json["topic"]
-        bs.respond('Starting server for research on {}'.format(topic))
+        self.bs.respond('Starting server for research on {}'.format(topic))
         glocal_vars.research_topic = topic
         # start python flask server in new thread
         threading.Thread(target=self.start_server).start()

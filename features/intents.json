@@ -1,22 +1,24 @@
 {
     "intents": [
         {
-            "tag": "search_google",
+            "tag": "google_search",
             "patterns": [
                 "google",
                 "open a google search on",
                 "google search",
                 "show me on google"
-            ]
+            ],
+            "index": 0
         },
         {
-            "tag": "help",
+            "tag": "bumble_help",
             "patterns": [
                 "tell me about yourself",
                 "identify yourself",
                 "who are you?",
                 "what are you?"
-            ]
+            ],
+            "index": 1
         },
         {
             "tag": "clock_in",
@@ -25,7 +27,8 @@
                 "let's work",
                 "start work",
                 "clock me in"
-            ]
+            ],
+            "index": 2
         },
         {
             "tag": "clock_out",
@@ -34,10 +37,11 @@
                 "done working",
                 "stop work",
                 "clock me out of work"
-            ]
+            ],
+            "index": 3
         },
         {
-            "tag": "greet",
+            "tag": "greeting",
             "patterns": [
                 "hello",
                 "what's up",
@@ -45,44 +49,50 @@
                 "are you there?",
                 "anyone home?",
                 "yo"
-            ]
+            ],
+            "index": 4
         },
         {
-            "tag": "search_grepapp",
+            "tag": "grepapp_search",
             "patterns": [
                 "grep search",
                 "search github",
                 "do a grep search",
                 "search on github"
-            ]
+            ],
+            "index": 5
         },
         {
             "tag": "send_email",
             "patterns": [
                 "send an email",
                 "send an email to"
-            ]
+            ],
+            "index": 6
         },
         {
             "tag": "open_notepad",
             "patterns": [
                 "open notepad"
-            ]
+            ],
+            "index": 7
         },
         {
-            "tag": "search_wikipedia",
+            "tag": "wiki_search",
             "patterns": [
                 "wikipedia"
-            ]
+            ],
+            "index": 8
         },
         {
-            "tag": "search_wolframalpha",
+            "tag": "wolfram_search",
             "patterns": [
                 "calculate",
                 "what is",
                 "i wonder why",
                 "compute"
-            ]
+            ],
+            "index": 9
         },
         {
             "tag": "start_research_server",
@@ -90,7 +100,8 @@
                 "start research",
                 "research modelet's do research",
                 "start research server"
-            ]
+            ],
+            "index": 10
         },
         {
             "tag": "stop_research_server",
@@ -98,7 +109,8 @@
                 "stop research",
                 "exit research mode",
                 "done researching"
-            ]
+            ],
+            "index": 11
         },
         {
             "tag": "store_research_data",
@@ -107,7 +119,8 @@
                 "save my research",
                 "save tabs",
                 "save my data"
-            ]
+            ],
+            "index": 12
         },
         {
             "tag": "silent_mode_on",
@@ -115,7 +128,8 @@
                 "silent mode",
                 "turn on silent mode",
                 "start silent mode"
-            ]
+            ],
+            "index": 13
         },
         {
             "tag": "silent_mode_off",
@@ -124,16 +138,18 @@
                 "voice mode",
                 "exit silent mode",
                 "stop silent mode"
-            ]
+            ],
+            "index": 14
         },
         {
-            "tag": "search_youtube",
+            "tag": "youtube_search",
             "patterns": [
                 "youtube",
                 "open a youtube search on",
                 "show me a video about",
                 "find a video on"
-            ]
+            ],
+            "index": 15
         },
         {
             "tag": "add_zoom_link",
@@ -141,14 +157,16 @@
                 "add zoom link",
                 "new zoom link",
                 "add a new zoom class"
-            ]
+            ],
+            "index": 16
         },
         {
             "tag": "open_zoom_link",
             "patterns": [
                 "take me to",
                 "time for class"
-            ]
+            ],
+            "index": 17
         }
     ]
 }

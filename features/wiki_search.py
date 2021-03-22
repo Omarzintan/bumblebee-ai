@@ -4,19 +4,19 @@ import sys
 
 class Feature(BaseFeature):
     def __init__(self):
-        self.tag_name = "search_wikipedia"
+        self.tag_name = "wiki_search"
         self.patterns = ["wikipedia"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         search_query = self.get_search_query(spoken_text, self.keywords)
         try:
             results = wikipedia.summary(search_query, sentences = 3)
-            bs.respond('According to Wikipedia')
-            bs.respond(results)
+            self.bs.respond('According to Wikipedia')
+            self.bs.respond(results)
             return
         except:
-            bs.respond('I could not find anything on Wikipedia related to your search.')
+            self.bs.respond('I could not find anything on Wikipedia related to your search.')
             return
 
     '''

@@ -10,7 +10,7 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "open_zoom_link"
         self.patterns = ["take me to", "time for class"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         # get class name from the query
@@ -18,11 +18,11 @@ class Feature(BaseFeature):
         # open zoom link in browser
         link_found, has_password = helpers.open_zoom(name.lower())
         if not link_found:
-            bs.respond('I could not find this zoom link.')
+            self.bs.respond('I could not find this zoom link.')
             return
-        bs.respond('I have opened the zoom link in a browser window.')
+        self.bs.respond('I have opened the zoom link in a browser window.')
         if has_password:
-            bs.respond('I have copied the password to the clip board. Press ctrl+v to paste it.')
+            self.bs.respond('I have copied the password to the clip board. Press ctrl+v to paste it.')
         return
 
 

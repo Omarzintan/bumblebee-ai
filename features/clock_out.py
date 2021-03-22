@@ -8,7 +8,7 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "clock_out"
         self.patterns = ["clock out", "done working", "stop work", "clock me out of work"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         if not Bumblebee.currently_working:

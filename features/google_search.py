@@ -4,9 +4,9 @@ import webbrowser
 
 class Feature(BaseFeature):
     def __init__(self):
-        self.tag_name = "search_google"
+        self.tag_name = "google_search"
         self.patterns = ["google", "open a google search on", "google search", "show me on google"]
-        self.index
+        super().__init__()
        
     def action(self, spoken_text):
         query = self.search(spoken_text, self.keywords)

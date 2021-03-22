@@ -3,13 +3,13 @@ import webbrowser
 
 class Feature(BaseFeature):
     def __init__(self):
-        self.tag_name = "search_grepapp"
+        self.tag_name = "grepapp_search"
         self.patterns = ["grep search", "search github", "do a grep search", "search on github"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         query = self.search(spoken_text, self.keywords)
-        bs.respond('I have opened a browser with your grepapp search')
+        self.bs.respond('I have opened a browser with your grepapp search')
         return
 
     '''

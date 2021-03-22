@@ -4,8 +4,10 @@ from core import Bumblebee
 class BaseFeature():
     tag_name = ''
     patterns = []
-    index = None
-    bs = Bumblebee.speech
+
+    def __init__(self):
+        self.bs = Bumblebee.speech
+        self.index = None
 
     def action(self, text):
         pass

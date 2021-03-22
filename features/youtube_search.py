@@ -4,13 +4,13 @@ import webbrowser
 
 class Feature(BaseFeature):
     def __init__(self):
-        self.tag_name = "search_youtube"
+        self.tag_name = "youtube_search"
         self.patterns = ["youtube", "open a youtube search on", "show me a video about", "find a video on"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         query = self.search(spoken_text, self.keywords)
-        bs.respond('I have opened YouTube with a search on {}'.format(query)) 
+        self.bs.respond('I have opened YouTube with a search on {}'.format(query)) 
         return
 
 

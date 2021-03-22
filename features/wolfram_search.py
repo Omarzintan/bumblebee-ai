@@ -6,9 +6,9 @@ import sys
 
 class Feature(BaseFeature):
     def __init__(self):
-        self.tag_name = "search_wolframalpha"
+        self.tag_name = "wolfram_search"
         self.patterns = ["calculate", "what is", "i wonder why", "compute"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         search_query = self.get_search_query(spoken_text, self.keywords)
@@ -17,7 +17,7 @@ class Feature(BaseFeature):
         try:
             res = client.query(search_query, width=200)
             answer = next(res.results).text
-            bs.respond(answer)
+            self.bs.respond(answer)
         except:
             # Trying Wikipedia
             #keywords = Keywords()

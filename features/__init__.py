@@ -16,6 +16,6 @@ __all__ = [
     'silent_mode_on',
     'silent_mode_off',
     'youtube_search',
-    'add_zoom',
-    'open_zoom'
+    'add_zoom_link',
+    'open_zoom_link'
 ]

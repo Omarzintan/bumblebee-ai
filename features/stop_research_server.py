@@ -6,10 +6,10 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = 'stop_research_server'
         self.patterns =  ["stop research", "exit research mode", "done researching"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
-        bs.respond('Stopping research server.')
+        self.bs.respond('Stopping research server.')
         self.stop_server()
         return
 
@@ -23,4 +23,4 @@ class Feature(BaseFeature):
             print('Server stopped')
         except:
             print("Unexpected error:", sys.exc_info())
-            bs.respond('The server does not seem to be running')
+            self.bs.respond('The server does not seem to be running')

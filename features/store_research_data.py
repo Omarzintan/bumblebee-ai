@@ -5,16 +5,16 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = 'store_research_data'
         self.patterns = ["store data", "save my research", "save tabs", "save my data"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         try:
             filename = self.store_data()
-            bs.respond('Research data stored successfully at {}.md'.format(filename))
+            self.bs.respond('Research data stored successfully at {}.md'.format(filename))
             return
         except:
             print("Unexpected error:", sys.exc_info())
-            bs.respond('Failed to store research data.')
+            self.bs.respond('Failed to store research data.')
             return
 
     '''

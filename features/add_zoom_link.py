@@ -8,15 +8,15 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "add_zoom_link"
         self.patterns = ["add zoom link", "new zoom link", "add a new zoom class"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         try:
             self.add_zoom_details()
-            bs.respond('Added zoom link successfully.')
+            self.bs.respond('Added zoom link successfully.')
         except:
             print(sys.exc_info())
-            bs.respond('Could not add zoom link.')
+            self.bs.respond('Could not add zoom link.')
 
         return
     
@@ -25,7 +25,7 @@ class Feature(BaseFeature):
     Arguments: None
     Return type: <JSON> zoom_details_json
     '''
-    def add_zoom_details():
+    def add_zoom_details(self):
         root = Tk()
         root.geometry("500x150")
         root.title("Add Zoom")

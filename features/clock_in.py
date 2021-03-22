@@ -10,7 +10,7 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "clock_in"
         self.patterns = ["clock in", "let's work", "start work", "clock me in"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         bs.respond('Is this for Peggy or Osborn?')

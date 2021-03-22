@@ -5,7 +5,7 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "open_notepad"
         self.patterns = ["open notepad"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         self.notepad()

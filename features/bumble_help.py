@@ -3,9 +3,9 @@ import pprint
 
 class Feature(BaseFeature):
     def __init__(self):
-        self.tag_name = "help"
+        self.tag_name = "bumble_help"
         self.patterns = ["tell me about yourself", "identify yourself", "who are you?", "what are you?"]
-        self.index
+        super().__init__()
 
     def action(self, spoken_text):
         keywords = Keywords()
