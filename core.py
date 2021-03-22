@@ -12,7 +12,7 @@ from nltk_utils import bag_of_words, tokenize
 
 
 class Bumblebee():
-    # define global vars here
+    # global vars
     speech = BumbleSpeech()
     currently_working = False
     employer = ''
@@ -23,14 +23,11 @@ class Bumblebee():
         if features != []:
             self._features = [
                 importlib.import_module('features.'+feature, ".").Feature() for feature in features]
-            for x, feature in enumerate(self._features):
-                feature.set_index(x)
-
+            self.feature_indices = {feature : x for x, feature in enumerate(features)}
+            print(self.feature_indices)
         else:
             # Use default feature if no features are set.
             self._features = [ importlib.import_module('features.default', ".").Feature()]
-
-        
             
     def run(self):
         # Prepping the Neural Net to be used.
@@ -79,12 +76,6 @@ class Bumblebee():
                 self.sleep = 1
                 continue
 
-            print(f"tag: {tag}")
-            '''
-            for feature in self._features:
-                print('feature: ', feature)
-                print('tag_name: ',feature.tag_name)
-                print('patterns: ',feature.patterns)
-                print('index: ', feature.index)
-            '''
+            tag_index = self.feature_indices[tag]
+            self._features[tag_index].action(text)
         return
