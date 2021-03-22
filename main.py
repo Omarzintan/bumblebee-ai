@@ -3,7 +3,6 @@ import features
 import sys, os
 import json
 import importlib
-import train
 
 if __name__ == "__main__":
     # Check to see that intents.json file exists.
@@ -35,10 +34,12 @@ if __name__ == "__main__":
         
         with open('features/intents.json', 'w') as f:
             f.write(intents_json)
-
+        print('intents.json file generated.')
+        
         # Retrain the NeuralNet
         print("Retraining NeuralNet...")
-        train.train()
+        exec(open("./train.py").read())
+        print("NeuralNet trained.")
         
     bumblebee = Bumblebee(features.__all__)
     bumblebee.run()
