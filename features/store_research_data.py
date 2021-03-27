@@ -1,11 +1,23 @@
 from features.default import BaseFeature
+from core import Bumblebee
+import datetime
+import json
+import requests
 import os, sys
+from tinydb import TinyDB, Query
+from mdutils import MdUtils
+from bs4 import BeautifulSoup
+import validators
 
 class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = 'store_research_data'
         self.patterns = ["store data", "save my research", "save tabs", "save my data"]
         super().__init__()
+
+        # self.config defined in BaseFeature class
+        research_db_path = self.config['Databases']['research']
+        self.research_db = TinyDB(research_db_path)
 
     def action(self, spoken_text):
         try:
@@ -21,15 +33,17 @@ class Feature(BaseFeature):
     Retrieves research data from server and stores the data in 
     the research database.
     '''
-    def store_data():
+    def store_data(self):
+        research_files_path = self.config['Folders']['research_files']
+        server_url = self.config['Utilities']['research_server_url']
         # Store files in ./research-files
-        os.makedirs(bumblebee_root+'research-files', exist_ok=True)
+        os.makedirs(research_files_path, exist_ok=True)
 
-        filename = glocal_vars.research_topic
+        filename = Bumblebee.research_topic
         filename = filename.replace(' ', '-')
         today = datetime.datetime.now().strftime('%a %b, %Y')
 
-        res = requests.get(os.getenv('SERVER_URL')+'/store_data')
+        res = requests.get(server_url+'/store_data')
         res.raise_for_status()
         json_response = res.json()
         parent_urls = json_response["parent_urls"]
@@ -42,7 +56,7 @@ class Feature(BaseFeature):
             for url in url_viewtimes[parent_url]:
                 if not validators.url(url):
                     continue
-                record["research_topic"] = glocal_vars.research_topic
+                record["research_topic"] = Bumblebee.research_topic
                 record["parent_url"] = parent_url
                 record["page_title"] = self.get_title(url)
                 record["url"] = url
@@ -51,9 +65,9 @@ class Feature(BaseFeature):
                 record["last_updated"] = today
 
                 # Updates record if url already exists, otherwise insert as new record.
-                research_db.upsert(record, Record.url == url)
+                self.research_db.upsert(record, Record.url == url)
             
-        md_file_create(glocal_vars.research_topic, bumblebee_root+'research-files/'+filename)
+        self.md_file_create(Bumblebee.research_topic, research_files_path + filename)
         return filename
 
     '''
@@ -76,7 +90,7 @@ class Feature(BaseFeature):
     '''
     def md_file_create(self, research_topic, filename, ordered_by='time'):
         Record = Query()
-        records = research_db.search(Record.research_topic == research_topic)
+        records = self.research_db.search(Record.research_topic == research_topic)
         mdfile = MdUtils(file_name=filename,title=research_topic)
         for record in records:
             mdfile.new_line('- '+ mdfile.new_inline_link(link=record["url"], text=record["page_title"]))
