@@ -17,6 +17,8 @@ class Bumblebee():
     currently_working = False
     employer = ''
     work_start_time = ''
+    research_server_proc = ''
+    research_topic = ''
     sleep = 0
     
     def __init__(self, features:list=[]):
