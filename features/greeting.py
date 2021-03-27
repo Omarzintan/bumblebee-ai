@@ -11,7 +11,8 @@ class Feature(BaseFeature):
         super().__init__()
 
     def action(self, spoken_text):
-        self.bs.respond(self.greet())
+        response = self.greet()
+        self.bs.respond(response)
         return
 
 
@@ -20,7 +21,7 @@ class Feature(BaseFeature):
     Argument: None
     Return type: <string>
     '''
-    def greet():
+    def greet(self):
         greetings = [
             'Hey there!',
             'Wassup',
