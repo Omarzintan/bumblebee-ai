@@ -2,6 +2,7 @@ from features.default import BaseFeature
 import sys
 from tkinter import *
 import json
+from tinydb import TinyDB, Query
 
 
 class Feature(BaseFeature):
@@ -9,6 +10,12 @@ class Feature(BaseFeature):
         self.tag_name = "add_zoom_link"
         self.patterns = ["add zoom link", "new zoom link", "add a new zoom class"]
         super().__init__()
+        
+        # self.config defined in BaseFeature class
+        zoom_db_path = self.config['Databases']['zoom']
+        self.zoom_db = TinyDB(zoom_db_path)
+
+
 
     def action(self, spoken_text):
         try:
@@ -31,8 +38,9 @@ class Feature(BaseFeature):
         root.title("Add Zoom")
         content = Frame(root)
         content.pack()
+        
         zoom_details = {}
-
+        
         # creating fields
         Label(content, text="Name").grid(row=0, column=0, padx=5, sticky='sw')
         Label(content, text="Link").grid(row=1, column=0, padx=5, sticky='sw')
@@ -47,12 +55,11 @@ class Feature(BaseFeature):
 
         # retrieve zoom details from window.
         def saveInput():
-            global zoom_db # FIND A WAY TO ACCESS ZOOM DB FROM config file
             Entry = Query()
             zoom_details["name"] = str(name_entry.get().lower())
             zoom_details["link"] = str(link_entry.get().lower())
             zoom_details["password"] = str(password_entry.get())
-            zoom_db.upsert(zoom_details, Entry.name == zoom_details["name"])
+            self.zoom_db.upsert(zoom_details, Entry.name == zoom_details["name"])
             root.destroy()
 
         def clear():
