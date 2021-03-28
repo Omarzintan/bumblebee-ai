@@ -10,8 +10,9 @@ So far, Bumblebee works well with:
 *Quickstart (How to add a basic feature)*
 1) In the /features folder, create a new file called hello_world.py
 2) Import the BaseFeature class by typing `from features.default import BaseFeature`
-3) Create your feature class as seen below
-   `
+3) Create your feature class as seen below:
+
+```python
    class Feature(BaseFeature):
          def __init__(self):
              # The tag_name will automatically be used an an intent
@@ -45,7 +46,7 @@ So far, Bumblebee works well with:
             self.bs.respond("Hello, world!")
             
             return
-    `
+```
     
 4) Now that you have created your feature file, open the `__init__.py` file in the /features folder and add the name of your file to the `__all__` list like so:
    `__all__ = [
