@@ -55,7 +55,7 @@ So far, Bumblebee works well with:
         'hello_world'
     ]
    ```
-5) When you run `python main.py` from the bumblebee folder, you should see that the intents.json file is regenerated and the model is retrained. After this, when Bumblebee asks "how may I help you?" you can say any sentence similar to the sentence `patterns` you defined in your `hello_world.py` file and the action for your feature should be executed!
+5) When you run `python main.py` from the bumblebee folder, you should see that the `intents.json` file is regenerated and the model is retrained. After this, when Bumblebee asks "how may I help you?" you can say any sentence similar to the sentence `patterns` you defined in your `hello_world.py` file and the action for your feature should be executed!
                                                                 
 ## Features
 1) tells the time and date
@@ -67,7 +67,7 @@ So far, Bumblebee works well with:
 7) Can clock me in and out of work (tracking how many hours I work my various work-study jobs)
 8) Research mode *
 
-*Starred Features*
+### Starred Features
 1) Research mode: Research mode is a feature that I find super useful with my regular work flow. It is basically a mode that Bumblebee goes into where she tracks all the tabs I open in a google chrome 
 browser and stores how long I spend on each tab. The information is then stored in a file whose name Bumblebee requests before starting research mode. The information is stored in a format that is easily
 readable. This feature makes conducting research easier since I will not have to worry about bookmarking certain pages or having to go through my whole history in order to find a site I visited weeks ago.
