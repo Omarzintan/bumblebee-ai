@@ -36,7 +36,7 @@ class Bumblebee():
     def run(self):
         # Prepping the Neural Net to be used.
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        with open('features/intents.json', 'r') as json_data:
+        with open('utils/intents.json', 'r') as json_data:
             intents = json.load(json_data)
 
         FILE = "models/data.pth"

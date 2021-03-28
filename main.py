@@ -8,7 +8,7 @@ from utils import wake_word_detector
 if __name__ == "__main__":
     # Check to see that intents.json file exists.
     try:
-        with open('features/intents.json', 'r') as json_data:
+        with open('utils/intents.json', 'r') as json_data:
             intents = json.load(json_data)
 
         # Check whether features have been added/removed.
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     except:
         # remove file if it exists        
         try:
-            os.remove('features/intents.json')
+            os.remove('utils/intents.json')
         except:
             print('intents.json file not found.')
             
@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
         intents_json = json.dumps(intents, indent=4)
         
-        with open('features/intents.json', 'w') as f:
+        with open('utils/intents.json', 'w') as f:
             f.write(intents_json)
         print('intents.json file generated.')
         

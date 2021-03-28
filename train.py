@@ -11,7 +11,7 @@ from nltk_utils import bag_of_words, tokenize, stem
 from model import NeuralNet
 
 
-with open('features/intents.json', 'r') as f:
+with open('utils/intents.json', 'r') as f:
     intents = json.load(f)
 
 all_words = []
