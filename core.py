@@ -123,7 +123,7 @@ class Bumblebee():
     def exit_gracefully(self):
         print('Exiting gracefully.')
         if Bumblebee.research_server_proc:
-            self.bs.respond('Closing research server gracefully.')
+            Bumblebee.speech.respond('Closing research server gracefully.')
             store_research_feature_index = self.feature_indices['store_research_data']
             stop_research_feature_index = self.feature_indices['stop_research_data']
             self._features[store_research_feature_index].action()

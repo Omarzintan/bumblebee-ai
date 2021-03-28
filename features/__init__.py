@@ -18,5 +18,6 @@ __all__ = [
     'youtube_search',
     'add_zoom_link',
     'open_zoom_link',
-    'sleep'
+    'sleep',
+    'stop_listening'
 ]

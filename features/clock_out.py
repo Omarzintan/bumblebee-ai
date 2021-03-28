@@ -10,9 +10,9 @@ class Feature(BaseFeature):
         self.patterns = ["clock out", "done working", "stop work", "clock me out of work"]
         super().__init__()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text=''):
         if not Bumblebee.currently_working:
-            bs.respond('You\'ve not been clocked in.')
+            self.bs.respond('You\'ve not been clocked in.')
             return
         
         Bumblebee.currently_working = False
@@ -20,7 +20,7 @@ class Feature(BaseFeature):
         duration = (work_stop_time - Bumblebee.work_start_time)
         print('Duration: ', duration)
         self.clock_out(Bumblebee.employer, work_stop_time.strftime('%a %b %d, %Y %I:%M %p'), duration)
-        bs.respond('You\'ve been clocked out.')
+        self.bs.respond('You\'ve been clocked out.')
         return
 
     '''
