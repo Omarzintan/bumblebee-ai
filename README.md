@@ -1,13 +1,13 @@
 # bumblebee-ai
-Virtual Assistant in Python
+Voice Assistant in Python
 
-*About*
+## About
 This is Bumblebee, a voice assistant made with Python. Bumblebee was made with the intention of automating certain boring or otherwise tedious tasks that I perform on a daily basis. Bumblebee was also made with the goal of being easily extendible. I also took the opportunity to learn about Neural Networks. Bumblebee works with a Deep Neural Network that is trained based on intents data and is able to find out the intent of a sentece spoken to it. Upon finding the intent of the input, Bumblebee run the action of the corresponding feature.
 So far, Bumblebee works well with:
    - Python3.7 on MacOS Big Sur
 (More platforms to be tested soon)
 
-*Quickstart (How to add a basic feature)*
+## Quickstart (How to add a basic feature)
 1) In the /features folder, create a new file called hello_world.py
 2) Import the BaseFeature class by typing `from features.default import BaseFeature`
 3) Create your feature class as seen below:
@@ -37,7 +37,8 @@ So far, Bumblebee works well with:
             self.bs.respond("What is your name?")
             
             # this is how Bumblebee would receive a response from the user
-            # infinite_speaking_chances is a function that keeps asking for input if your speech is not recognized correctly. To break out of this loop, that is if you don't want to proceed, just say 'cancel' or 'stop'.
+            # infinite_speaking_chances is a function that keeps asking for input if your speech is not recognized
+            # correctly. To break out of this loop, that is if you don't want to proceed, just say 'cancel' or 'stop'.
             name = ''
             name = self.bs.infinite_speaking_chances(name)
             
@@ -49,13 +50,14 @@ So far, Bumblebee works well with:
 ```
     
 4) Now that you have created your feature file, open the `__init__.py` file in the /features folder and add the name of your file to the `__all__` list like so:
-   `__all__ = [
+   ```python
+   __all__ = [
         'hello_world'
     ]
-   `
+   ```
 5) When you run `python main.py` from the bumblebee folder, you should see that the intents.json file is regenerated and the model is retrained. After this, when Bumblebee asks "how may I help you?" you can say any sentence similar to the sentence `patterns` you defined in your `hello_world.py` file and the action for your feature should be executed!
                                                                 
-*Features*
+## Features
 1) tells the time and date
 2) Opens up browser with Google search on any query specified
 3) Opens up browser with Youtube search on any query specified
@@ -74,7 +76,7 @@ Research mode can be turned on/off on demand and so it doesn't store all the sit
 
 
 
-*Troubleshooting*
+## Troubleshooting
 1. Bumblebee says "Listening..." but does not respond to wake-word? 
   - If on MacOS Terminal, you will have to make sure audio permissions are enabled through System Preferences and try again.
   - For VSCode, make sure that audio permissions are enabled for MacOS terminal through System Preferences, and then launch Bumblebee through MacOS Terminal app. See [here](https://github.com/microsoft/vscode/issues/95062#issuecomment-625553211) for detailed steps.
