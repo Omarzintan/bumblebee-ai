@@ -8,9 +8,10 @@ from features.crash_recovery import store_globals as cr
 
 def run():
     bs.respond('Hey.')
+    bs.respond('How may I help you?')
+
     while(global_vars.sleep == 0):
         action_found = False
-        bs.respond('How may I help you?')
         text = ''
         text = bs.infinite_speaking_chances(text)
 
@@ -20,7 +21,8 @@ def run():
                 config.action(text)
                 break
         if not action_found:
-            bs.respond('I do not know how to do this yet.')
+            # for generic conversations
+            configs.wolfram_search.action(text)
         
 if __name__ == '__main__':    
     while(1):

@@ -31,14 +31,13 @@ class ClockIn(BaseFeature):
             global_vars.work_start_time = datetime.datetime.now()
             global_vars.currently_working = True
             # access peggy file and put timestamp there
-            helpers.clock_in(global_vars.employer, global_vars.work_start_time.strftime('%d:%m:%Y, %H:%M:%S'))
+            helpers.clock_in(global_vars.employer, global_vars.work_start_time.strftime('%a %b %d, %Y %I:%M %p'))
 
         elif 'osborn' in global_vars.employer:
             # access osborn file and put timestamp there
             global_vars.employer = 'osborn'
             global_vars.work_start_time = datetime.datetime.now()
             global_vars.currently_working = True
-            helpers.clock_in(global_vars.employer, global_vars.work_start_time.strftime('%d-%m-%Y, %H:%M:%S'))
+            helpers.clock_in(global_vars.employer, global_vars.work_start_time.strftime('%a %b %d, %Y %I:%M %p'))
         bs.respond('You\'ve been clocked in for {}.'.format(global_vars.employer))
         return
-            

@@ -16,13 +16,11 @@ class WolframalphaSearch(BaseFeature):
         app_id = wak.get_key()
         client = wolframalpha.Client(app_id)
         try:
-            bs.respond('Searching Wolframalpha')
-            res = client.query(search_query)
+            res = client.query(search_query, width=200)
             answer = next(res.results).text
-            bs.respond('The answer is ' + answer)
+            bs.respond(answer)
         except:
             # Trying Wikipedia
-            bs.respond('I found nothing on Wolframalpha. Trying Wikipedia')
             keywords = Keywords()
             wiki_keywords = keywords.get('search_wikipedia')
             wiki_search_obj = wiki_search.WikipediaSearch(wiki_keywords)

@@ -16,7 +16,7 @@ class ClockOut(BaseFeature):
         global_vars.currently_working = False
         work_stop_time = datetime.datetime.now()
         duration = (work_stop_time - global_vars.work_start_time)
-        print(duration)
-        helpers.clock_out(global_vars.employer, work_stop_time.strftime('%d-%m-%Y, %H:%M:%S'), duration)
+        print('Duration: ', duration)
+        helpers.clock_out(global_vars.employer, work_stop_time.strftime('%a %b %d, %Y %I:%M %p'), duration)
         bs.respond('You\'ve been clocked out.')
         return
