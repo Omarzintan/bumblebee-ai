@@ -20,3 +20,7 @@ mdutils
 beautifulsoup4
 validators
 colorama
+torch
+torchvision
+torchaudio
+nltk
