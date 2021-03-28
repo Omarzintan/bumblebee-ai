@@ -132,7 +132,6 @@ def store_data():
             record["page_title"] = get_title(url)
             record["url"] = url
             record["viewtime"] = url_viewtimes[parent_url][url]
-            record["date_created"] = today
             record["last_updated"] = today
 
             # Updates record if url already exists, otherwise insert as new record.
