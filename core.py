@@ -84,7 +84,14 @@ class Bumblebee():
             self._features[tag_index].action(text)
         return
 
-    """FUNCTIONS NECESSARY FOR CRASH RECOVERY"""
+    """
+    FUNCTIONS NECESSARY FOR CRASH RECOVERY
+    Crash recovery entails storing desired global variables in case
+    a crash happens. So far, the employee info is stored and preserved 
+    if the user is currently working. On reboot, the information about 
+    much time has been spent working is restored. Also, if the research
+    server process is running, it is killed before reboot happens.
+    """
     def store_vars(self):
         Bumblebee.crash_store['work_start_time'] = Bumblebee.work_start_time
         Bumblebee.crash_store['currently_working'] = Bumblebee.currently_working
