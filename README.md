@@ -2,7 +2,7 @@
 Voice Assistant in Python
 
 ## About
-This is Bumblebee, a voice assistant made with Python. Bumblebee was made with the intention of automating certain boring or otherwise tedious tasks that I perform on a daily basis. Bumblebee was also made with the goal of being easily extendible. I also took the opportunity to learn about Neural Networks. Bumblebee works with a Deep Neural Network that is trained based on intents data and is able to find out the intent of a sentece spoken to it. Upon finding the intent of the input, Bumblebee run the action of the corresponding feature.
+This is Bumblebee, a voice assistant made with Python. Bumblebee was made with the intention of automating certain boring or otherwise tedious tasks that I perform on a daily basis. Bumblebee was also made with the goal of being easily extendible. I also used this as an opportunity to learn about Neural Networks. Bumblebee works with a Deep Neural Network that is trained based on intents data and is able to find out the intent of a sentece spoken to it. Upon finding the intent of the input, Bumblebee run the action of the corresponding feature.
 So far, Bumblebee works well with:
    - Python3.7 on MacOS Big Sur
 (More platforms to be tested soon)
