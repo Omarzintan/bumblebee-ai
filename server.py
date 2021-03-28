@@ -16,7 +16,7 @@ fileConfig(bumblebee_root+'logging.cfg')
 
 url_timestamp = {}
 url_viewtime = {}
-parent_url_viewtime = {}
+parent_url_viewtimes = {}
 parent_url_timestamp = {}
 prev_url = ""
 prev_parent_url = ""
@@ -64,7 +64,7 @@ def send_url():
         url_viewtime = {}
         # Set the viewtime of the specific url to 0.
         url_viewtime[url] = 0
-        parent_url_viewtime[parent_url] = url_viewtime
+        parent_url_viewtimes[parent_url] = url_viewtime
         url_timestamp = {}
     else:
         # If we have seen this parent url before. Here, we
@@ -72,7 +72,7 @@ def send_url():
         # url or we are viewing a specific url that we have seen before.
         
         # Access the url_viewtime dictionary for this parent_url.
-        url_viewtime = parent_url_viewtime[parent_url]
+        url_viewtime = parent_url_viewtimes[parent_url]
         
         # If this specific url doesn't exist in the url_viewtime dictionary
         # (accessed in previous line), set the url_viewtime for this url to 0
@@ -81,7 +81,7 @@ def send_url():
         # Note: If it does exist, we do not need to do anything to it.
         if url not in url_viewtime.keys():
             url_viewtime[url] = 0
-            parent_url_viewtime[parent_url] = url_viewtime
+            parent_url_viewtimes[parent_url] = url_viewtime
             
         # Access the specific url timestamp dictionary for this parent url.
         url_timestamp = parent_url_timestamp[parent_url]
@@ -94,7 +94,7 @@ def send_url():
         time_spent = int(time.time() - parent_url_timestamp[prev_parent_url][prev_url])
 
         # The url_viewtime of the previous url is then updated with time_spent
-        parent_url_viewtime[prev_parent_url][prev_url] += time_spent
+        parent_url_viewtimes[prev_parent_url][prev_url] += time_spent
         
     x = int(time.time())
     
@@ -105,7 +105,7 @@ def send_url():
     parent_url_timestamp[parent_url] = url_timestamp
 
     # Update the parent url_viewtime dictionary
-    parent_url_viewtime[parent_url] = url_viewtime
+    parent_url_viewtimes[parent_url] = url_viewtime
 
     prev_url = url
     prev_parent_url = parent_url
@@ -129,7 +129,7 @@ To be called by helper function in research feature.
 '''
 @app.route('/store_data', methods=['GET'])
 def store_data():
-    return jsonify({'message': 'success', 'parent_urls':list(parent_url_timestamp.keys()), 'url_viewtimes':parent_url_viewtime}), 200
+    return jsonify({'message': 'success', 'parent_urls':list(parent_url_timestamp.keys()), 'url_viewtimes':parent_url_viewtimes}), 200
 
 
 if __name__ == '__main__':
