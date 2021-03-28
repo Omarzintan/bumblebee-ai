@@ -1,7 +1,6 @@
-from features import global_vars
-from features.global_vars import bumble_speech as bs
 from features.research import helpers as research_help
 from features.research import glocal_vars as research_glocal
+from core import Bumblebee
 import json, pickle
 import os, sys
 import datetime
@@ -17,9 +16,9 @@ global_vars_store = {}
 
 # Store necessary global variables in global_vars.py
 def store_vars():
-    global_vars_store['work_start_time'] = global_vars.work_start_time
-    global_vars_store['currently_working'] = global_vars.currently_working
-    global_vars_store['employer'] = global_vars.employer
+    global_vars_store['work_start_time'] = Bumblebee.work_start_time
+    global_vars_store['currently_working'] = Bumblebee.currently_working
+    global_vars_store['employer'] = Bumblebee.employer
     with open(crash_file, 'wb') as f:
         f.seek(0)
         pickle.dump(global_vars_store, f)
@@ -27,9 +26,9 @@ def store_vars():
         
 def restore_vars():
     global_vars_store = pickle.load(open(crash_file, "rb"))
-    global_vars.work_start_time = global_vars_store['work_start_time']
-    global_vars.currently_working = global_vars_store['currently_working']
-    global_vars.employer = global_vars_store['employer']
+    Bumblebee.work_start_time = global_vars_store['work_start_time']
+    Bumblebee.currently_working = global_vars_store['currently_working']
+    Bumblebee.employer = global_vars_store['employer']
     return
     
 def start_gracefully():
@@ -46,7 +45,7 @@ def start_gracefully():
 
 def exit_gracefully():
     print('Exiting gracefully.')
-    if research_glocal.server_proc:
+    if Bumblebee.research_server_proc:
         bs.respond('Closing research server gracefully.')
         research_help.store_data()
         research_help.stop_server()

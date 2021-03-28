@@ -19,7 +19,7 @@ class Feature(BaseFeature):
         research_db_path = self.config['Databases']['research']
         self.research_db = TinyDB(research_db_path)
 
-    def action(self, spoken_text):
+    def action(self, spoken_text=''):
         try:
             filename = self.store_data()
             self.bs.respond('Research data stored successfully at {}.md'.format(filename))

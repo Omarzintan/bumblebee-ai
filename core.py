@@ -1,8 +1,9 @@
 '''The core of Bumblebee.'''
 import importlib
 from utils.speech import BumbleSpeech
-
-import json
+import os, sys
+import json, pickle
+import datetime
 
 import torch
 
@@ -20,13 +21,14 @@ class Bumblebee():
     research_server_proc = ''
     research_topic = ''
     sleep = 0
+    crash_file = 'crash_recovery.p'
+    crash_store = {}
     
     def __init__(self, features:list=[]):
         if features != []:
             self._features = [
                 importlib.import_module('features.'+feature, ".").Feature() for feature in features]
             self.feature_indices = {feature : x for x, feature in enumerate(features)}
-            print(self.feature_indices)
         else:
             # Use default feature if no features are set.
             self._features = [ importlib.import_module('features.default', ".").Feature()]
@@ -81,3 +83,43 @@ class Bumblebee():
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
         return
+
+    """FUNCTIONS NECESSARY FOR CRASH RECOVERY"""
+    def store_vars(self):
+        Bumblebee.crash_store['work_start_time'] = Bumblebee.work_start_time
+        Bumblebee.crash_store['currently_working'] = Bumblebee.currently_working
+        Bumblebee.crash_store['employer'] = Bumblebee.employer
+        with open(Bumblebee.crash_file, 'wb') as f:
+            f.seek(0)
+            pickle.dump(Bumblebee.crash_store, f)
+        return
+        
+    def restore_vars(self):
+        Bumblebee.crash_store = pickle.load(open(Bumblebee.crash_file, "rb"))
+        Bumblebee.work_start_time = Bumblebee.crash_store['work_start_time']
+        Bumblebee.currently_working = Bumblebee.crash_store['currently_working']
+        Bumblebee.employer = Bumblebee.crash_store['employer']
+        return
+
+    def start_gracefully(self):
+        try:
+            if os.path.exists(Bumblebee.crash_file):
+                print('Starting gracefully.')
+                self.restore_vars()
+                os.remove(Bumblebee.crash_file)
+        except:
+            print(sys.exc_info())
+            print('Start gracefully failed.')
+            pass
+        return
+
+    def exit_gracefully(self):
+        print('Exiting gracefully.')
+        if Bumblebee.research_server_proc:
+            self.bs.respond('Closing research server gracefully.')
+            store_research_feature_index = self.feature_indices['store_research_data']
+            stop_research_feature_index = self.feature_indices['stop_research_data']
+            self._features[store_research_feature_index].action()
+            self._features[stop_research_feature_index].action()
+        if Bumblebee.currently_working:
+            self.store_vars()

@@ -3,12 +3,15 @@ import features
 import sys, os
 import json
 import importlib
+from utils import wake_word_detector
 
 if __name__ == "__main__":
     # Check to see that intents.json file exists.
     try:
         with open('features/intents.json', 'r') as json_data:
             intents = json.load(json_data)
+
+        # Check whether features have been added/removed.
         assert(len(features.__all__) == len(intents['intents']))
     except:
         # remove file if it exists        
@@ -41,5 +44,13 @@ if __name__ == "__main__":
         exec(open("./train.py").read())
         print("NeuralNet trained.")
         
-    bumblebee = Bumblebee(features.__all__)
-    bumblebee.run()
+
+    while(1):
+        try:
+            bumblebee = Bumblebee(features.__all__)
+            bumblebee.start_gracefully()
+            if wake_word_detector.run():
+                Bumblebee.sleep = 0                
+                bumblebee.run()
+        except IOError:
+            bumblebee.exit_gracefully()
