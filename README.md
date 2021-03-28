@@ -8,14 +8,14 @@ So far, Bumblebee works well with:
 (More platforms to be tested soon)
 
 ## Quickstart (How to add a basic feature)
-1) In the /features folder, create a new file called hello_world.py
+1) In the `/features` folder, create a new file called `hello_world.py`
 2) Import the BaseFeature class by typing `from features.default import BaseFeature`
 3) Create your feature class as seen below:
 
 ```python
    class Feature(BaseFeature):
          def __init__(self):
-             # The tag_name will automatically be used an an intent
+             # The tag_name will automatically be used as an intent
              # identifier in the Neural Network.
              # While your tag_name can be anything you want it to be,
              # it must be the same name as your .py file             
@@ -27,11 +27,12 @@ So far, Bumblebee works well with:
 
              # Initialize some important variables from the BaseFeature class in default.py
              # Such important variables include Bumblebee's speech function (which we call bs)
-             # i.e. short for bumble speech as well as Bumblebee's config variable which we use
+             # i.e. short for bumble speech, as well as Bumblebee's config variable which we use
              # to read values from the config.ini file. (Not relevant here)
              super().__init__()
 
-        # We define our action function where all the action happens.        
+        # We define our action function where all the action happens.
+        # This function has to be called action.
         def action(self, spoken_text):
             # use the respond function from the bs (bumble speech) class to let Bumblebee ask for your name.
             self.bs.respond("What is your name?")
@@ -49,13 +50,13 @@ So far, Bumblebee works well with:
             return
 ```
     
-4) Now that you have created your feature file, open the `__init__.py` file in the /features folder and add the name of your file to the `__all__` list like so:
+4) Now that you have created your feature file, open the `__init__.py` file in the `/features` folder and add the name of your file to the `__all__` list like so:
    ```python
    __all__ = [
         'hello_world'
     ]
    ```
-5) When you run `python main.py` from the bumblebee folder, you should see that the `intents.json` file is regenerated and the model is retrained. After this, when Bumblebee asks "how may I help you?" you can say any sentence similar to the sentence `patterns` you defined in your `hello_world.py` file and the action for your feature should be executed!
+5) When you run `python main.py` from the bumblebee folder, you should see that the `intents.json` file is regenerated and the model is retrained. Now when you say "Bumblebee" and Bumblebee asks "how may I help you?" you can say any sentence similar to the sentence `patterns` you defined in your `hello_world.py` file and the action for your feature should be executed!
                                                                 
 ## Features
 1) tells the time and date
