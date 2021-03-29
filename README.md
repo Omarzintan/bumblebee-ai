@@ -6,7 +6,7 @@ This is Bumblebee, a voice assistant made with Python. Bumblebee was made with t
 
 *So far, Bumblebee works well with:*
    - Python3.7 on MacOS Big Sur
-*(More platforms to be tested soon)*
+   *(More platforms to be tested soon)*
 
 ## Quickstart (How to add a basic feature)
 1) In the `/features` folder, create a new file called `hello_world.py`
