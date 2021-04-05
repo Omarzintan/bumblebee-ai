@@ -1,0 +1,15 @@
+Common:
+  home_dir: /Users
+  bumblebee_dir: /Users/zintan/fun-projects/bumblebee
+  python3_env: /Users/zintan/opt/anaconda3/envs/bumblebee/bin/python3.7
+Authur:
+  name: Zintan
+  my_dir: /Users/zintan
+Databases:
+  zoom: /Users/zintan/fun-projects/bumblebee/database/zoom_db.json
+  research: /Users/zintan/fun-projects/bumblebee/database/research_db.json
+Folders:
+  work_study: /Users/zintan/fun-projects/bumblebee/work_study
+  research_files: /Users/zintan/fun-projects/bumblebee/research_files/
+Utilities:
+  research_server_url: http://127.0.0.1:5000

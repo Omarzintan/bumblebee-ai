@@ -24,14 +24,26 @@ class Bumblebee():
     crash_file = 'crash_recovery.p'
     crash_store = {}
     
-    def __init__(self, features:list=[]):
+    def __init__(self, features:list=[], config:dict={}):
+        assert(config != {})
+        self.config = config
+        self.bumblebee_dir = config["Common"]["bumblebee_dir"]
         if features != []:
-            self._features = [
-                importlib.import_module('features.'+feature, ".").Feature() for feature in features]
+            self._features = []
+            # Importing features this way is more friendly towards pyinstaller.
+            for feature in features:
+                spec = importlib.util.spec_from_file_location("features."+feature, self.bumblebee_dir+"/features/"+feature+".py")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module) # Without this line, module.Feature() in the next line will not work.
+                self._features.append(module.Feature())
+
             self.feature_indices = {feature : x for x, feature in enumerate(features)}
         else:
             # Use default feature if no features are set.
-            self._features = [ importlib.import_module('features.default', ".").Feature()]
+            spec = importlib.util.spec_from_file_loaction("features.default", self.bumblebee_dir+"/features/default.py")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            self._features = [ module.Feature()]
             
     def run(self):
         # Prepping the Neural Net to be used.

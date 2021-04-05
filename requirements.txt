@@ -24,3 +24,5 @@ torch
 torchvision
 torchaudio
 nltk
+pyinstaller
+pyyaml

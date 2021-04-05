@@ -1,6 +1,7 @@
 '''Default Feature Class'''
 from core import Bumblebee
 from configparser import ConfigParser, ExtendedInterpolation
+import yaml
 
 class BaseFeature():
     tag_name = ''
@@ -9,8 +10,13 @@ class BaseFeature():
     def __init__(self):
         self.bs = Bumblebee.speech
         self.index = None
-        self.config = ConfigParser(interpolation=ExtendedInterpolation())
-        self.config.read('utils/config.ini')
+#        self.config = ConfigParser(interpolation=ExtendedInterpolation())
+#        self.config.read('utils/config.ini')
+        try:
+            with open("utils/config.yaml", "r") as ymlfile:
+                self.config = yaml.load(ymlfile, Loader=yaml.FullLoader)
+        except FileNotFoundError:
+            print("Config file not found.")
         
     def action(self, text):
         pass
