@@ -1,0 +1,16 @@
+Api_keys:
+  gmail: YOUR_PATH_TO_GMAIL_CREDENTIALS_FILE
+  wolframalpha: YOUR_API_KEY_HERE
+Common:
+  bumblebee_dir: /Users/user/Desktop/bumblebee/
+  python3_env: /Users/user/opt/anaconda3/envs/bumblebee/bin/python3.7
+Databases:
+  contacts: /Users/user/Desktop/bumblebee/databases/contacts_db.json
+  employers: /Users/user/Desktop/bumblebee/databases/employers_db.json
+  research: /Users/user/Desktop/bumblebee/databases/research_db.json
+  zoom: /Users/user/Desktop/bumblebee/databases/zoom_db.json
+Folders:
+  research_files: /Users/user/Desktop/bumblebee/research_files/
+  work_study: /Users/user/Desktop/bumblebee/work_study
+Utilities:
+  research_server_url: http://127.0.0.1:8000

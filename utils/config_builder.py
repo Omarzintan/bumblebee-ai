@@ -18,6 +18,10 @@ config["Databases"]["research"] = bumblebee_root+"databases/research_db.json"
 config["Databases"]["employers"] = bumblebee_root+"databases/employers_db.json"
 config["Databases"]["contacts"] = bumblebee_root+"databases/contacts_db.json"
 
+config["Api_keys"] = {}
+config["Api_keys"]["wolframalpha"] = "YOUR_API_KEY_HERE"
+config["Api_keys"]["gmail"] = "YOUR_PATH_TO_GMAIL_CREDENTIALS_FILE"
+
 config["Folders"] = {}
 config["Folders"]["work_study"] = bumblebee_root+"work_study"
 config["Folders"]["research_files"] = bumblebee_root+"research_files/"
