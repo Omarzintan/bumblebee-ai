@@ -13,6 +13,7 @@ config["Common"]["bumblebee_dir"] = bumblebee_root
 config["Common"]["python3_env"] = subprocess.check_output(["which", "python3.7"]).decode('utf-8').strip()
 
 config["Database"] = {}
+config["Database"]["path"] = bumblebee_root+"database/"
 config["Database"]["zoom"] = bumblebee_root+"database/zoom_db.json"
 config["Database"]["research"] = bumblebee_root+"database/research_db.json"
 config["Database"]["employers"] = bumblebee_root+"database/employers_db.json"
