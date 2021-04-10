@@ -1,5 +1,4 @@
 from features.default import BaseFeature
-from database import wolframalpha_key as wak
 import wolframalpha
 from features import wiki_search
 import sys
