@@ -7,18 +7,27 @@ import importlib
 import utils
 import yaml
 from utils import wake_word_detector
+from utils import config_builder
 
 if __name__ == "__main__":
-    # Access config file
+   
     bumblebee_dir = ""
     config = ""
     try:
-        with open("utils/config.yaml", "r") as ymlfile:
+        # Access config file
+        print("Accessing configuration file")
+        with open("utils/config4.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
             bumblebee_dir = config["Common"]["bumblebee_dir"]
     except FileNotFoundError:
-        print("Please ensure that you have a config.yaml file in the utils direcroty")
-        raise
+        # Build config file if it is not found.
+        print("Building configuration file.")
+        if config_builder.build_yaml() == -1:
+            raise("Error building config file.")
+        print("Configuration file built successfully at 'utils/config.yaml'")
+        with open("utils/config.yaml", "r") as ymlfile:
+            config = yaml.load(ymlfile, Loader=yaml.FullLoader)
+            bumblebee_dir = config["Common"]["bumblebee_dir"]
         
     # Check to see that intents.json file exists.
     try:

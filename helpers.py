@@ -33,7 +33,7 @@ def get_root_directory():
     bumblebee_root_dir = os.getenv('BUMBLEBEE_PATH')
     if not bumblebee_root_dir:
         logger.debug("No BUMBLEBEE_PATH is set in environment. Computing root directory instead.")
-        top_level_filename = "bumblebee.py"
+        top_level_filename = "main.py"
         bumblebee_root_dir = os.path.dirname(os.path.abspath(top_level_filename))
         
     return bumblebee_root_dir + "/" 
