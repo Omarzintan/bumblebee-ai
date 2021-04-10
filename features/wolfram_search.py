@@ -13,7 +13,11 @@ class Feature(BaseFeature):
     def action(self, spoken_text):
         search_query = self.get_search_query(spoken_text, self.patterns)
         app_id = self.config["Api_keys"]["wolframalpha"]
-        client = wolframalpha.Client(app_id)
+        try:
+            client = wolframalpha.Client(app_id)
+        except:
+            self.bs.respond("I cannot use the wolframalpha api key")
+            return
         try:
             res = client.query(search_query, width=200)
             answer = next(res.results).text
