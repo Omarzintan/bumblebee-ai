@@ -34,10 +34,9 @@ class Feature(BaseFeature):
     the research database.
     '''
     def store_data(self):
+        # The research files folder is gauranteed to exist.
         research_files_path = self.config['Folders']['research_files']
         server_url = self.config['Utilities']['research_server_url']
-        # Store files in ./research-files
-        os.makedirs(research_files_path, exist_ok=True)
 
         filename = Bumblebee.research_topic
         filename = filename.replace(' ', '-')

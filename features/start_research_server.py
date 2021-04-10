@@ -83,5 +83,5 @@ class Feature(BaseFeature):
         python3_env_path = self.config['Common']['python3_env']
         bumblebee_dir = self.config['Common']['bumblebee_dir']
         # Create the subprocess for the flask server.
-        Bumblebee.research_server_proc = subprocess.Popen([python3_env_path, bumblebee_dir+'/server.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        Bumblebee.research_server_proc = subprocess.Popen([python3_env_path, bumblebee_dir+'server.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return

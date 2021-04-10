@@ -12,7 +12,7 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text):
         search_query = self.get_search_query(spoken_text, self.patterns)
-        app_id = wak.get_key()
+        app_id = self.config["Api_keys"]["wolframalpha"]
         client = wolframalpha.Client(app_id)
         try:
             res = client.query(search_query, width=200)
