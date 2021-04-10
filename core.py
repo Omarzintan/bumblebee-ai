@@ -1,8 +1,9 @@
 '''The core of Bumblebee.'''
 import importlib
 from utils.speech import BumbleSpeech
-
-import json
+import os, sys
+import json, pickle
+import datetime
 
 import torch
 
@@ -20,21 +21,35 @@ class Bumblebee():
     research_server_proc = ''
     research_topic = ''
     sleep = 0
+    crash_file = 'crash_recovery.p'
+    crash_store = {}
+    config_yaml = {}
     
-    def __init__(self, features:list=[]):
+    def __init__(self, features:list=[], config:dict={}):
+        assert(config != {})
+        Bumblebee.config_yaml = config
+        self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
         if features != []:
-            self._features = [
-                importlib.import_module('features.'+feature, ".").Feature() for feature in features]
+            self._features = []
+            # Importing features this way is more friendly towards pyinstaller.
+            for feature in features:
+                spec = importlib.util.spec_from_file_location("features."+feature, self.bumblebee_dir+"/features/"+feature+".py")
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module) # Without this line, module.Feature() in the next line will not work.
+                self._features.append(module.Feature())
+
             self.feature_indices = {feature : x for x, feature in enumerate(features)}
-            print(self.feature_indices)
         else:
             # Use default feature if no features are set.
-            self._features = [ importlib.import_module('features.default', ".").Feature()]
+            spec = importlib.util.spec_from_file_loaction("features.default", self.bumblebee_dir+"/features/default.py")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            self._features = [ module.Feature()]
             
     def run(self):
         # Prepping the Neural Net to be used.
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        with open('features/intents.json', 'r') as json_data:
+        with open('utils/intents.json', 'r') as json_data:
             intents = json.load(json_data)
 
         FILE = "models/data.pth"
@@ -81,3 +96,54 @@ class Bumblebee():
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
         return
+
+    """Get the config file that Bumblebee is running with."""
+    def get_config(self):
+        return self.config
+
+    """
+    FUNCTIONS NECESSARY FOR CRASH RECOVERY
+    Crash recovery entails storing desired global variables in case
+    a crash happens. So far, the employee info is stored and preserved 
+    if the user is currently working. On reboot, the information about 
+    much time has been spent working is restored. Also, if the research
+    server process is running, it is killed before reboot happens.
+    """
+    def store_vars(self):
+        Bumblebee.crash_store['work_start_time'] = Bumblebee.work_start_time
+        Bumblebee.crash_store['currently_working'] = Bumblebee.currently_working
+        Bumblebee.crash_store['employer'] = Bumblebee.employer
+        with open(Bumblebee.crash_file, 'wb') as f:
+            f.seek(0)
+            pickle.dump(Bumblebee.crash_store, f)
+        return
+        
+    def restore_vars(self):
+        Bumblebee.crash_store = pickle.load(open(Bumblebee.crash_file, "rb"))
+        Bumblebee.work_start_time = Bumblebee.crash_store['work_start_time']
+        Bumblebee.currently_working = Bumblebee.crash_store['currently_working']
+        Bumblebee.employer = Bumblebee.crash_store['employer']
+        return
+
+    def start_gracefully(self):
+        try:
+            if os.path.exists(Bumblebee.crash_file):
+                print('Starting gracefully.')
+                self.restore_vars()
+                os.remove(Bumblebee.crash_file)
+        except:
+            print(sys.exc_info())
+            print('Start gracefully failed.')
+            pass
+        return
+
+    def exit_gracefully(self):
+        print('Exiting gracefully.')
+        if Bumblebee.research_server_proc:
+            Bumblebee.speech.respond('Closing research server gracefully.')
+            store_research_feature_index = self.feature_indices['store_research_data']
+            stop_research_feature_index = self.feature_indices['stop_research_data']
+            self._features[store_research_feature_index].action()
+            self._features[stop_research_feature_index].action()
+        if Bumblebee.currently_working:
+            self.store_vars()

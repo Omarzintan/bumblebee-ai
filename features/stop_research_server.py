@@ -8,7 +8,7 @@ class Feature(BaseFeature):
         self.patterns =  ["stop research", "exit research mode", "done researching"]
         super().__init__()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text=''):
         self.bs.respond('Stopping research server.')
         self.stop_server()
         return

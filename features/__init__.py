@@ -6,8 +6,8 @@ __all__ = [
     'clock_out',
     'greeting',
     'grepapp_search',
-    'send_email',
-    'open_notepad',
+    #'send_email',
+    #'open_notepad',
     'wiki_search',
     'wolfram_search',
     'start_research_server',
@@ -17,5 +17,7 @@ __all__ = [
     'silent_mode_off',
     'youtube_search',
     'add_zoom_link',
-    'open_zoom_link'
+    'open_zoom_link',
+    'sleep',
+    'stop_listening'
 ]

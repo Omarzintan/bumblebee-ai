@@ -1,16 +1,14 @@
 '''Default Feature Class'''
 from core import Bumblebee
-from configparser import ConfigParser, ExtendedInterpolation
 
-class BaseFeature():
+class BaseFeature(Bumblebee):
     tag_name = ''
     patterns = []
 
     def __init__(self):
-        self.bs = Bumblebee.speech
+        self.bs = self.speech
         self.index = None
-        self.config = ConfigParser(interpolation=ExtendedInterpolation())
-        self.config.read('utils/config.ini')
+        self.config = self.config_yaml
         
     def action(self, text):
         pass

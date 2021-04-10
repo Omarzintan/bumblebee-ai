@@ -80,7 +80,9 @@
         {
             "tag": "wiki_search",
             "patterns": [
-                "wikipedia"
+                "wikipedia",
+                "search wikipedia for",
+                "look up on wikipedia"
             ],
             "index": 8
         },
@@ -89,7 +91,8 @@
             "patterns": [
                 "calculate",
                 "what is",
-                "i wonder why",
+                "how many",
+                "how much",
                 "compute"
             ],
             "index": 9
@@ -98,7 +101,8 @@
             "tag": "start_research_server",
             "patterns": [
                 "start research",
-                "research modelet's do research",
+                "research mode",
+                "let's do research",
                 "start research server"
             ],
             "index": 10
@@ -167,6 +171,26 @@
                 "time for class"
             ],
             "index": 17
+        },
+        {
+            "tag": "sleep",
+            "patterns": [
+                "I am done",
+                "all done",
+                "exit",
+                "go to sleep",
+                "bye"
+            ],
+            "index": 18
+        },
+        {
+            "tag": "stop_listening",
+            "patterns": [
+                "stop listening",
+                "shutdown",
+                "shut down"
+            ],
+            "index": 19
         }
     ]
 }
