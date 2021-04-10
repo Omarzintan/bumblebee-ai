@@ -30,11 +30,8 @@ logger  = get_logger(__name__)
 
 def get_root_directory():
     '''Gets the root directory of the project. Source: https://www.kite.com/python/answers/how-to-get-the-path-of-the-root-project-structure-in-python'''
-    bumblebee_root_dir = os.getenv('BUMBLEBEE_PATH')
-    if not bumblebee_root_dir:
-        logger.debug("No BUMBLEBEE_PATH is set in environment. Computing root directory instead.")
-        top_level_filename = "main.py"
-        bumblebee_root_dir = os.path.dirname(os.path.abspath(top_level_filename))
+    top_level_filename = "main.py"
+    bumblebee_root_dir = os.path.dirname(os.path.abspath(top_level_filename))
         
     return bumblebee_root_dir + "/" 
 
