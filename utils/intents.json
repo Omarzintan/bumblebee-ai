@@ -63,28 +63,13 @@
             "index": 5
         },
         {
-            "tag": "send_email",
-            "patterns": [
-                "send an email",
-                "send an email to"
-            ],
-            "index": 6
-        },
-        {
-            "tag": "open_notepad",
-            "patterns": [
-                "open notepad"
-            ],
-            "index": 7
-        },
-        {
             "tag": "wiki_search",
             "patterns": [
                 "wikipedia",
                 "search wikipedia for",
                 "look up on wikipedia"
             ],
-            "index": 8
+            "index": 6
         },
         {
             "tag": "wolfram_search",
@@ -95,7 +80,7 @@
                 "how much",
                 "compute"
             ],
-            "index": 9
+            "index": 7
         },
         {
             "tag": "start_research_server",
@@ -105,7 +90,7 @@
                 "let's do research",
                 "start research server"
             ],
-            "index": 10
+            "index": 8
         },
         {
             "tag": "stop_research_server",
@@ -114,7 +99,7 @@
                 "exit research mode",
                 "done researching"
             ],
-            "index": 11
+            "index": 9
         },
         {
             "tag": "store_research_data",
@@ -124,7 +109,7 @@
                 "save tabs",
                 "save my data"
             ],
-            "index": 12
+            "index": 10
         },
         {
             "tag": "silent_mode_on",
@@ -133,7 +118,7 @@
                 "turn on silent mode",
                 "start silent mode"
             ],
-            "index": 13
+            "index": 11
         },
         {
             "tag": "silent_mode_off",
@@ -143,7 +128,7 @@
                 "exit silent mode",
                 "stop silent mode"
             ],
-            "index": 14
+            "index": 12
         },
         {
             "tag": "youtube_search",
@@ -153,7 +138,7 @@
                 "show me a video about",
                 "find a video on"
             ],
-            "index": 15
+            "index": 13
         },
         {
             "tag": "add_zoom_link",
@@ -162,7 +147,7 @@
                 "new zoom link",
                 "add a new zoom class"
             ],
-            "index": 16
+            "index": 14
         },
         {
             "tag": "open_zoom_link",
@@ -170,7 +155,7 @@
                 "take me to",
                 "time for class"
             ],
-            "index": 17
+            "index": 15
         },
         {
             "tag": "sleep",
@@ -181,7 +166,7 @@
                 "go to sleep",
                 "bye"
             ],
-            "index": 18
+            "index": 16
         },
         {
             "tag": "stop_listening",
@@ -190,7 +175,7 @@
                 "shutdown",
                 "shut down"
             ],
-            "index": 19
+            "index": 17
         }
     ]
 }
