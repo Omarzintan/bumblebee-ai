@@ -12,7 +12,7 @@ class Feature(BaseFeature):
         super().__init__()
         
         # self.config defined in BaseFeature class
-        zoom_db_path = self.config['Databases']['zoom']
+        zoom_db_path = self.config['Database']['zoom']
         self.zoom_db = TinyDB(zoom_db_path)
 
 

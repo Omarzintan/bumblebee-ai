@@ -16,7 +16,7 @@ class Feature(BaseFeature):
         super().__init__()
 
         # self.config defined in BaseFeature class
-        research_db_path = self.config['Databases']['research']
+        research_db_path = self.config['Database']['research']
         self.research_db = TinyDB(research_db_path)
 
     def action(self, spoken_text=''):
