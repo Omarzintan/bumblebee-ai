@@ -1,9 +1,12 @@
 '''The core of Bumblebee.'''
 import importlib
 from utils.speech import BumbleSpeech
-import os, sys
-import json, pickle
+import os
+import sys
+import json
+import pickle
 import datetime
+import subprocess
 
 import torch
 
@@ -29,11 +32,15 @@ class Bumblebee():
         assert(config != {})
         Bumblebee.config_yaml = config
         self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
+        
+        # %%
+        # Building Feature objects from list of features.
+        # -----------------------------------------------
         if features != []:
             self._features = []
             # Importing features this way is more friendly towards pyinstaller.
             for feature in features:
-                spec = importlib.util.spec_from_file_location("features."+feature, self.bumblebee_dir+"/features/"+feature+".py")
+                spec = importlib.util.spec_from_file_location("features."+feature, self.bumblebee_dir+"features/"+feature+".py")
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module) # Without this line, module.Feature() in the next line will not work.
                 self._features.append(module.Feature())
@@ -41,10 +48,52 @@ class Bumblebee():
             self.feature_indices = {feature : x for x, feature in enumerate(features)}
         else:
             # Use default feature if no features are set.
-            spec = importlib.util.spec_from_file_loaction("features.default", self.bumblebee_dir+"/features/default.py")
+            spec = importlib.util.spec_from_file_loaction("features.default", self.bumblebee_dir+"features/default.py")
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-            self._features = [ module.Feature()]
+            self._features = [module.Feature()]
+            self.feature_indices = {feature : x for x, feature in enumerate(self._features)}
+
+        # %%
+        # Accessing intents.json file.
+        # ----------------------------
+        try:
+            # Check to see that intents.json file exists.
+            with open(self.bumblebee_dir+'utils/intents.json', 'r') as json_data:
+                intents = json.load(json_data)
+            # Check whether any features have been added/removed.
+            assert(len(self._features) == len(intents['intents']))
+        except:
+            # remove intents file if it exists        
+            try:
+                os.remove(self.bumblebee_dir+'utils/intents.json')
+            except:
+                print('intents.json file not found.')
+            
+            # Update intents.json if features have been added/removed or the file does not exist.
+            print('Generating new intents.json file...')
+
+            intents = {}
+            intents['intents'] = []
+            for x, feature in enumerate(self._features):
+                tag = {}
+                tag["tag"] = feature.tag_name
+                tag["patterns"] = feature.patterns
+                tag["index"] = x
+                intents['intents'].append(tag)
+
+            intents_json = json.dumps(intents, indent=4)
+        
+            with open(self.bumblebee_dir+'utils/intents.json', 'w') as f:
+                f.write(intents_json)
+            print('intents.json file generated.')
+
+            # Retrain the NeuralNet
+            print("Retraining NeuralNet...")
+            output, errors = subprocess.Popen(['python', 'train.py'], stdout=subprocess.PIPE, text=True).communicate()
+            print(output)
+            print(errors)
+            print("NeuralNet trained.")
             
     def run(self):
         # Prepping the Neural Net to be used.
@@ -96,7 +145,7 @@ class Bumblebee():
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
         return
-
+        
     """Get the config file that Bumblebee is running with."""
     def get_config(self):
         return self.config
