@@ -1,3 +1,7 @@
+'''
+This file is just for building a default config file on first install.
+Any updates to the config.yaml file should be made directly into config/config.yaml
+'''
 import yaml
 import subprocess
 from helpers import bumblebee_root
