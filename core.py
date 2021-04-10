@@ -23,11 +23,12 @@ class Bumblebee():
     sleep = 0
     crash_file = 'crash_recovery.p'
     crash_store = {}
+    config_yaml = {}
     
     def __init__(self, features:list=[], config:dict={}):
         assert(config != {})
-        self.config = config
-        self.bumblebee_dir = config["Common"]["bumblebee_dir"]
+        Bumblebee.config_yaml = config
+        self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
         if features != []:
             self._features = []
             # Importing features this way is more friendly towards pyinstaller.
@@ -95,6 +96,10 @@ class Bumblebee():
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
         return
+
+    """Get the config file that Bumblebee is running with."""
+    def get_config(self):
+        return self.config
 
     """
     FUNCTIONS NECESSARY FOR CRASH RECOVERY

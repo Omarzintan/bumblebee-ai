@@ -17,25 +17,24 @@ if __name__ == "__main__":
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
             bumblebee_dir = config["Common"]["bumblebee_dir"]
     except FileNotFoundError:
-        print("Config file not found.")
-        print("Using hard-coded value for bumblebee directory.")
-        bumblebee_dir = "/Users/zintan/fun-projects/bumblebee"
-
+        print("Please ensure that you have a config.yaml file in the utils direcroty")
+        raise
+        
     # Check to see that intents.json file exists.
     try:
         with open(bumblebee_dir+'/utils/intents.json', 'r') as json_data:
             intents = json.load(json_data)
 
-        # Check whether features have been added/removed.
+        # Check whether any features have been added/removed.
         assert(len(features.__all__) == len(intents['intents']))
     except:
-        # remove file if it exists        
+        # remove intents file if it exists        
         try:
             os.remove(bumblebee_dir+'utils/intents.json')
         except:
             print('intents.json file not found.')
             
-        # Update intents.json if features have been added/removed or the file does not exist.        
+        # Update intents.json if features have been added/removed or the file does not exist.
         print('Generating new intents.json file...')
 
         intents = {}
