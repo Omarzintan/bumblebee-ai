@@ -6,8 +6,7 @@ from utils import config_builder
 
 if __name__ == "__main__":
    
-    bumblebee_dir = ""
-    config = ""
+    config = {}
     try:
         # %%
         # Access config file
@@ -15,7 +14,6 @@ if __name__ == "__main__":
         print("Accessing configuration file")
         with open("utils/config.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
-            bumblebee_dir = config["Common"]["bumblebee_dir"]
     except FileNotFoundError:
         # %%
         # Build config file if it is not found.
@@ -26,7 +24,6 @@ if __name__ == "__main__":
         print("Configuration file built successfully at 'utils/config.yaml'")
         with open("utils/config.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
-            bumblebee_dir = config["Common"]["bumblebee_dir"]
 
     while(1):
         try:
