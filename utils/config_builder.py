@@ -22,7 +22,7 @@ config["Utilities"] = {}
 config["Utilities"]["research_server_url"] = "http://127.0.0.1:5000"
 
 def write_yaml(data):
-    with open("utils/config2.yaml", "w") as config_file:
+    with open("utils/config.yaml", "w") as config_file:
         yaml.dump(data, config_file)
 
 def build_yaml():

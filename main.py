@@ -16,7 +16,7 @@ if __name__ == "__main__":
     try:
         # Access config file
         print("Accessing configuration file")
-        with open("utils/config4.yaml", "r") as ymlfile:
+        with open("utils/config.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
             bumblebee_dir = config["Common"]["bumblebee_dir"]
     except FileNotFoundError:
