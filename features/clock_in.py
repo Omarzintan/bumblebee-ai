@@ -13,19 +13,19 @@ class Feature(BaseFeature):
         super().__init__()
 
     def action(self, spoken_text):
-        bs.respond('Is this for Peggy or Osborn?')
+        self.bs.respond('Is this for Peggy or Osborn?')
         Bumblebee.employer = ''
-        Bumblebee.employer = bs.infinite_speaking_chances(Bumblebee.employer)
-        if bs.interrupt_check(Bumblebee.employer):
+        Bumblebee.employer = self.bs.infinite_speaking_chances(Bumblebee.employer)
+        if self.bs.interrupt_check(Bumblebee.employer):
             return
         close_names = []
         while close_names == []:
             close_names = difflib.get_close_matches(Bumblebee.employer, ['peggy', 'osborn'])
             if close_names == []:
-                bs.respond('I don\'t know this employer. Please try again')
+                self.bs.respond('I don\'t know this employer. Please try again')
                 Bumblebee.employer = ''
-                Bumblebee.employer = bs.infinite_speaking_chances(Bumblebee.employer)
-                if bs.interrupt_check(Bumblebee.employer):
+                Bumblebee.employer = self.bs.infinite_speaking_chances(Bumblebee.employer)
+                if self.bs.interrupt_check(Bumblebee.employer):
                     break
 
         Bumblebee.employer = close_names[0]
@@ -42,7 +42,7 @@ class Feature(BaseFeature):
             Bumblebee.work_start_time = datetime.datetime.now()
             Bumblebee.currently_working = True
             self.clock_in(Bumblebee.employer, Bumblebee.work_start_time.strftime('%a %b %d, %Y %I:%M %p'))
-        bs.respond('You\'ve been clocked in for {}.'.format(Bumblebee.employer))
+        self.bs.respond('You\'ve been clocked in for {}.'.format(Bumblebee.employer))
         return
 
     '''

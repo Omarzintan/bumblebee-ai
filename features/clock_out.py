@@ -1,6 +1,7 @@
 from features.default import BaseFeature
 import datetime
 import os
+from core import Bumblebee
 from helpers import bumblebee_root
 
 
@@ -15,7 +16,6 @@ class Feature(BaseFeature):
             self.bs.respond('You\'ve not been clocked in.')
             return
         
-        Bumblebee.currently_working = False
         work_stop_time = datetime.datetime.now()
         duration = (work_stop_time - Bumblebee.work_start_time)
         print('Duration: ', duration)
