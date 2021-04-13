@@ -19,5 +19,12 @@ __all__ = [
     'add_zoom_link',
     'open_zoom_link',
     'sleep',
-    'stop_listening'
+    'stop_listening',
+    'add_contact'
 ]
+
+'''Contains cybersecurity specific features.'''
+__cybersecurity__ = []
+
+'''Contains geo specific features.'''
+__geo__ = []
