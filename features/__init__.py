@@ -20,8 +20,14 @@ __all__ = [
     'open_zoom_link',
     'sleep',
     'stop_listening',
-    'add_contact'
+    'add_contact',
+    'add_employer'
 ]
+
+'''Features to test'''
+__test__ = [
+    'clock_in'
+    ]
 
 '''Contains cybersecurity specific features.'''
 __cybersecurity__ = []
