@@ -1,12 +1,12 @@
-from core import Bumblebee
-import features
-import yaml
 import os
+import yaml
+import features
+from core import Bumblebee
 from utils import wake_word_detector
 from utils import config_builder
 
 if __name__ == "__main__":
-   
+
     config = {}
     try:
         # %%
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         # -------------------------------------
         print("Building configuration file.")
         if config_builder.build_yaml() == -1:
-            raise("Error building config file.")
+            raise "Error building config file."
         print("Configuration file built successfully at 'utils/config.yaml'")
         with open("utils/config.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
@@ -39,14 +39,14 @@ if __name__ == "__main__":
             os.makedirs(work_study_files_path, exist_ok=True)
             print("All necessary folders exist.")
         except:
-            raise("There was a problem verifying the existence of necessary folders.")
+            raise "There was a problem verifying the existence of necessary folders."
 
-    while(1):
+    while 1:
         try:
             bumblebee = Bumblebee(features.__all__, config)
             bumblebee.start_gracefully()
             if wake_word_detector.run():
-                Bumblebee.sleep = 0                
+                Bumblebee.sleep = 0
                 bumblebee.run()
         except IOError:
             bumblebee.exit_gracefully()

@@ -1,19 +1,15 @@
 '''The core of Bumblebee.'''
 import importlib
-from utils.speech import BumbleSpeech
 import os
 import sys
 import json
 import pickle
-import datetime
 import subprocess
-
 import torch
 
+from utils.speech import BumbleSpeech
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
-
-
 
 class Bumblebee():
     # global vars
@@ -27,12 +23,12 @@ class Bumblebee():
     crash_file = 'crash_recovery.p'
     crash_store = {}
     config_yaml = {}
-    
-    def __init__(self, features:list=[], config:dict={}):
-        assert(config != {})
+
+    def __init__(self, features: list = ['default'], config: dict = {}):
+        assert config != {}
         Bumblebee.config_yaml = config
         self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
-        
+
         # %%
         # Building Feature objects from list of features.
         # -----------------------------------------------
@@ -40,19 +36,17 @@ class Bumblebee():
             self._features = []
             # Importing features this way is more friendly towards pyinstaller.
             for feature in features:
-                spec = importlib.util.spec_from_file_location("features."+feature, self.bumblebee_dir+"features/"+feature+".py")
+                spec = importlib.util.spec_from_file_location("features."
+                                                              + feature,
+                                                              self.bumblebee_dir
+                                                              + "features/"
+                                                              + feature+".py")
                 module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module) # Without this line, module.Feature() in the next line will not work.
+                # Without this line, module.Feature() in the next line will not work.
+                spec.loader.exec_module(module)
                 self._features.append(module.Feature())
 
-            self.feature_indices = {feature : x for x, feature in enumerate(features)}
-        else:
-            # Use default feature if no features are set.
-            spec = importlib.util.spec_from_file_loaction("features.default", self.bumblebee_dir+"features/default.py")
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            self._features = [module.Feature()]
-            self.feature_indices = {feature : x for x, feature in enumerate(self._features)}
+            self.feature_indices = {feature: x for x, feature in enumerate(features)}
 
         # %%
         # Accessing intents.json file.
@@ -90,7 +84,9 @@ class Bumblebee():
 
             # Retrain the NeuralNet
             print("Retraining NeuralNet...")
-            output, errors = subprocess.Popen(['python', 'train.py'], stdout=subprocess.PIPE, text=True).communicate()
+            output, errors = subprocess.Popen(['python', 'train.py'],
+                                              stdout=subprocess.PIPE,
+                                              text=True).communicate()
             print(output)
             print(errors)
             print("NeuralNet trained.")
@@ -115,12 +111,10 @@ class Bumblebee():
         model.load_state_dict(model_state)
         model.eval()
 
-        
         self.speech.respond('Hey.')
         self.speech.respond('How may I help you?')
 
         while(self.sleep == 0):
-            action_found = False
             text = ''
             text = self.speech.infinite_speaking_chances(text)
 
@@ -145,10 +139,10 @@ class Bumblebee():
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
         return
-        
-    """Get the config file that Bumblebee is running with."""
+
     def get_config(self):
-        return self.config
+        '''Get the config file that Bumblebee is running with.'''
+        return self.config_yaml
 
     """
     FUNCTIONS NECESSARY FOR CRASH RECOVERY
