@@ -24,13 +24,21 @@ __all__ = [
     'add_employer'
 ]
 
+'''Essential Features that should be included in every custon list.'''
+__essential__ = [
+    'sleep',
+    'stop_listening',
+    'silent_mode_on',
+    'silent_mode_off'
+    ]
+
 '''Features to test'''
-__test__ = [
+__test__ = __essential__ + [
     'clock_in'
     ]
 
 '''Contains cybersecurity specific features.'''
-__cybersecurity__ = []
+__cybersecurity__ = __essential__ + []
 
 '''Contains geo specific features.'''
-__geo__ = []
+__geo__ = __essential__ + []
