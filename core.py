@@ -14,15 +14,16 @@ from nltk_utils import bag_of_words, tokenize
 class Bumblebee():
     # global vars
     speech = BumbleSpeech()
-    currently_working = False
-    employer = ''
-    work_start_time = ''
-    research_server_proc = ''
-    research_topic = ''
-    sleep = 0
-    crash_file = 'crash_recovery.p'
-    crash_store = {}
     config_yaml = {}
+    sleep = 0
+    global_store = {
+        "currently_working": False,
+        "employer": '',
+        "work_start_time": '',
+        "research_server_proc": '',
+        "research_topic": '',
+        "threads": {}
+        }
 
     def __init__(self, features: list = ['default'], config: dict = {}):
         assert config != {}
@@ -58,7 +59,7 @@ class Bumblebee():
             # Check whether any features have been added/removed.
             assert(len(self._features) == len(intents['intents']))
         except:
-            # remove intents file if it exists        
+            # remove intents file if it exists
             try:
                 os.remove(self.bumblebee_dir+'utils/intents.json')
             except:
@@ -90,12 +91,13 @@ class Bumblebee():
             print(output)
             print(errors)
             print("NeuralNet trained.")
-            
+
     def run(self):
+        """
+        Main function for running features given input from user.
+        """
         # Prepping the Neural Net to be used.
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        with open('utils/intents.json', 'r') as json_data:
-            intents = json.load(json_data)
 
         FILE = "models/data.pth"
         data = torch.load(FILE)
@@ -138,7 +140,19 @@ class Bumblebee():
 
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
-        return
+
+    def run_by_tags(self, feature_tags: list):
+        '''Run a list of features given their tags.'''
+        if len(feature_tags) > 0:
+            for tag in feature_tags:
+                try:
+                    tag_index = self.feature_indices[tag]
+                    self._features[tag_index].action("")
+                except KeyError:
+                    if not tag_index:
+                        print(f"Could not find feature index of {tag}.")
+                    else:
+                        print(f"Could not perform action for {tag}")
 
     def get_config(self):
         '''Get the config file that Bumblebee is running with.'''
