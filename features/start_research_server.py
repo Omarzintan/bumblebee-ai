@@ -77,11 +77,11 @@ class Feature(BaseFeature):
 
     def start_server(self):
         '''Starts the flask server for research mode.'''
-        python3_env_path = self.config['Common']['python3_env']
+        python3_path = self.config['Common']['python3_path']
         bumblebee_dir = self.config['Common']['bumblebee_dir']
         # Create the subprocess for the flask server.
         research_server_proc = subprocess.Popen(
-            [python3_env_path, bumblebee_dir+'server.py'],
+            [python3_path, bumblebee_dir+'server.py'],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         self.globals_api.store(

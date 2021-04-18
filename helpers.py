@@ -1,5 +1,6 @@
 import os
 import logging
+import subprocess
 from colorlog import ColoredFormatter
 
 
@@ -43,4 +44,17 @@ def get_root_directory():
     return bumblebee_root_dir + "/"
 
 
+def get_python3_path():
+    '''Gets the python3 path which Bumblebee is using to run.'''
+    python3_path = os.getenv("PYTHON3_PATH")
+    if not python3_path:
+        logger.debug(
+            "No PYTHON3_PATH is set in environment. Computing path using 'which python' instead."
+        )
+        python3_path = subprocess.check_output(["which", "python3.7"]).decode('utf-8').strip()
+
+    return python3_path
+
+
 bumblebee_root = get_root_directory()
+python3_path = get_python3_path()

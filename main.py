@@ -25,7 +25,7 @@ if __name__ == "__main__":
         if config_builder.build_yaml() == -1:
             raise Exception("Error building config file.")
         print("Configuration file built successfully at 'utils/config.yaml'")
-        with open("utils/config.yaml", "r") as ymlfile:
+        with open(bumblebee_root+"utils/config.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
     finally:
         # %%
@@ -45,12 +45,13 @@ if __name__ == "__main__":
 
     while 1:
         try:
-            bumblebee = Bumblebee(features.__test__, config)
+            bumblebee = Bumblebee(features.__all__, config)
             run_gracefully.start_gracefully()
             if wake_word_detector.run():
                 Bumblebee.sleep = 0
                 bumblebee.run()
-        except IOError:
+        except IOError as exception:
+            print(exception)
             CRASH_HAPPENED = True
             run_gracefully.exit_gracefully(bumblebee, CRASH_HAPPENED)
         except KeyboardInterrupt:

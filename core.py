@@ -28,6 +28,7 @@ class Bumblebee():
         assert config != {}
         Bumblebee.config_yaml = config
         self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
+        self.python3_path = Bumblebee.config_yaml["Common"]["python3_path"]
 
         # %%
         # Building Feature objects from list of features.
@@ -84,9 +85,11 @@ class Bumblebee():
 
             # Retrain the NeuralNet
             print("Retraining NeuralNet...")
-            output, errors = subprocess.Popen(['python', 'train.py'],
-                                              stdout=subprocess.PIPE,
-                                              text=True).communicate()
+            output, errors = subprocess.Popen(
+                [self.python3_path, self.bumblebee_dir+'train.py'],
+                stdout=subprocess.PIPE,
+                text=True
+            ).communicate()
             print(output)
             print(errors)
             print("NeuralNet trained.")
@@ -98,7 +101,7 @@ class Bumblebee():
         # Prepping the Neural Net to be used.
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-        FILE = "models/data.pth"
+        FILE = self.bumblebee_dir+"models/data.pth"
         data = torch.load(FILE)
 
         input_size = data["input_size"]
@@ -111,9 +114,6 @@ class Bumblebee():
         model = NeuralNet(input_size, hidden_size, output_size).to(device)
         model.load_state_dict(model_state)
         model.eval()
-
-        self.speech.respond('Hey.')
-        self.speech.respond('How may I help you?')
 
         while(self.sleep == 0):
             text = ''

@@ -1,7 +1,7 @@
 # train.py
+import json
 import numpy as np
 import random
-import json
 
 import torch
 import torch.nn as nn
@@ -9,9 +9,9 @@ from torch.utils.data import Dataset, DataLoader
 
 from nltk_utils import bag_of_words, tokenize, stem
 from model import NeuralNet
+from helpers import bumblebee_root
 
-
-with open('utils/intents.json', 'r') as f:
+with open(bumblebee_root+'utils/intents.json', 'r') as f:
     intents = json.load(f)
 
 all_words = []
@@ -116,7 +116,7 @@ data = {
 "tags": tags
 }
 
-FILE = "models/data.pth"
+FILE = bumblebee_root+"models/data.pth"
 torch.save(data, FILE)
 
 print(f'training complete. file saved to {FILE}')
