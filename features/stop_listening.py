@@ -1,7 +1,9 @@
-from utils import run_gracefully
 from features.default import BaseFeature
+from core import Bumblebee
+from utils import wake_word_detector
 from features import clock_out
-
+from features import store_research_data
+from features import stop_research_server
 
 class Feature(BaseFeature):
     def __init__(self):
@@ -16,11 +18,13 @@ class Feature(BaseFeature):
         if self.bs.interrupt_check(approve):
             return
         if 'yes' in approve:
-            currently_working = self.globals_api.retrieve("currently_working")
-            if currently_working:
+            if Bumblebee.currently_working:
                 clock_out.Feature().action()
-            self.bs.respond('See you later then, bye. Take care.')
-            raise KeyboardInterrupt('Exiting Bumblebee')
+            if Bumblebee.research_server_proc:
+                store_research_data.Feature().action()
+                stop_research_server.Feature().action()
+            self.bs.respond('See you later then, bye. Take care.')                
+            wake_word_detector.stop()
         else:
             self.bs.respond('Alright, I will not stop.')
             return
