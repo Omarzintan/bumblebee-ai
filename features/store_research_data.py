@@ -12,7 +12,12 @@ import validators
 class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = 'store_research_data'
-        self.patterns = ["store data", "save my research", "save tabs", "save my data"]
+        self.patterns = [
+            "store data",
+            "save my research",
+            "save tabs",
+            "save my data"
+        ]
         super().__init__()
 
         # self.config defined in BaseFeature class
@@ -38,8 +43,8 @@ class Feature(BaseFeature):
         research_files_path = self.config['Folders']['research_files']
         server_url = self.config['Utilities']['research_server_url']
 
-        filename = Bumblebee.research_topic
-        filename = filename.replace(' ', '-')
+        research_topic = self.globals_api.retrieve("research_topic")
+        filename = research_topic.replace(' ', '-')
         today = datetime.datetime.now().strftime('%a %b, %Y')
 
         res = requests.get(server_url+'/store_data')
@@ -49,13 +54,13 @@ class Feature(BaseFeature):
         url_viewtimes = json_response["url_viewtimes"]
         Record = Query()
 
-        #store data in tinydb
+        # store data in tinydb
         for parent_url in parent_urls:
             record = {}
             for url in url_viewtimes[parent_url]:
                 if not validators.url(url):
                     continue
-                record["research_topic"] = Bumblebee.research_topic
+                record["research_topic"] = research_topic
                 record["parent_url"] = parent_url
                 record["page_title"] = self.get_title(url)
                 record["url"] = url
@@ -65,34 +70,38 @@ class Feature(BaseFeature):
 
                 # Updates record if url already exists, otherwise insert as new record.
                 self.research_db.upsert(record, Record.url == url)
-            
-        self.md_file_create(Bumblebee.research_topic, research_files_path + filename)
+
+        self.md_file_create(research_topic, research_files_path + filename)
         return filename
 
-    '''
-    Gets title of a url given the url.
-    Arguments: <string> url
-    Returns the title of the url
-    '''
     def get_title(self, url):
+        '''
+        Gets title of a url given the url.
+        Arguments: <string> url
+        Returns the title of the url
+        '''
         reqs = requests.get(url)
         soup = BeautifulSoup(reqs.text, 'html.parser')
         url_title = ''
         for title in soup.find_all('title'):
-            url_title+=title.get_text()
+            url_title += title.get_text()
         return url_title
 
-    '''
-    Creates a markdown file of data in the research database given 
-    a research topic.
-    Returns the file name
-    '''
     def md_file_create(self, research_topic, filename, ordered_by='time'):
+        '''
+        Creates a markdown file of data in the research database given 
+        a research topic.
+        Returns the file name
+        '''
         Record = Query()
         records = self.research_db.search(Record.research_topic == research_topic)
-        mdfile = MdUtils(file_name=filename,title=research_topic)
+        mdfile = MdUtils(file_name=filename, title=research_topic)
         for record in records:
-            mdfile.new_line('- '+ mdfile.new_inline_link(link=record["url"], text=record["page_title"]))
+            mdfile.new_line('- ' +
+                            mdfile.new_inline_link(
+                                link=record["url"],
+                                text=record["page_title"]
+                            )
+            )
         mdfile.create_md_file()
         return
-

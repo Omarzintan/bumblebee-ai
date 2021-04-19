@@ -34,7 +34,9 @@ __essential__ = [
 
 '''Features to test'''
 __test__ = __essential__ + [
-    'clock_in'
+    'start_research_server',
+    'stop_research_server',
+    'store_research_data'
     ]
 
 '''Contains cybersecurity specific features.'''

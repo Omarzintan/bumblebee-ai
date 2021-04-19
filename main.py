@@ -4,6 +4,8 @@ import features
 from core import Bumblebee
 from utils import wake_word_detector
 from utils import config_builder
+from utils import run_gracefully
+from helpers import bumblebee_root
 
 if __name__ == "__main__":
 
@@ -13,7 +15,7 @@ if __name__ == "__main__":
         # Access config file
         # ------------------
         print("Accessing configuration file")
-        with open("utils/config.yaml", "r") as ymlfile:
+        with open(bumblebee_root+"utils/config.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
     except FileNotFoundError:
         # %%
@@ -21,9 +23,9 @@ if __name__ == "__main__":
         # -------------------------------------
         print("Building configuration file.")
         if config_builder.build_yaml() == -1:
-            raise "Error building config file."
+            raise Exception("Error building config file.")
         print("Configuration file built successfully at 'utils/config.yaml'")
-        with open("utils/config.yaml", "r") as ymlfile:
+        with open(bumblebee_root+"utils/config.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
     finally:
         # %%
@@ -38,15 +40,19 @@ if __name__ == "__main__":
             os.makedirs(research_files_path, exist_ok=True)
             os.makedirs(work_study_files_path, exist_ok=True)
             print("All necessary folders exist.")
-        except:
-            raise "There was a problem verifying the existence of necessary folders."
+        except OSError as exception:
+            raise OSError(exception)
 
     while 1:
         try:
             bumblebee = Bumblebee(features.__all__, config)
-            bumblebee.start_gracefully()
+            run_gracefully.start_gracefully()
             if wake_word_detector.run():
                 Bumblebee.sleep = 0
                 bumblebee.run()
-        except IOError:
-            bumblebee.exit_gracefully()
+        except IOError as exception:
+            print(exception)
+            CRASH_HAPPENED = True
+            run_gracefully.exit_gracefully(bumblebee, CRASH_HAPPENED)
+        except KeyboardInterrupt:
+            run_gracefully.exit_gracefully(bumblebee)

@@ -1,14 +1,11 @@
-#from features.features import BaseFeature
+'''Feature to start research server.'''
+import json
+import threading
+import subprocess
 from features.default import BaseFeature
 from core import Bumblebee
 from tkinter import *
-import json
-import threading
-import subprocess, signal
-import logging, selectors
-import sys
-import os
-import datetime
+
 
 class Feature(BaseFeature):
     def __init__(self):
@@ -33,7 +30,7 @@ class Feature(BaseFeature):
             edited_json = json.loads(edited_topic)
             topic = edited_json["topic"]
         self.bs.respond('Starting server for research on {}'.format(topic))
-        Bumblebee.research_topic = topic
+        self.globals_api.store("research_topic", topic)
         # start python flask server in new thread
         threading.Thread(target=self.start_server).start()
 
@@ -77,11 +74,21 @@ class Feature(BaseFeature):
 
         topic_details_json = json.dumps(topic_details)
         return topic_details_json
-        
-    '''Starts the flask server for research mode.'''
+
     def start_server(self):
-        python3_env_path = self.config['Common']['python3_env']
+        '''Starts the flask server for research mode.'''
+        python3_path = self.config['Common']['python3_path']
         bumblebee_dir = self.config['Common']['bumblebee_dir']
         # Create the subprocess for the flask server.
-        Bumblebee.research_server_proc = subprocess.Popen([python3_env_path, bumblebee_dir+'server.py'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return
+        research_server_proc = subprocess.Popen(
+            [python3_path, bumblebee_dir+'server.py'],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        self.globals_api.store(
+            "research_server_proc_id",
+            research_server_proc.pid
+        )
+        self.globals_api.add_thread_failsafe(
+            research_server_proc.pid,
+            ["store_research_data", "stop_research_server"]
+        )
