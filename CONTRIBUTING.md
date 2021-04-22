@@ -17,10 +17,6 @@ Contributions are welcome, no matter how small or large. Please read this file t
 3) If you have added code that should be tested, please add tests.
 4) Ensure that your tests pass.
 
-## Community
-If you have questions. Join the conversation in our Discord[PUT LINK HERE]
-
-
 ## Quickstart (How to add a basic feature)
 1) In the `/features` folder, create a new file called `hello_world.py`
 2) Import the BaseFeature class by typing `from features.default import BaseFeature`
@@ -68,6 +64,13 @@ If you have questions. Join the conversation in our Discord[PUT LINK HERE]
             
             return
 ```
+4) Now that you have created your feature file, open the `__init__.py` file in the `/features` folder and add the name of your file to the `__all__` list like so:
+   ```python
+   __all__ = [
+        'hello_world'
+    ]
+   ``` 
+5) When you run `python main.py` from the bumblebee folder, you should see that the `intents.json` file is regenerated and the model is retrained. Now when you say "Bumblebee" and Bumblebee asks "how may I help you?" you can say any sentence similar to the sentence `patterns` you defined in your `hello_world.py` file and the action for your feature should be executed!
 
 ## Useful information for creating new features.
 ### Using the globals_api
@@ -148,7 +151,7 @@ If you are adding a new variable that you want to be added by default whenever b
 
 ### Dealing with thread-based feature actions
 #### Adding thread_failsafe
-If you write a feature that performs an action withing a thread. You need to use our ```add_thread_failsafe``` function in the ```globals_api``` to ensure that bumblebee terminates the thread before shutting down if the thread is not terminated manually.
+If you write a feature that performs an action within a thread. You need to use our ```add_thread_failsafe``` function in the ```globals_api``` to ensure that bumblebee terminates the thread before shutting down if the thread is not terminated manually.
 
 For instance, I have a feature that starts a server in a separate thread which runs in the background while bumblebee is running. This is how I would add a thread failsafe.
 ```python
@@ -226,3 +229,6 @@ class Feature(BaseFeature):
           # Pass in the process id as the argument.
           self.globals_api.remove_thread_failsafe(server_proc_id)
 ```
+
+## Community
+If you have questions. Join the conversation in our Discord[PUT LINK HERE]
