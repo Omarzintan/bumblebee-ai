@@ -20,7 +20,7 @@ This is Bumblebee, a voice assistant made with Python. Bumblebee was made with t
 3) Run this command to install bumblebee's environment and run it!
    ```source setup.sh```
 
-4) After initial installation, bumblebee will run automatically. If you close bumblebee and you want to run it again, go into the bumblebee folder and ensure that the bumblebee environment is activated. Otherwise, activate it by typing ```conda activate bumblebee``` then type ```python main.py```. If the environment is already activated, you can type ```python main.py``` to run bumblebee.
+4) After initial installation, bumblebee will run automatically. If you close bumblebee and you want to run it again, go into the bumblebee folder and ensure that the bumblebee environment is activated. Otherwise, activate it by typing ```conda activate bumblebee-ai``` then type ```python main.py```. If the environment is already activated, you can type ```python main.py``` to run bumblebee.
 
 
 
