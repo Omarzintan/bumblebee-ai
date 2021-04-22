@@ -35,10 +35,12 @@ if __name__ == "__main__":
         database_path = config['Database']['path']
         research_files_path = config['Folders']['research_files']
         work_study_files_path = config['Folders']['work_study']
+        models_path = config['Folders']['models']
         try:
             os.makedirs(database_path, exist_ok=True)
             os.makedirs(research_files_path, exist_ok=True)
             os.makedirs(work_study_files_path, exist_ok=True)
+            os.makedirs(models_path, exist_ok=True)
             print("All necessary folders exist.")
         except OSError as exception:
             raise OSError(exception)
