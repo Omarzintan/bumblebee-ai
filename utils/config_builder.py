@@ -27,6 +27,7 @@ def build_config():
     config["Folders"] = {}
     config["Folders"]["work_study"] = bumblebee_root+"work_study"
     config["Folders"]["research_files"] = bumblebee_root+"research_files/"
+    config["Folders"]["models"] = bumblebee_root+"models"
 
     config["Utilities"] = {}
     config["Utilities"]["research_server_url"] = "http://127.0.0.1:5000"

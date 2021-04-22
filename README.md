@@ -9,14 +9,20 @@ This is Bumblebee, a voice assistant made with Python. Bumblebee was made with t
    *(More platforms to be tested soon)*
 
 ## Try Bumblebee out (Mac users)
-1) Ensure that you have miniconda/anaconda installed. [Install miniconda/anaconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/macos.html)
-2) Open a fresh terminal and run ```conda -V``` to ensure that conda is ready to use.
-3) Ensure that you have portaudio installed. [install portaudio](https://formulae.brew.sh/formula/portaudio)
-4) Clone this repo. ```git clone GITHUBURL YOUR_FOLDER_NAME```
-5) Get into the bumblebee folder. ```cd YOUR_FOLDER_NAME/bumblebee```
-6) Run this command to setup bumblebee's conda environment ```conda env create --name YOUR_ENV_NAME --file bumblebee_env.yml```
-7) Activate the environment using by typing ```conda activate bumblebee``` in the terminal.
-8) Go into the bumblebee directory in the cloned repo from your terminal and run ```python main.py```
+### Requirements
+1) Ensure that you have miniconda/anaconda installed. (miniconda is recommended because it is more lightweight.) [Install miniconda/anaconda](https://docs.conda.io/projects/continuumio-conda/en/latest/user-guide/install/macos.html)
+ *If you are not sure whether you have miniconda/anaconda, check by opening a fresh terminal and running ```conda -V``` to ensure that conda is ready to use.
+2) You will need ```portaudio``` for bumblebee to work. Ensure that you have portaudio installed. Otherwise, install it here: [install portaudio](https://formulae.brew.sh/formula/portaudio)
+
+### If all requirements are met:
+1) Clone this repo. ```git clone GITHUBURL YOUR_FOLDER_NAME```
+2) Get into the bumblebee folder. ```cd YOUR_FOLDER_NAME/bumblebee```
+3) Run this command to install bumblebee's environment and run it!
+   ```source setup.sh```
+
+4) After initial installation, bumblebee will run automatically. If you close bumblebee and you want to run it again, go into the bumblebee folder and ensure that the bumblebee environment is activated. Otherwise, activate it by typing ```conda activate bumblebee``` then type ```python main.py```. If the environment is already activated, you can type ```python main.py``` to run bumblebee.
+
+
 
 ## Quickstart (How to add a basic feature)
 1) In the `/features` folder, create a new file called `hello_world.py`
