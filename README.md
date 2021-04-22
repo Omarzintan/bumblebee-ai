@@ -53,7 +53,10 @@ This is Bumblebee, a voice assistant made with Python. Bumblebee was made with t
             # correctly. To break out of this loop, that is if you don't want to proceed, just say 'cancel' or 'stop'.
             name = ''
             name = self.bs.infinite_speaking_chances(name)
-            
+            # looks for 'cancel' or 'stop' in input
+            if self.bs.interrupt_check(name):
+               return
+               
             # We use the respond function from the bs (bumble speech) class to let Bumblebee say "Hello, world".
             self.bs.respond(f"Hey {name}")
             self.bs.respond("Hello, world!")
