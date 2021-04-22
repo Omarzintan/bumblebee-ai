@@ -104,7 +104,7 @@ class Feature(BaseFeature):
       ...
 ```
 
-### Dealing with the config file. [TODO]
+### Dealing with the config file.
 #### Sample config file
 This is what the config file (automatically generated on install) looks like:
 ```yaml
