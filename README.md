@@ -41,7 +41,7 @@ Research mode can be turned on/off on demand and so it doesn't store all the sit
 (More information about how research mode works will be provided soon)
 
 ## Contributing
-Contributions are welcome, no matter how small or large. Please read this file to help you contribute to this project. Please see our [CONTRIBUTE.md](/Omarzintan/bumblebee-ai/blob/main/CONTRIBUTING.md) to learn more about how to contribute.
+Contributions are welcome, no matter how small or large. Please read this file to help you contribute to this project. Please see our [CONTRIBUTE.md](/CONTRIBUTING.md) to learn more about how to contribute.
 
 ## Troubleshooting
 1. Bumblebee says "Listening..." but does not respond to wake-word? 
