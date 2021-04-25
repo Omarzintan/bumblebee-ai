@@ -6,9 +6,8 @@ from tinydb import TinyDB
 from helpers import bumblebee_root
 
 
-# TODO:  went back and forth between naming this StoreKeys, or just Constants, but I think I prefer Constants
 class Constants:
-    # Store Keys
+    # Global Store Keys
     EMPLOYER = 'employer'
     WORK_START_TIME = 'work_start_time'
     DATETIME = 'datetime'
@@ -53,14 +52,15 @@ class Feature(BaseFeature):
         closest_matches = close_names[0]
 
         for employer in known_employers:
-            # TODO: again this seems like it only makes sense if close_names is a list of lists
+            # TODO: again this would probably only work if close_names is a list of lists?
             if employer in closest_matches:
                 # TODO: put this into one object. Not sure if there is a strong reason for them to be separate
                 self.globals_api.store(Constants.EMPLOYER, employer)
                 self.globals_api.store(
                     Constants.WORK_START_TIME, datetime.datetime.now())
                 self.globals_api.store(Constants.CURRENTLY_WORKING, True)
-                # access peggy file and put timestamp there
+
+                # Log clock-in info into employer's file
                 self.clock_in(
                     self.globals_api.retrieve(Constants.EMPLOYER),
                     self.globals_api.retrieve(Constants.WORK_START_TIME).strftime(
@@ -72,23 +72,21 @@ class Feature(BaseFeature):
             'You\'ve been clocked in for {}.'.format(self.globals_api.retrieve(Constants.EMPLOYER)))
         return
 
-    '''
-    Writes line in employer specific file saying I have logged in to work.
-    Arguments: <string> employer name, <datetime.datetime object> work_start_time
-    Return type: None
-    '''
-
     def clock_in(self, employer, work_start_time):
+        '''
+        Writes line in employer specific file saying I have logged in to work.
+        Arguments: <string> employer name, <datetime.datetime object> work_start_time
+        Return type: None
+        '''
         # find/create employer file
         os.makedirs('work_study', exist_ok=True)
         with open(bumblebee_root+os.path.join('work_study', '{}_hours.txt'.format(employer)), 'a+') as file:
             file.write('Started work: {}\n'.format(work_start_time))
 
-    '''
-    Gets a list of all employers from the employer database.
-    '''
-
     def get_employers(self):
+        '''
+        Gets a list of all employers from the employer database.
+        '''
         employer_db_path = self.config["Database"]["employers"]
         employer_db = TinyDB(employer_db_path)
         return [item["name"] for item in employer_db.all()]
