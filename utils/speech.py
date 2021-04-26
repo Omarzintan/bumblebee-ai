@@ -1,7 +1,8 @@
 '''Functions responsible for Bumblebee's speech recognition and responding'''
 
 import speech_recognition as sr
-import os, sys
+import os
+import sys
 import playsound
 import pyttsx3
 from helpers import bumblebee_root
@@ -59,8 +60,8 @@ class BumbleSpeech():
                 self.set_silent_mode(True)
         return input_data
 
-    ''' Respond to requests/questions.'''
     def respond(self, output):
+        ''' Respond to requests/questions.'''
         if silent_mode:
             print(Fore.YELLOW + output)
             return
@@ -77,8 +78,8 @@ class BumbleSpeech():
         os.remove(file)
         return
 
-    '''Check for cancel command from user.'''    
     def interrupt_check(self, input_text):
+        '''Check for cancel command from user.'''    
         if "stop" in input_text or "cancel" in input_text:
             self.respond("Okay.")
             return True
