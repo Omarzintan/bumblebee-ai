@@ -1,38 +1,43 @@
 '''Functions responsible for Bumblebee's speech recognition and responding'''
 
 import speech_recognition as sr
-import os, sys
+import os
+import sys
 import playsound
 import pyttsx3
 from helpers import bumblebee_root
 from colorama import Fore
 
 silent_mode = False
+
+
 class BumbleSpeech():
-    '''Function to set silent mode.'''
+
     def set_silent_mode(self, bool_val):
+        '''Function to set silent mode.'''
         global silent_mode
         if not isinstance(bool_val, (bool)):
             return -1
         silent_mode = bool_val
         return 0
-    
-    ''' Function to capture requests/questions.'''
-    def hear(self):
-        if silent_mode:
-            input_data = input(Fore.WHITE + 'type your response here: ')
-            return input_data
 
-            
-        input_speech = sr.Recognizer()
-        sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
+    def hear(self):
+        ''' Function to capture requests/questions.'''
+        if silent_mode:
+            input_text = input(Fore.WHITE + 'type your response here: ')
+            return input_text
+
+        recognizer = sr.Recognizer()
+
         with sr.Microphone() as source:
+            spoken_text = ''
+            # breifly adjust for ambient noise
+            recognizer.adjust_for_ambient_noise(source, duration=1)
             playsound.playsound(bumblebee_root+'sounds/tone-beep.wav', True)
-            audio = input_speech.listen(source)
-            input_data = ''
+            audio = recognizer.listen(source)
             try:
-                input_data = input_speech.recognize_google(audio)
-                print(Fore.WHITE + 'You said, ' + input_data)
+                spoken_text = recognizer.recognize_google(audio)
+                print(Fore.WHITE + 'You said, ' + spoken_text)
             except sr.UnknownValueError:
                 self.respond('Sorry I did not hear you, please repeat.')
             except sr.RequestError:
@@ -40,10 +45,10 @@ class BumbleSpeech():
                 self.respond('No internet connection found.')
                 self.respond('Starting silent mode.')
                 self.set_silent_mode(True)
-        return input_data
+        return spoken_text
 
-    ''' Respond to requests/questions.'''
     def respond(self, output):
+        ''' Respond to requests/questions.'''
         if silent_mode:
             print(Fore.YELLOW + output)
             return
@@ -60,14 +65,14 @@ class BumbleSpeech():
         os.remove(file)
         return
 
-    '''Give user chance to repeat when bumblebee doesn't hear properly.'''    
-    def infinite_speaking_chances(self, input_text):
-        while input_text == '':
-            input_text = self.hear().lower()
-        return input_text
+    def infinite_speaking_chances(self, spoken_text):
+        '''Give user chance to repeat when bumblebee doesn't hear properly.'''
+        while spoken_text == '':
+            spoken_text = self.hear().lower()
+        return spoken_text
 
-    '''Check for cancel command from user.'''    
-    def interrupt_check(self, input_text):
-        if "stop" in input_text or "cancel" in input_text:
+    def interrupt_check(self, spoken_text):
+        '''Check for cancel command from user.'''
+        if "stop" in spoken_text or "cancel" in spoken_text:
             self.respond("Okay.")
             return True
