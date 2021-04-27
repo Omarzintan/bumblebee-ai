@@ -6,7 +6,7 @@ from tinydb import TinyDB
 from helpers import bumblebee_root
 
 
-class Constants:
+class StoreKeys:
     # Global Store Keys
     EMPLOYER = 'employer'
     WORK_START_TIME = 'work_start_time'
@@ -21,55 +21,66 @@ class Feature(BaseFeature):
         super().__init__()
 
     def action(self, spoken_text):
+        # TODO: what if user is already clocked in?
         known_employers = self.get_employers()
         self.bs.respond('Which employer is this for?')
         print(f'List of employers: {known_employers}')
 
-        self.globals_api.store(Constants.EMPLOYER, '')
-
-        employer_text = self.bs.infinite_speaking_chances()
-
-        if self.bs.interrupt_check(employer_text):
-            return
+        self.globals_api.store(StoreKeys.EMPLOYER, '')
 
         close_names = []
         while close_names == []:
+            employer_text = self.bs.hear()
+
+            if self.bs.interrupt_check(employer_text):
+                return
+
             close_names = difflib.get_close_matches(
                 employer_text, known_employers)
+
             if close_names == []:
                 self.bs.respond(
-                    'I don\'t know this employer. Please try again')
+                    'I don\'t know this employer. Please try again or cancel')
 
-                self.globals_api.store(Constants.EMPLOYER, '')
+        found_employer = close_names[0]
+        self.bs.respond('Should I clock you in for ' +
+                        found_employer + '?')
 
-                employer_text = self.bs.infinite_speaking_chances(
-                    employer_text)
+        yes_words = ['yes', 'yea', 'yeah', 'ok', 'okay', 'sure']
+        no_words = ['no', 'nope', 'nah']
+        expected_response = False
 
-                if self.bs.interrupt_check(employer_text):
-                    break
+        while not expected_response:
+            yes_no_response = self.bs.hear()
 
-        # TODO: Is this step correct? Is close_names a list of lists?
-        closest_matches = close_names[0]
+            if self.bs.interrupt_check(employer_text):
+                return
 
-        for employer in known_employers:
-            # TODO: again this would probably only work if close_names is a list of lists?
-            if employer in closest_matches:
-                # TODO: put this into one object. Not sure if there is a strong reason for them to be separate
-                self.globals_api.store(Constants.EMPLOYER, employer)
+            if yes_no_response in no_words:
+                self.bs.respond('Clock-in cancelled')
+                expected_response = True
+
+            elif yes_no_response in yes_words:
+                self.globals_api.store(StoreKeys.EMPLOYER, found_employer)
                 self.globals_api.store(
-                    Constants.WORK_START_TIME, datetime.datetime.now())
-                self.globals_api.store(Constants.CURRENTLY_WORKING, True)
+                    StoreKeys.WORK_START_TIME, datetime.datetime.now())
+                self.globals_api.store(StoreKeys.CURRENTLY_WORKING, True)
 
                 # Log clock-in info into employer's file
                 self.clock_in(
-                    self.globals_api.retrieve(Constants.EMPLOYER),
-                    self.globals_api.retrieve(Constants.WORK_START_TIME).strftime(
+                    self.globals_api.retrieve(StoreKeys.EMPLOYER),
+                    self.globals_api.retrieve(StoreKeys.WORK_START_TIME).strftime(
                         '%a %b %d, %Y %I:%M %p')
                 )
-                break
 
-        self.bs.respond(
-            'You\'ve been clocked in for {}.'.format(self.globals_api.retrieve(Constants.EMPLOYER)))
+                self.bs.respond(
+                    'You\'ve been clocked in for {}.'
+                    .format(self.globals_api.retrieve(StoreKeys.EMPLOYER)))
+                expected_response = True
+            else:
+                self.bs.respond(
+                    'Sorry, I did not get that. Please say yes or no.')
+
         return
 
     def clock_in(self, employer, work_start_time):
