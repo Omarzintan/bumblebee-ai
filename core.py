@@ -22,13 +22,14 @@ class Bumblebee():
         "research_server_proc": '',
         "research_topic": '',
         "threads": []
-        }
+    }
 
     def __init__(self, features: list = ['default'], config: dict = {}):
         assert config != {}
         Bumblebee.config_yaml = config
         self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
         self.python3_path = Bumblebee.config_yaml["Common"]["python3_path"]
+        self.path_to_trained_model = self.bumblebee_dir+"models/data.pth"
 
         # %%
         # Building Feature objects from list of features.
@@ -47,7 +48,8 @@ class Bumblebee():
                 spec.loader.exec_module(module)
                 self._features.append(module.Feature())
 
-            self.feature_indices = {feature: x for x, feature in enumerate(features)}
+            self.feature_indices = {feature: x for x,
+                                    feature in enumerate(features)}
 
         # %%
         # Accessing intents.json file.
@@ -56,15 +58,16 @@ class Bumblebee():
             # Check to see that intents.json file exists.
             with open(self.bumblebee_dir+'utils/intents.json', 'r') as json_data:
                 intents = json.load(json_data)
-            # Check whether any features have been added/removed.
+            # Check whether any features have been added/removed or if no trained model present.
             assert(len(self._features) == len(intents['intents']))
+            assert(os.path.exists(self.path_to_trained_model))
         except (FileNotFoundError, AssertionError):
             # remove intents file if it exists
             try:
                 os.remove(self.bumblebee_dir+'utils/intents.json')
             except OSError:
                 print('intents.json file not found.')
-            
+
             # Update intents.json if features have been added/removed or the file does not exist.
             print('Generating new intents.json file...')
 
@@ -78,7 +81,7 @@ class Bumblebee():
                 intents['intents'].append(tag)
 
             intents_json = json.dumps(intents, indent=4)
-        
+
             with open(self.bumblebee_dir+'utils/intents.json', 'w') as f:
                 f.write(intents_json)
             print('intents.json file generated.')
@@ -101,8 +104,7 @@ class Bumblebee():
         # Prepping the Neural Net to be used.
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-        FILE = self.bumblebee_dir+"models/data.pth"
-        data = torch.load(FILE)
+        data = torch.load(self.path_to_trained_model)
 
         input_size = data["input_size"]
         hidden_size = data["hidden_size"]

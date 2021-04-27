@@ -2,7 +2,7 @@
 Voice Assistant in Python
 
 ## About
-This is Bumblebee, a voice assistant made with Python. Bumblebee was made with the intention of automating certain boring or otherwise tedious tasks that I perform on a daily basis. Bumblebee was also made with the goal of being easily extendible. I also used this as an opportunity to learn about Neural Networks. Bumblebee works with a Deep Neural Network that is trained based on intents data and is able to find out the intent of a sentece spoken to it. Upon finding the intent of the input, Bumblebee run the action of the corresponding feature.
+This is Bumblebee, a voice assistant made with Python. Bumblebee was made with the intention of automating certain boring or otherwise tedious tasks that I perform on a daily basis. Bumblebee was also made with the goal of being easily extendible. I also used this as an opportunity to learn about Neural Networks. Bumblebee works with a Deep Neural Network that is trained based on intents data and is able to find out the intent of a sentence spoken to it. Upon finding the intent of the input, Bumblebee run the action of the corresponding feature.
 
 *So far, Bumblebee works well with:*
    - MacOS Big Sur
@@ -49,7 +49,7 @@ Research mode can be turned on/off on demand and so it doesn't store all the sit
 (More information about how research mode works will be provided soon)
 
 ## Contributing
-Contributions are welcome, no matter how small or large. Please read this file to help you contribute to this project. Please see our [CONTRIBUTE.md](docs/CONTRIBUTING.md) to learn more about how to contribute.
+Contributions are welcome, no matter how small or large. Please read this file to help you contribute to this project. Please see our [CONTRIBUTE.md](/CONTRIBUTING.md) to learn more about how to contribute.
 
 ## Troubleshooting
 1. Bumblebee says "Listening..." but does not respond to wake-word? 
