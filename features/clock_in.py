@@ -50,16 +50,12 @@ class Feature(BaseFeature):
         no_words = ['no', 'nope', 'nah']
         expected_response = False
 
-        while not expected_response:
+        while True:
             yes_no_response = self.bs.hear()
 
-            if self.bs.interrupt_check(employer_text):
+            if yes_no_response in no_words or self.bs.interrupt_check(yes_no_response):
                 self.bs.respond('Clock-in cancelled')
-                return
-
-            if yes_no_response in no_words:
-                self.bs.respond('Clock-in cancelled')
-                expected_response = True
+                break
 
             elif yes_no_response in yes_words:
                 self.globals_api.store(StoreKeys.EMPLOYER, found_employer)
@@ -77,7 +73,7 @@ class Feature(BaseFeature):
                 self.bs.respond(
                     'You\'ve been clocked in for {}.'
                     .format(self.globals_api.retrieve(StoreKeys.EMPLOYER)))
-                expected_response = True
+                break
             else:
                 self.bs.respond(
                     'Sorry, I did not get that. Please say yes, no or cancel.')
