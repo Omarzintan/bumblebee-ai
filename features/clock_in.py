@@ -1,10 +1,17 @@
 from features.default import BaseFeature
-from core import Bumblebee
 import difflib
 import datetime
 import os
 from tinydb import TinyDB
 from helpers import bumblebee_root
+
+
+class StoreKeys:
+    # Global Store Keys
+    EMPLOYER = 'employer'
+    WORK_START_TIME = 'work_start_time'
+    DATETIME = 'datetime'
+    CURRENTLY_WORKING = 'currently_working'
 
 
 class Feature(BaseFeature):
@@ -14,51 +21,80 @@ class Feature(BaseFeature):
         super().__init__()
 
     def action(self, spoken_text):
-        employers = self.get_employers()
+        # TODO: what if user is already clocked in?
+        known_employers = self.get_employers()
         self.bs.respond('Which employer is this for?')
-        print(f'List of employers: {employers}')
-        Bumblebee.employer = ''
-        Bumblebee.employer = self.bs.infinite_speaking_chances(Bumblebee.employer)
-        if self.bs.interrupt_check(Bumblebee.employer):
-            return
+        print(f'List of employers: {known_employers}')
+
+        self.globals_api.store(StoreKeys.EMPLOYER, '')
+
         close_names = []
         while close_names == []:
-            close_names = difflib.get_close_matches(Bumblebee.employer, employers)
-            if close_names == []:
-                self.bs.respond('I don\'t know this employer. Please try again')
-                Bumblebee.employer = ''
-                Bumblebee.employer = self.bs.infinite_speaking_chances(Bumblebee.employer)
-                if self.bs.interrupt_check(Bumblebee.employer):
-                    break
+            employer_text = self.bs.hear()
 
-        Bumblebee.employer = close_names[0]
-        for employer in employers:
-            if employer in Bumblebee.employer:
-                Bumblebee.employer = employer
-                Bumblebee.work_start_time = datetime.datetime.now()
-                Bumblebee.currently_working = True
-                # access peggy file and put timestamp there
-                self.clock_in(Bumblebee.employer, Bumblebee.work_start_time.strftime('%a %b %d, %Y %I:%M %p'))
+            if self.bs.interrupt_check(employer_text):
+                return
+
+            close_names = difflib.get_close_matches(
+                employer_text, known_employers)
+
+            if close_names == []:
+                self.bs.respond(
+                    'I don\'t know this employer. Please try again or cancel')
+
+        found_employer = close_names[0]
+        self.bs.respond('Should I clock you in for ' +
+                        found_employer + '?')
+
+        yes_words = ['yes', 'yea', 'yeah', 'ok', 'okay', 'sure']
+        no_words = ['no', 'nope', 'nah']
+        expected_response = False
+
+        while True:
+            yes_no_response = self.bs.hear()
+
+            if yes_no_response in no_words or self.bs.interrupt_check(yes_no_response):
+                self.bs.respond('Clock-in cancelled')
                 break
-            
-        self.bs.respond('You\'ve been clocked in for {}.'.format(Bumblebee.employer))
+
+            elif yes_no_response in yes_words:
+                self.globals_api.store(StoreKeys.EMPLOYER, found_employer)
+                self.globals_api.store(
+                    StoreKeys.WORK_START_TIME, datetime.datetime.now())
+                self.globals_api.store(StoreKeys.CURRENTLY_WORKING, True)
+
+                # Log clock-in info into employer's file
+                self.clock_in(
+                    self.globals_api.retrieve(StoreKeys.EMPLOYER),
+                    self.globals_api.retrieve(StoreKeys.WORK_START_TIME).strftime(
+                        '%a %b %d, %Y %I:%M %p')
+                )
+
+                self.bs.respond(
+                    'You\'ve been clocked in for {}.'
+                    .format(self.globals_api.retrieve(StoreKeys.EMPLOYER)))
+                break
+            else:
+                self.bs.respond(
+                    'Sorry, I did not get that. Please say yes, no or cancel.')
+
         return
 
-    '''
-    Writes line in employer specific file saying I have logged in to work.
-    Arguments: <string> employer name, <datetime.datetime object> work_start_time
-    Return type: None
-    '''
     def clock_in(self, employer, work_start_time):
+        '''
+        Writes line in employer specific file saying I have logged in to work.
+        Arguments: <string> employer name, <datetime.datetime object> work_start_time
+        Return type: None
+        '''
         # find/create employer file
         os.makedirs('work_study', exist_ok=True)
         with open(bumblebee_root+os.path.join('work_study', '{}_hours.txt'.format(employer)), 'a+') as file:
             file.write('Started work: {}\n'.format(work_start_time))
 
-    '''
-    Gets a list of all employers from the employer database.
-    '''
     def get_employers(self):
+        '''
+        Gets a list of all employers from the employer database.
+        '''
         employer_db_path = self.config["Database"]["employers"]
         employer_db = TinyDB(employer_db_path)
         return [item["name"] for item in employer_db.all()]
