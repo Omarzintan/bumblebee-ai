@@ -9,6 +9,8 @@ from helpers import bumblebee_root
 from colorama import Fore
 
 silent_mode = False
+
+
 class BumbleSpeech():
     '''Function to set silent mode.'''
     def set_silent_mode(self, bool_val):
@@ -41,9 +43,9 @@ class BumbleSpeech():
             input_data = input(Fore.WHITE + 'type your response here: ')
             return input_data
 
-            
         input_speech = sr.Recognizer()
-        sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
+        # makes adjusting to ambient noise more fine-tuned
+        sr.energy_threshold = 4000
         with sr.Microphone() as source:
             playsound.playsound(bumblebee_root+'sounds/tone-beep.wav', True)
             audio = input_speech.listen(source)
@@ -79,7 +81,7 @@ class BumbleSpeech():
         return
 
     def interrupt_check(self, input_text):
-        '''Check for cancel command from user.'''    
+        '''Check for cancel command from user.'''
         if "stop" in input_text or "cancel" in input_text:
             self.respond("Okay.")
             return True
