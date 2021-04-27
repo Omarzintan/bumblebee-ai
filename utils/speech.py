@@ -9,9 +9,12 @@ from helpers import bumblebee_root
 from colorama import Fore
 
 silent_mode = False
+
+
 class BumbleSpeech():
-    '''Function to set silent mode.'''
+
     def set_silent_mode(self, bool_val):
+        '''Function to set silent mode.'''
         global silent_mode
         if not isinstance(bool_val, (bool)):
             return -1
@@ -38,19 +41,20 @@ class BumbleSpeech():
         '''
 
         if silent_mode:
-            input_data = input(Fore.WHITE + 'type your response here: ')
-            return input_data
+            input_text = input(Fore.WHITE + 'type your response here: ')
+            return input_text
 
-            
-        input_speech = sr.Recognizer()
-        sr.energy_threshold = 4000 # makes adjusting to ambient noise more fine-tuned
+        recognizer = sr.Recognizer()
+
         with sr.Microphone() as source:
+            spoken_text = ''
+            # breifly adjust for ambient noise
+            recognizer.adjust_for_ambient_noise(source, duration=1)
             playsound.playsound(bumblebee_root+'sounds/tone-beep.wav', True)
-            audio = input_speech.listen(source)
-            input_data = ''
+            audio = recognizer.listen(source)
             try:
-                input_data = input_speech.recognize_google(audio)
-                print(Fore.WHITE + 'You said, ' + input_data)
+                spoken_text = recognizer.recognize_google(audio)
+                print(Fore.WHITE + 'You said, ' + spoken_text)
             except sr.UnknownValueError:
                 self.respond('Sorry I did not hear you, please repeat.')
             except sr.RequestError:
@@ -58,7 +62,7 @@ class BumbleSpeech():
                 self.respond('No internet connection found.')
                 self.respond('Starting silent mode.')
                 self.set_silent_mode(True)
-        return input_data
+        return spoken_text
 
     def respond(self, output):
         ''' Respond to requests/questions.'''
@@ -79,7 +83,7 @@ class BumbleSpeech():
         return
 
     def interrupt_check(self, input_text):
-        '''Check for cancel command from user.'''    
+        '''Check for cancel command from user.'''
         if "stop" in input_text or "cancel" in input_text:
             self.respond("Okay.")
             return True
