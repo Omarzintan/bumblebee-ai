@@ -54,6 +54,7 @@ class Feature(BaseFeature):
             yes_no_response = self.bs.hear()
 
             if self.bs.interrupt_check(employer_text):
+                self.bs.respond('Clock-in cancelled')
                 return
 
             if yes_no_response in no_words:
@@ -79,7 +80,7 @@ class Feature(BaseFeature):
                 expected_response = True
             else:
                 self.bs.respond(
-                    'Sorry, I did not get that. Please say yes or no.')
+                    'Sorry, I did not get that. Please say yes, no or cancel.')
 
         return
 
