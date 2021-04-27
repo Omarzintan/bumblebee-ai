@@ -21,8 +21,25 @@ class BumbleSpeech():
         silent_mode = bool_val
         return 0
 
+    def infinite_speaking_chances(func):
+        '''
+        Wrapper for bumblebee hear function.
+        This wrapper gives the user a chance to repeat
+        when bumblebee doesn't hear properly.
+        '''
+        def wrapper(*args, **kwargs):
+            input_text = ''
+            while input_text == '':
+                input_text = func(*args, **kwargs)
+            return input_text
+        return wrapper
+
+    @infinite_speaking_chances
     def hear(self):
-        ''' Function to capture requests/questions.'''
+        '''
+        Function to capture requests/questions.
+        '''
+
         if silent_mode:
             input_text = input(Fore.WHITE + 'type your response here: ')
             return input_text
@@ -65,14 +82,8 @@ class BumbleSpeech():
         os.remove(file)
         return
 
-    def infinite_speaking_chances(self, spoken_text):
-        '''Give user chance to repeat when bumblebee doesn't hear properly.'''
-        while spoken_text == '':
-            spoken_text = self.hear().lower()
-        return spoken_text
-
-    def interrupt_check(self, spoken_text):
+    def interrupt_check(self, input_text):
         '''Check for cancel command from user.'''
-        if "stop" in spoken_text or "cancel" in spoken_text:
+        if "stop" in input_text or "cancel" in input_text:
             self.respond("Okay.")
             return True
