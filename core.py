@@ -38,13 +38,13 @@ class Bumblebee():
             self._features = []
             # Importing features this way is more friendly towards pyinstaller.
             for feature in features:
-                spec = importlib.util.spec_from_file_location("features."
-                                                              + feature,
-                                                              self.bumblebee_dir
-                                                              + "features/"
-                                                              + feature+".py")
+                spec = importlib.util.spec_from_file_location(
+                    "features." + feature, self.bumblebee_dir +
+                    "features/" + feature+".py"
+                )
                 module = importlib.util.module_from_spec(spec)
-                # Without this line, module.Feature() in the next line will not work.
+                # Without this line, module.Feature() in the next line
+                # will not work.
                 spec.loader.exec_module(module)
                 self._features.append(module.Feature())
 
