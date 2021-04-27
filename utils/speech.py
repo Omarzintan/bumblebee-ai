@@ -1,7 +1,8 @@
 '''Functions responsible for Bumblebee's speech recognition and responding'''
 
 import speech_recognition as sr
-import os, sys
+import os
+import sys
 import playsound
 import pyttsx3
 from helpers import bumblebee_root
@@ -16,9 +17,26 @@ class BumbleSpeech():
             return -1
         silent_mode = bool_val
         return 0
-    
-    ''' Function to capture requests/questions.'''
+
+    def infinite_speaking_chances(func):
+        '''
+        Wrapper for bumblebee hear function.
+        This wrapper gives the user a chance to repeat
+        when bumblebee doesn't hear properly.
+        '''
+        def wrapper(*args, **kwargs):
+            input_text = ''
+            while input_text == '':
+                input_text = func(*args, **kwargs)
+            return input_text
+        return wrapper
+
+    @infinite_speaking_chances
     def hear(self):
+        '''
+        Function to capture requests/questions.
+        '''
+
         if silent_mode:
             input_data = input(Fore.WHITE + 'type your response here: ')
             return input_data
@@ -42,8 +60,8 @@ class BumbleSpeech():
                 self.set_silent_mode(True)
         return input_data
 
-    ''' Respond to requests/questions.'''
     def respond(self, output):
+        ''' Respond to requests/questions.'''
         if silent_mode:
             print(Fore.YELLOW + output)
             return
@@ -60,14 +78,8 @@ class BumbleSpeech():
         os.remove(file)
         return
 
-    '''Give user chance to repeat when bumblebee doesn't hear properly.'''    
-    def infinite_speaking_chances(self, input_text):
-        while input_text == '':
-            input_text = self.hear().lower()
-        return input_text
-
-    '''Check for cancel command from user.'''    
     def interrupt_check(self, input_text):
+        '''Check for cancel command from user.'''    
         if "stop" in input_text or "cancel" in input_text:
             self.respond("Okay.")
             return True

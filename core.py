@@ -119,7 +119,7 @@ class Bumblebee():
 
         while(self.sleep == 0):
             text = ''
-            text = self.speech.infinite_speaking_chances(text)
+            text = self.speech.hear()
 
             text = tokenize(text)
             x = bag_of_words(text, all_words)

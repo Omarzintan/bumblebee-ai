@@ -50,11 +50,11 @@ Contributions are welcome, no matter how small or large. Please read this file t
             self.bs.respond("What is your name?")
             
             # this is how Bumblebee would receive a response from the user
-            # infinite_speaking_chances is a function that keeps asking for input if your speech is not recognized
-            # correctly. To break out of this loop, that is if you don't want to proceed, just say 'cancel' or 'stop'.
-            name = ''
-            name = self.bs.infinite_speaking_chances(name)
-            # looks for 'cancel' or 'stop' in input
+            # hear is a function that keeps asking for input if your speech is not recognized
+            # correctly. 
+            name = self.bs.hear()
+            
+            # stops running feature if 'cancel' or 'stop' is in input
             if self.bs.interrupt_check(name):
                return
                

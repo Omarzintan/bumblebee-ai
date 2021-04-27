@@ -16,10 +16,18 @@ This is Bumblebee, a voice assistant made with Python. Bumblebee was made with t
 2) You will need ```portaudio``` for bumblebee to work. Ensure that you have portaudio installed. Otherwise, install it here: [install portaudio](https://formulae.brew.sh/formula/portaudio)
 
 ### If all requirements are met:
-1) Clone this repo. ```git clone GITHUBURL YOUR_FOLDER_NAME```
-2) Get into the bumblebee folder. ```cd YOUR_FOLDER_NAME/bumblebee```
+1) Clone this repo. 
+```bash
+git clone GITHUBURL YOUR_FOLDER_NAME
+```
+2) Get into the bumblebee folder. 
+```bash
+cd YOUR_FOLDER_NAME/bumblebee
+```
 3) Run this command to install bumblebee's environment and run it!
-   ```source setup.sh```
+   ```bash
+   source setup.sh
+   ```
 
 NOTE: After initial installation, bumblebee will run automatically. If you close bumblebee and you want to run it again, go into the bumblebee folder and ensure that the bumblebee environment is activated. Otherwise, activate it by typing ```conda activate bumblebee-ai``` then type ```python main.py```. If the environment is already activated, you can type ```python main.py``` to run bumblebee.
 
