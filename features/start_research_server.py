@@ -7,6 +7,11 @@ from core import Bumblebee
 from tkinter import *
 
 
+class StoreKeys:
+    RESEARCH_TOPIC = 'research_topic'
+    RESEARCH_SERVER_PROC_ID = 'research_server_proc_id'
+
+
 class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "start_research_server"
@@ -20,14 +25,12 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text):
         self.bs.respond('What is the topic of your research?')
-        topic = ''
-        topic = self.bs.infinite_speaking_chances(topic)
+        topic = self.bs.hear()
         if self.bs.interrupt_check(topic):
             return
         self.bs.respond('Starting research mode on {}'.format(topic))
         self.bs.respond('Would you like to edit this?')
-        edit = ''
-        edit = self.bs.infinite_speaking_chances(edit)
+        edit = self.bs.hear()
         if self.bs.interrupt_check(edit):
             return
         if 'yes' in edit or 'yeah' in edit:
@@ -35,7 +38,7 @@ class Feature(BaseFeature):
             edited_json = json.loads(edited_topic)
             topic = edited_json["topic"]
         self.bs.respond('Starting server for research on {}'.format(topic))
-        self.globals_api.store("research_topic", topic)
+        self.globals_api.store(RESEARCH_TOPIC, topic)
         # start python flask server in new thread
         threading.Thread(target=self.start_server).start()
 
@@ -91,7 +94,7 @@ class Feature(BaseFeature):
             stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         self.globals_api.store(
-            "research_server_proc_id",
+            RESEARCH_SERVER_PROC_ID,
             research_server_proc.pid
         )
         self.globals_api.add_thread_failsafe(

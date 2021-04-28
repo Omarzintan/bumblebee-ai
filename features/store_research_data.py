@@ -7,6 +7,7 @@ import os
 import sys
 from tinydb import TinyDB, Query
 from mdutils import MdUtils
+from features.start_research_server import StoreKeys as research_store
 from bs4 import BeautifulSoup
 import validators
 
@@ -47,7 +48,9 @@ class Feature(BaseFeature):
         research_files_path = self.config['Folders']['research_files']
         server_url = self.config['Utilities']['research_server_url']
 
-        research_topic = self.globals_api.retrieve("research_topic")
+        research_topic = self.globals_api.retrieve(
+            research_store.RESEARCH_TOPIC
+            )
         filename = research_topic.replace(' ', '-')
         today = datetime.datetime.now().strftime('%a %b, %Y')
 

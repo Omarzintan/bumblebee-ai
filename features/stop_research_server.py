@@ -2,6 +2,7 @@ import os
 import signal
 from core import Bumblebee
 from features.default import BaseFeature
+from features.start_research_server import StoreKeys as research_store
 
 
 class Feature(BaseFeature):
@@ -21,7 +22,9 @@ class Feature(BaseFeature):
 
     def stop_server(self):
         '''Stops the flask server for research mode.'''
-        server_proc_id = self.globals_api.retrieve("research_server_proc_id")
+        server_proc_id = self.globals_api.retrieve(
+            research_store.RESEARCH_SERVER_PROC_ID
+            )
         print(server_proc_id)
         try:
             os.kill(server_proc_id, signal.SIGTERM)
