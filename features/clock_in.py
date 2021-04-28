@@ -53,8 +53,8 @@ class Feature(BaseFeature):
         while True:
             yes_no_response = self.bs.hear()
 
-            if yes_no_response in no_words or
-            self.bs.interrupt_check(yes_no_response):
+            if yes_no_response in no_words or \
+                    self.bs.interrupt_check(yes_no_response):
                 self.bs.respond('Clock-in cancelled')
                 break
 
