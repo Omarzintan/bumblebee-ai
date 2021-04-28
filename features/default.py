@@ -13,9 +13,9 @@ class BaseFeature(Bumblebee):
         self.index = None
         self.config = self.config_yaml
         self.globals_api = GLOBALSAPI()
-        
+
     def action(self, text):
         pass
 
-    def set_index(self, value : int):
+    def set_index(self, value: int):
         self.index = value

@@ -1,8 +1,8 @@
-from features.default import BaseFeature
 import sys
 from tkinter import *
 import json
 from tinydb import TinyDB, Query
+from features.default import BaseFeature
 
 
 class Feature(BaseFeature):
@@ -10,12 +10,10 @@ class Feature(BaseFeature):
         self.tag_name = "add_contact"
         self.patterns = ["add new contact", "new contact", "add a new contact"]
         super().__init__()
-        
+
         # self.config defined in BaseFeature class
         contact_db_path = self.config['Database']['contacts']
         self.contact_db = TinyDB(contact_db_path)
-
-
 
     def action(self, spoken_text):
         try:
@@ -26,9 +24,10 @@ class Feature(BaseFeature):
             self.bs.respond('Could not add new contact.')
 
         return
-    
+
     '''
-    Opens a Tkinter window to allow the user to add a new contact to the database.
+    Opens a Tkinter window to allow the user to add a new contact
+    to the database.
     Arguments: None
     Return type: <JSON> contact_details_json
     '''
@@ -38,9 +37,8 @@ class Feature(BaseFeature):
         root.title("Add New Contact")
         content = Frame(root)
         content.pack()
-        
         contact_details = {}
-        
+
         # creating fields
         Label(content, text="Name").grid(row=0, column=0, padx=5, sticky='sw')
         Label(content, text="email").grid(row=1, column=0, padx=5, sticky='sw')
@@ -59,14 +57,16 @@ class Feature(BaseFeature):
             contact_details["name"] = str(name_entry.get().lower())
             contact_details["email"] = str(email_entry.get().lower())
             contact_details["phone"] = str(phone_entry.get())
-            self.contact_db.upsert(contact_details, Entry.name == contact_details["name"])
+            self.contact_db.upsert(
+                contact_details, Entry.name == contact_details["name"]
+                )
             root.destroy()
 
         def clear():
             name_entry.delete(0, "end")
             email_entry.delete(0, "end")
             phone_entry.delete(0, "end")
-        
+
         # Buttons for saving and clearing
         saveButton = Button(content, text="Save", command=saveInput)
         clearButton = Button(content, text="Clear", command=clear)

@@ -58,6 +58,7 @@ input_size = len(x_train[0])
 hidden_size = 8
 output_size = len(tags)
 
+
 class IntentDataset(Dataset):
 
     def __init__(self):
@@ -75,7 +76,9 @@ dataset = IntentDataset()
 train_loader = DataLoader(dataset=dataset,
                           batch_size=batch_size,
                           shuffle=True,
-                          num_workers=2) # if using Python3.8, set num_workers=0. Python3.8 has a spawn vs fork issue that causes this to fail if num_workers > 0
+                          num_workers=2)
+# if using Python3.8, set num_workers=0. Python3.8 has a spawn vs fork issue
+# that causes this to fail if num_workers > 0
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -108,13 +111,13 @@ for epoch in range(num_epochs):
 print(f'final loss: {loss.item():.4f}')
 
 data = {
-"model_state": model.state_dict(),
-"input_size": input_size,
-"hidden_size": hidden_size,
-"output_size": output_size,
-"all_words": all_words,
-"tags": tags
-}
+    "model_state": model.state_dict(),
+    "input_size": input_size,
+    "hidden_size": hidden_size,
+    "output_size": output_size,
+    "all_words": all_words,
+    "tags": tags
+    }
 
 FILE = bumblebee_root+"models/data.pth"
 torch.save(data, FILE)

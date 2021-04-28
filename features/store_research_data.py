@@ -3,11 +3,13 @@ from core import Bumblebee
 import datetime
 import json
 import requests
-import os, sys
+import os
+import sys
 from tinydb import TinyDB, Query
 from mdutils import MdUtils
 from bs4 import BeautifulSoup
 import validators
+
 
 class Feature(BaseFeature):
     def __init__(self):
@@ -27,7 +29,9 @@ class Feature(BaseFeature):
     def action(self, spoken_text=''):
         try:
             filename = self.store_data()
-            self.bs.respond('Research data stored successfully at {}.md'.format(filename))
+            self.bs.respond(
+                f'Research data stored successfully at {filename}.md'
+                )
             return
         except:
             print("Unexpected error:", sys.exc_info())
@@ -35,7 +39,7 @@ class Feature(BaseFeature):
             return
 
     '''
-    Retrieves research data from server and stores the data in 
+    Retrieves research data from server and stores the data in
     the research database.
     '''
     def store_data(self):
@@ -68,7 +72,8 @@ class Feature(BaseFeature):
                 record["date_created"] = today
                 record["last_updated"] = today
 
-                # Updates record if url already exists, otherwise insert as new record.
+                # Updates record if url already exists, otherwise insert
+                # as new record.
                 self.research_db.upsert(record, Record.url == url)
 
         self.md_file_create(research_topic, research_files_path + filename)
@@ -89,19 +94,21 @@ class Feature(BaseFeature):
 
     def md_file_create(self, research_topic, filename, ordered_by='time'):
         '''
-        Creates a markdown file of data in the research database given 
+        Creates a markdown file of data in the research database given
         a research topic.
         Returns the file name
         '''
         Record = Query()
-        records = self.research_db.search(Record.research_topic == research_topic)
+        records = self.research_db.search(
+            Record.research_topic == research_topic
+            )
         mdfile = MdUtils(file_name=filename, title=research_topic)
         for record in records:
             mdfile.new_line('- ' +
                             mdfile.new_inline_link(
                                 link=record["url"],
                                 text=record["page_title"]
+                                )
                             )
-            )
         mdfile.create_md_file()
         return

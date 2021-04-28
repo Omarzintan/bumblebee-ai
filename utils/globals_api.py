@@ -64,7 +64,6 @@ class GLOBALSAPI():
                 )
             ]
             Bumblebee.global_store['threads'] = result
-                    
 
         except KeyError:
             print(f"No thread with id {proc_id} found.")

@@ -53,7 +53,8 @@ class Feature(BaseFeature):
         while True:
             yes_no_response = self.bs.hear()
 
-            if yes_no_response in no_words or self.bs.interrupt_check(yes_no_response):
+            if yes_no_response in no_words or
+            self.bs.interrupt_check(yes_no_response):
                 self.bs.respond('Clock-in cancelled')
                 break
 
@@ -66,8 +67,10 @@ class Feature(BaseFeature):
                 # Log clock-in info into employer's file
                 self.clock_in(
                     self.globals_api.retrieve(StoreKeys.EMPLOYER),
-                    self.globals_api.retrieve(StoreKeys.WORK_START_TIME).strftime(
-                        '%a %b %d, %Y %I:%M %p')
+                    self.globals_api.retrieve(
+                        StoreKeys.WORK_START_TIME).strftime(
+                            '%a %b %d, %Y %I:%M %p'
+                            )
                 )
 
                 self.bs.respond(
@@ -83,12 +86,16 @@ class Feature(BaseFeature):
     def clock_in(self, employer, work_start_time):
         '''
         Writes line in employer specific file saying I have logged in to work.
-        Arguments: <string> employer name, <datetime.datetime object> work_start_time
+        Arguments: <string> employer name,
+                   <datetime.datetime object> work_start_time
         Return type: None
         '''
         # find/create employer file
         os.makedirs('work_study', exist_ok=True)
-        with open(bumblebee_root+os.path.join('work_study', '{}_hours.txt'.format(employer)), 'a+') as file:
+        with open(
+            bumblebee_root +
+            os.path.join('work_study', '{}_hours.txt'.format(employer)), 'a+'
+        ) as file:
             file.write('Started work: {}\n'.format(work_start_time))
 
     def get_employers(self):

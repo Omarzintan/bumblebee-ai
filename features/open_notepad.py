@@ -1,6 +1,7 @@
 from features.default import BaseFeature
 from tkinter import *
 
+
 class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "open_notepad"
@@ -23,26 +24,25 @@ class Feature(BaseFeature):
         scrollbar = Scrollbar(root)
 
         # packing the scrollbar
-        scrollbar.pack(side = RIGHT, fill = Y)
+        scrollbar.pack(side=RIGHT, fill=Y)
 
         # adding typing functionality
         text_info = Text(root, yscrollcommand=scrollbar.set)
-        text_info.pack(fill = BOTH)
-
+        text_info.pack(fill=BOTH)
 
         # retrieving info from text widget
         def printInput():
             inp = text_info.get(1.0, "end-1c")
-            lbl.config(text = "Provided Input: "+inp)
+            lbl.config(text="Provided Input: "+inp)
 
         # Button Creation
-        printButton = Button(root, text = "Done", command = printInput)
-        printButton.pack(side = BOTTOM)
+        printButton = Button(root, text="Done", command=printInput)
+        printButton.pack(side=BOTTOM)
 
         # Label Creation
-        lbl = Label(root, text = "")
+        lbl = Label(root, text="")
         lbl.pack()
-    
+
         # configuring the scrollbar
-        scrollbar.config(command = text_info.yview)
+        scrollbar.config(command=text_info.yview)
         root.mainloop()

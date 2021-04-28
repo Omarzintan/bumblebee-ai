@@ -1,10 +1,12 @@
 '''
 This file is just for building a default config file on first install.
-Any updates to the config.yaml file should be made directly into config/config.yaml
+Any updates to the config.yaml file should be made directly into
+config/config.yaml
 '''
 import yaml
 from helpers import bumblebee_root
 from helpers import python3_path
+
 
 def build_config():
     config = {}
@@ -17,7 +19,8 @@ def build_config():
     config["Database"]["path"] = bumblebee_root+"database/"
     config["Database"]["zoom"] = bumblebee_root+"database/zoom_db.json"
     config["Database"]["research"] = bumblebee_root+"database/research_db.json"
-    config["Database"]["employers"] = bumblebee_root+"database/employers_db.json"
+    config["Database"]["employers"] = bumblebee_root+"database/employers_db" \
+                                                     ".json"
     config["Database"]["contacts"] = bumblebee_root+"database/contacts_db.json"
 
     config["Api_keys"] = {}
@@ -34,9 +37,11 @@ def build_config():
 
     return config
 
+
 def write_yaml(data):
     with open(bumblebee_root+"utils/config.yaml", "w") as config_file:
         yaml.dump(data, config_file)
+
 
 def build_yaml():
     try:

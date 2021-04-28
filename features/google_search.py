@@ -2,21 +2,31 @@
 from features.default import BaseFeature
 import webbrowser
 
+
 class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "google_search"
-        self.patterns = ["google", "open a google search on", "google search", "show me on google"]
+        self.patterns = [
+            "google",
+            "open a google search on",
+            "google search",
+            "show me on google"
+            ]
         super().__init__()
-       
+
     def action(self, spoken_text):
         query = self.search(spoken_text, self.patterns)
-        self.bs.respond('I have opened a browser window with your search on {}.'.format(query))
+        self.bs.respond(
+            'I have opened a browser window with your search on {}.'
+            .format(query))
         return
 
     '''
     Parses spoken text to retrieve a search query for Google
-    Argument: <list> spoken_text (tokenized. i.e. list of words), <list> patterns
-    Return type: <string> spoken_text (this is actually the search query as retrieved from spoken_text.)
+    Argument: <list> spoken_text (tokenized. i.e. list of words),
+              <list> patterns
+    Return type: <string> spoken_text (this is actually the search query
+    as retrieved from spoken_text.)
     '''
     def get_search_query(self, spoken_text, patterns):
         search_terms = ['about', 'on', 'for', 'search']
@@ -36,8 +46,10 @@ class Feature(BaseFeature):
                 # split the phrase into individual words
                 phrase_list = phrase.split(' ')
                 # remove phrase list from spoken_text
-                spoken_text = [word for word in spoken_text if word not in phrase_list]
-                
+                spoken_text = [
+                    word for word in spoken_text if word not in phrase_list
+                    ]
+
         return ' '.join(spoken_text)
 
     '''

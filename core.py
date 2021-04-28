@@ -56,9 +56,12 @@ class Bumblebee():
         # ----------------------------
         try:
             # Check to see that intents.json file exists.
-            with open(self.bumblebee_dir+'utils/intents.json', 'r') as json_data:
+            with open(
+                self.bumblebee_dir+'utils/intents.json', 'r'
+            ) as json_data:
                 intents = json.load(json_data)
-            # Check whether any features have been added/removed or if no trained model present.
+            # Check whether any features have been added/removed or if
+            # no trained model is present.
             assert(len(self._features) == len(intents['intents']))
             assert(os.path.exists(self.path_to_trained_model))
         except (FileNotFoundError, AssertionError):
@@ -68,7 +71,8 @@ class Bumblebee():
             except OSError:
                 print('intents.json file not found.')
 
-            # Update intents.json if features have been added/removed or the file does not exist.
+            # Update intents.json if features have been added/removed
+            # or the file does not exist.
             print('Generating new intents.json file...')
 
             intents = {}

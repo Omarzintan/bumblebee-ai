@@ -10,7 +10,9 @@ class Feature(BaseFeature):
         super().__init__()
 
     def action(self, spoken_text=''):
-        self.bs.respond('To get me back you will have to boot me back up. Are you sure?')
+        self.bs.respond(
+            'To get me back you will have to boot me back up. Are you sure?'
+            )
         approve = ''
         approve = self.bs.infinite_speaking_chances(approve)
         if self.bs.interrupt_check(approve):

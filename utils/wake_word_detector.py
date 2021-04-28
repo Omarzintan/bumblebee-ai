@@ -7,16 +7,19 @@ import sys
 from colorama import Fore
 
 '''
-This code was adapted from porcupine demos on github: https://github.com/Picovoice/porcupine/blob/master/demo/python/porcupine_demo_mic.py
+This code was adapted from porcupine demos on github:
+https://github.com/Picovoice/porcupine/blob/master/demo/python/porcupine_demo_mic.py
 This is an implementation of wake-word detection using porcupine.
 '''
 porcupine = None
 pa = None
 audio_stream = None
 
+
 def run():
     try:
-        porcupine = pvporcupine.create(keywords=['bumblebee']) # part of default keywords from porcupine.
+        # 'bumblebee is one of default keywords from porcupine.
+        porcupine = pvporcupine.create(keywords=['bumblebee'])
         pa = pyaudio.PyAudio()
 
         audio_stream = pa.open(
@@ -24,13 +27,14 @@ def run():
             channels=1,
             format=pyaudio.paInt16,
             input=True,
-            frames_per_buffer=porcupine.frame_length)
+            frames_per_buffer=porcupine.frame_length
+            )
         print(Fore.CYAN + '[Listening...]')
         # add banners for wifi and mode:
         while True:
             pcm = audio_stream.read(porcupine.frame_length)
             pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
-            
+
             keyword_index = porcupine.process(pcm)
             if keyword_index >= 0:
                 # Word detected

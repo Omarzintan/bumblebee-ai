@@ -10,9 +10,14 @@ from tkinter import *
 class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "start_research_server"
-        self.patterns = ["start research", "research mode", "let's do research", "start research server"]
+        self.patterns = [
+            "start research",
+            "research mode",
+            "let's do research",
+            "start research server"
+            ]
         super().__init__()
-        
+
     def action(self, spoken_text):
         self.bs.respond('What is the topic of your research?')
         topic = ''
@@ -34,12 +39,13 @@ class Feature(BaseFeature):
         # start python flask server in new thread
         threading.Thread(target=self.start_server).start()
 
-    '''
-    Opens a Tkinter window to allow the user to edit the research topic as heard.
-    Argument: <string> topic
-    Return type: <JSON> topic_details_json
-    '''
     def topic_edit(self, topic):
+        '''
+        Opens a Tkinter window to allow the user to edit the research
+        topic as heard.
+        Argument: <string> topic
+        Return type: <JSON> topic_details_json
+        '''
         root = Tk()
         root.geometry("320x100")
         root.title("Edit research topic")

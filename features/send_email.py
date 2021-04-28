@@ -18,13 +18,17 @@ class Feature(BaseFeature):
         self.bs.respond('Who do you want to send the email to?')
         name = ''
         name = self.bs.infinite_speaking_chances(name)
-        if self.bs.interrupt_check(name):                
+        if self.bs.interrupt_check(name):
             return
         close_names = []
         while close_names == []:
-            close_names = difflib.get_close_matches(name, contact_help.get_names())
+            close_names = difflib.get_close_matches(
+                name, contact_help.get_names()
+                )
             if close_names == []:
-                self.bs.respond('Could not find this contact. Please try again')
+                self.bs.respond(
+                    'Could not find this contact. Please try again'
+                    )
                 name = ''
                 name = self.bs.infinite_speaking_chances(name)
                 if self.bs.interrupt_check(name):
@@ -72,7 +76,10 @@ class Feature(BaseFeature):
             return
         if approve == 'yes':
             # send email
-            ezgmail.init(tokenFile=os.getenv('BUMBLEBEE_PATH')+'token.json', credentialsFile=os.getenv('BUMBLEBEE_PATH')+'credentials.json')
+            ezgmail.init(
+                tokenFile=os.getenv('BUMBLEBEE_PATH')+'token.json',
+                credentialsFile=os.getenv('BUMBLEBEE_PATH')+'credentials.json'
+                )
             message += "\n\n\n Bumblebee (Zintan's ai assistant)"
             ezgmail.send(recipient, subject, message)
             self.bs.respond('I have sent the email.')
@@ -80,18 +87,20 @@ class Feature(BaseFeature):
             self.bs.respond('Okay.')
         return
 
-
     '''
     Returns summary information of email details as heard from user.
     Arguments: <string> recipient, <string> subject, <string> message
     Return type: <string> summary
     '''
     def summary_email(self, recipient, subject, message):
-        summary = 'To: {}\nSubject: {}\nMessage: {}'.format(recipient, subject, message)
+        summary = 'To: {}\nSubject: {}\nMessage: {}'.format(
+            recipient, subject, message
+            )
         return summary
 
     '''
-    Opens up a Tkinter window with email details to allow the user to edit any of these details.
+    Opens up a Tkinter window with email details to allow the user to edit
+    any of these details.
     Arguments: <string> recipient, <string> subject, <string> message
     Return type: <JSON> email_details_json
     '''
@@ -105,16 +114,19 @@ class Feature(BaseFeature):
         content.pack()
         email_details = {}
 
-
         # creating fields
         Label(content, text="To:").grid(row=0, column=0, padx=5, sticky='sw')
-        Label(content, text="Subject:").grid(row=0, column=1, padx=5, sticky='sw')
-        Label(content, text="Message:").grid(row=2, column=0, padx=5, sticky='sw')
+        Label(content, text="Subject:").grid(
+            row=0, column=1, padx=5, sticky='sw'
+            )
+        Label(content, text="Message:").grid(
+            row=2, column=0, padx=5, sticky='sw'
+            )
 
         recip = Entry(content, width=24)
         subj = Entry(content, width=24)
         msg = Text(content, width=50, height=10)
-    
+
         recip.grid(row=1, column=0, padx=5)
         subj.grid(row=1, column=1, padx=5)
         msg.grid(row=3, column=0, columnspan=2, padx=5)
@@ -123,7 +135,7 @@ class Feature(BaseFeature):
         recip.insert(END, recipient)
         subj.insert(END, subject)
         msg.insert(END, message)
-    
+
         # retrieve email details from edit fields and close windown
         def saveInput():
             email_details["recipient"] = str(recip.get())
@@ -135,14 +147,14 @@ class Feature(BaseFeature):
             recip.delete(0, "end")
             subj.delete(0, "end")
             msg.delete(1.0, "end")
-        
-        # Buttons for saving and clearing 
+
+        # Buttons for saving and clearing
         saveButton = Button(content, text="Save", command=saveInput)
         clearButton = Button(content, text="Clear", command=clear)
         saveButton.grid(row=4, column=0, padx=5, sticky='e')
         clearButton.grid(row=4, column=1, padx=5, sticky='w')
-    
+
         root.mainloop()
-    
+
         email_details_json = json.dumps(email_details)
         return email_details_json

@@ -2,6 +2,7 @@
 from features.default import BaseFeature
 import webbrowser
 
+
 class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "youtube_search"
@@ -37,7 +38,7 @@ class Feature(BaseFeature):
                 phrase_list = phrase.split(' ')
                 # remove phrase list from spoken_text
                 spoken_text = [word for word in spoken_text if word not in phrase_list]
-                
+
         return ' '.join(spoken_text)
 
     '''
