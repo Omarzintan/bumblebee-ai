@@ -8,7 +8,7 @@ __all__ = [
     'clock_out',
     'greeting',
     'grepapp_search',
-    # 'send_email',
+    'send_email',
     # 'open_notepad',
     'wiki_search',
     'wolfram_search',
@@ -36,9 +36,8 @@ __essential__ = [
 
 '''Features to test'''
 __test__ = __essential__ + [
-    'start_research_server',
-    'stop_research_server',
-    'store_research_data'
+    'send_email',
+    'open_zoom_link'
     ]
 
 '''Contains cybersecurity specific features.'''

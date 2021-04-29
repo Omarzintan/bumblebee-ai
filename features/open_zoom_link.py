@@ -1,5 +1,6 @@
 '''Open zoom link in a web browser'''
 from features.default import BaseFeature
+from features.feature_helpers import get_search_query
 from tinydb import TinyDB, Query
 import pyperclip as pc
 import webbrowser
@@ -17,7 +18,7 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text):
         # get class name from the query
-        name = self.get_search_query(spoken_text, self.patterns)
+        name = self.get_search_query(spoken_text)
         # open zoom link in browser
         link_found, has_password = self.open_zoom(name.lower())
         if not link_found:
@@ -61,51 +62,16 @@ class Feature(BaseFeature):
         webbrowser.open(result['link'])
         return found, has_password
 
-    def get_search_query(self, spoken_text, patterns):
+    def get_search_query(self, spoken_text):
         '''
         Parse spoken text to retrieve a search query for Zoom.
         e.g. spoken_text: I would like to go to french class
-        In the above reqeuest, the term  is 'to' and it will
-        lead to 'french class' being captured as the query.
-        The false search term in the above case is 'like'
-        and it will be ignored in searching for the search term.
-
-        Arguments: <string> spoken_text, <list> patterns
-        Return type: <string> spoken_text (now stripped down to
-        only the search query.)
+        query = french class
         '''
         search_terms = ['to', 'for']
-        false_search_term_indicators = ['like', 'love', 'ready', 'want']
-        query_found = False
-
-        for search_term in search_terms:
-            if search_term in spoken_text:
-                search_index = spoken_text.index(search_term)
-                # ignore cases with "like to", "love to" "ready to"
-                if spoken_text[search_index-1] in false_search_term_indicators:
-                    # looking for the search term in rest of text after
-                    # the false_search_term_indicator.
-                    search_index = spoken_text[
-                        search_index+1:
-                            ].index(search_term)
-                # get everything after the search term
-                spoken_text = spoken_text[search_index+1:]
-                query_found = True
-                break
-
-        # In case none of the search terms are included in spoken_text.
-        if not query_found:
-            for phrase in patterns:
-                # split the phrase into individual words
-                phrase_list = phrase.split(' ')
-                # remove phrase list from spoken_text
-                spoken_text = [
-                    word for word in spoken_text if word not in phrase_list
-                    ]
-
-        spoken_text = ' '.join(spoken_text)
-        # Need to remove whitespace before and after the wanted query,
-        # otherwise the zoom_db search will return nothing.
-        spoken_text = spoken_text.strip()
-        print(spoken_text)
-        return spoken_text
+        search_query = get_search_query(
+            spoken_text,
+            self.patterns,
+            search_terms
+        )
+        return search_query
