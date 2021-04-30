@@ -12,7 +12,7 @@ from halo import Halo
 
 class BumbleSpeech():
     def __init__(self):
-        self.listening_spinner = Halo(text='Listening', spinner='dots')
+        self.spinner = Halo(spinner='dots')
         self.recognize_spinner = Halo(text='Recognizing', spinner='dots')
         self.silent_mode = False
 
@@ -53,21 +53,21 @@ class BumbleSpeech():
             # breifly adjust for ambient noise
             recognizer.adjust_for_ambient_noise(source, duration=1)
             playsound.playsound(bumblebee_root+'sounds/tone-beep.wav', True)
-            self.listening_spinner.start()
+            self.spinner.start(text='Listening')
             audio = recognizer.listen(source)
-            self.listening_spinner.stop()
+            self.spinner.stop()
             try:
-                self.recognize_spinner.start()
+                self.spinner.start('Recognizing')
                 spoken_text = recognizer.recognize_google(audio)
-                self.recognize_spinner.stop()
+                self.spinner.stop()
 
                 print(Fore.WHITE + 'You said, ' + spoken_text)
             except sr.UnknownValueError:
-                self.recognize_spinner.stop()
+                self.spinner.stop()
                 self.respond('Sorry I did not hear you, please repeat.')
             except sr.RequestError:
                 # This happens when there is not internet connection.
-                self.recognize_spinner.stop()
+                self.spinner.stop()
                 self.respond('No internet connection found.')
                 self.respond('Starting silent mode.')
                 self.set_silent_mode(True)

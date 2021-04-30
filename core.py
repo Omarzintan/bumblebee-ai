@@ -6,6 +6,7 @@ import subprocess
 import torch
 
 from utils.speech import BumbleSpeech
+from halo import Halo
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 
@@ -30,6 +31,7 @@ class Bumblebee():
         self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
         self.python3_path = Bumblebee.config_yaml["Common"]["python3_path"]
         self.path_to_trained_model = self.bumblebee_dir+"models/data.pth"
+        self.spinner = Halo(spinner='dots2')
 
         # %%
         # Building Feature objects from list of features.
@@ -67,13 +69,14 @@ class Bumblebee():
         except (FileNotFoundError, AssertionError):
             # remove intents file if it exists
             try:
+                print('Detected modification in feature list.')
                 os.remove(self.bumblebee_dir+'utils/intents.json')
             except OSError:
                 print('intents.json file not found.')
 
             # Update intents.json if features have been added/removed
             # or the file does not exist.
-            print('Generating new intents.json file...')
+            self.spinner.start(text='Generating new intents.json file...')
 
             intents = {}
             intents['intents'] = []
@@ -88,18 +91,18 @@ class Bumblebee():
 
             with open(self.bumblebee_dir+'utils/intents.json', 'w') as f:
                 f.write(intents_json)
-            print('intents.json file generated.')
+            self.spinner.succeed(text='intents.json file generated.')
 
             # Retrain the NeuralNet
-            print("Retraining NeuralNet...")
+            self.spinner.start(text='Training NeuralNet.')
             output, errors = subprocess.Popen(
                 [self.python3_path, self.bumblebee_dir+'train.py'],
                 stdout=subprocess.PIPE,
                 text=True
             ).communicate()
+            self.spinner.succeed('NeuralNet trained.')
             print(output)
             print(errors)
-            print("NeuralNet trained.")
 
     def run(self):
         """
