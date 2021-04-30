@@ -5,6 +5,7 @@ import struct
 import os
 import sys
 from colorama import Fore
+from halo import Halo
 
 '''
 This code was adapted from porcupine demos on github:
@@ -14,6 +15,7 @@ This is an implementation of wake-word detection using porcupine.
 porcupine = None
 pa = None
 audio_stream = None
+spinner = Halo(spinner='simpleDots', interval=1000)
 
 
 def run():
@@ -29,15 +31,17 @@ def run():
             input=True,
             frames_per_buffer=porcupine.frame_length
             )
-        print(Fore.CYAN + '[Listening...]')
+
         # add banners for wifi and mode:
         while True:
+            spinner.start(text="Say 'Bumblebee' to activate.")
             pcm = audio_stream.read(porcupine.frame_length)
             pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
 
             keyword_index = porcupine.process(pcm)
             if keyword_index >= 0:
                 # Word detected
+                spinner.stop()
                 return True
     except KeyboardInterrupt:
         print(Fore.CYAN + 'Stopping...')
