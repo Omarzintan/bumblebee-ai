@@ -80,12 +80,15 @@ If you need to store global variables that can be accessed by other features in 
 
 from features.default import BaseFeature 
 
+class StoreKeys():
+      MYGLOBAL_VAR = 'myvariable'
+
 class Feature(BaseFeature):
       ...
 
       # storing a global variable
       myvariable = "hey"
-      self.globals_api.store('myvariable', myvariable)
+      self.globals_api.store(StoreKeys.MYGLOBAL_VAR, myvariable)
 
       ...
 ```
@@ -94,12 +97,15 @@ Now if you want to retrieve this same global variable from another feature, you 
 # feature2.py
 
 from features.default import BaseFeature
+from features.feature1 import StoreKeys as feature1_store
 
 class Feature(BaseFeature):
       ...
 
-      # retrieving a global variable
-      myvariable = self.globals_api.retrieve('myvariable')
+      # retrieving a global variable from feature1
+      myvariable = self.globals_api.retrieve(
+        feature1_store.MYGLOBAL_VAR
+        )
 
       ...
 ```
@@ -161,6 +167,9 @@ import threading
 import subprocess
 from features.default import BaseFeature
 
+class StoreKeys():
+      SERVER_PROC_ID = 'server_proc_id'
+
 class Feature(BaseFeature):
 
       ...
@@ -182,7 +191,9 @@ class Feature(BaseFeature):
           
           # Get the process id and store it globally.
           proc_id = process.pid
-          self.globals_api.store('server_proc_id', proc_id)
+          self.globals_api.store(
+            StoreKeys.SERVER_PROC_ID, proc_id
+            )
           
           # Adding the thread failsafe.
           # The add_thread_failsafe function takes the process id,
@@ -208,6 +219,7 @@ If you write a feature that runs in a thread, it is advisable to also create ano
 import os
 import signal
 from features.default import BaseFeature
+from features.run_server import StoreKeys as run_server_store
 
 class Feature(BaseFeature):
 
@@ -220,7 +232,9 @@ class Feature(BaseFeature):
       def stop_server(self):
           '''Stops my running server.'''
           # Retrieve the proc_id of the server stored globally.
-          server_proc_id = self.globals_api.retrieve('server_proc_od')
+          server_proc_id = self.globals_api.retrieve(
+            run_server_store.SERVER_PROC_ID
+            )
 
           # Kill the server process
           os.kill(server_proc_id, signal.SIGTERM)
