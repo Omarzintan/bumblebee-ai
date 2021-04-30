@@ -13,8 +13,7 @@ class Feature(BaseFeature):
         self.bs.respond(
             'To get me back you will have to boot me back up. Are you sure?'
             )
-        approve = ''
-        approve = self.bs.infinite_speaking_chances(approve)
+        approve = self.bs.hear()
         if self.bs.interrupt_check(approve):
             return
         if 'yes' in approve:

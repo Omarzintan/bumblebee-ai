@@ -38,7 +38,7 @@ class Feature(BaseFeature):
             edited_json = json.loads(edited_topic)
             topic = edited_json["topic"]
         self.bs.respond('Starting server for research on {}'.format(topic))
-        self.globals_api.store(RESEARCH_TOPIC, topic)
+        self.globals_api.store(StoreKeys.RESEARCH_TOPIC, topic)
         # start python flask server in new thread
         threading.Thread(target=self.start_server).start()
 
@@ -94,7 +94,7 @@ class Feature(BaseFeature):
             stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         self.globals_api.store(
-            RESEARCH_SERVER_PROC_ID,
+            StoreKeys.RESEARCH_SERVER_PROC_ID,
             research_server_proc.pid
         )
         self.globals_api.add_thread_failsafe(
