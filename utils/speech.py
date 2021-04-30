@@ -7,18 +7,20 @@ import playsound
 import pyttsx3
 from helpers import bumblebee_root
 from colorama import Fore
-
-silent_mode = False
+from halo import Halo
 
 
 class BumbleSpeech():
+    def __init__(self):
+        self.listening_spinner = Halo(text='Listening', spinner='dots')
+        self.recognize_spinner = Halo(text='Recognizing', spinner='dots')
+        self.silent_mode = False
 
     def set_silent_mode(self, bool_val):
         '''Function to set silent mode.'''
-        global silent_mode
         if not isinstance(bool_val, (bool)):
             return -1
-        silent_mode = bool_val
+        self.silent_mode = bool_val
         return 0
 
     def infinite_speaking_chances(func):
@@ -40,7 +42,7 @@ class BumbleSpeech():
         Function to capture requests/questions.
         '''
 
-        if silent_mode:
+        if self.silent_mode:
             input_text = input(Fore.WHITE + 'type your response here: ')
             return input_text
 
@@ -51,14 +53,21 @@ class BumbleSpeech():
             # breifly adjust for ambient noise
             recognizer.adjust_for_ambient_noise(source, duration=1)
             playsound.playsound(bumblebee_root+'sounds/tone-beep.wav', True)
+            self.listening_spinner.start()
             audio = recognizer.listen(source)
+            self.listening_spinner.stop()
             try:
+                self.recognize_spinner.start()
                 spoken_text = recognizer.recognize_google(audio)
+                self.recognize_spinner.stop()
+
                 print(Fore.WHITE + 'You said, ' + spoken_text)
             except sr.UnknownValueError:
+                self.recognize_spinner.stop()
                 self.respond('Sorry I did not hear you, please repeat.')
             except sr.RequestError:
                 # This happens when there is not internet connection.
+                self.recognize_spinner.stop()
                 self.respond('No internet connection found.')
                 self.respond('Starting silent mode.')
                 self.set_silent_mode(True)
@@ -66,7 +75,7 @@ class BumbleSpeech():
 
     def respond(self, output):
         ''' Respond to requests/questions.'''
-        if silent_mode:
+        if self.silent_mode:
             print(Fore.YELLOW + output)
             return
 

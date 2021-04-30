@@ -26,3 +26,4 @@ torchaudio
 nltk
 pyinstaller
 pyyaml
+halo
