@@ -17,9 +17,6 @@ class Bumblebee():
     config_yaml = {}
     sleep = 0
     global_store = {
-        "currently_working": False,
-        "employer": '',
-        "work_start_time": '',
         "research_server_proc": '',
         "research_topic": '',
         "threads": []
