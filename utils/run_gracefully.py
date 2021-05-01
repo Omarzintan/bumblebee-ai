@@ -58,7 +58,7 @@ def exit_gracefully(bumblebee, crash_happened=False):
 
     # If this is a regular exiting, we ensure all threads are
     # terminated before we exit.
-    threads = globals_api.retrieve("threads")
-    for thread in threads:
-        bumblebee.run_by_tags(thread["terminate"])
+    for thread_failsafe in Bumblebee.thread_failsafes:
+        bumblebee.run_by_tags(thread_failsafe["termination_features"])
+
     wake_word_detector.stop()

@@ -34,20 +34,20 @@ class GLOBALSAPI():
             return None
 
     def add_thread_failsafe(self, proc_id: int,
-                            terminate=["terminate_all_threads"]):
+                            termination_features=[]):
         """
         Inserts a record of a running thread into the threads
         list in Bumblebee.
         Arguments: <int> proc_id (process id of the thread),
-                   <list> terminate (list of commands to run in
-                                     order to terminate thread)
+                   <list> termination_features (list of feature tags, indicating features to run in
+                                     order to terminate thread. These features are run when exiting gracefully)
         Returns: None
         """
         thread_failsafe = {}
         thread_failsafe["proc_id"] = proc_id
-        thread_failsafe["terminate"] = terminate
+        thread_failsafe["termination_features"] = termination_features
 
-        Bumblebee.global_store['threads'].append(thread_failsafe)
+        Bumblebee.thread_failsafes.append(thread_failsafe)
 
     def remove_thread_failsafe(self, proc_id: int):
         """
@@ -57,13 +57,13 @@ class GLOBALSAPI():
         Returns: None
         """
         try:
-            threads = Bumblebee.global_store['threads']
             result = [
-                thread for thread in threads if not (
-                    thread['proc_id'] == proc_id
+                thread_failsafe for thread_failsafe in Bumblebee.thread_failsafes if not (
+                    thread_failsafe['proc_id'] == proc_id
                 )
             ]
-            Bumblebee.global_store['threads'] = result
+
+            Bumblebee.thread_failsafes = result
 
         except KeyError:
-            print(f"No thread with id {proc_id} found.")
+            print(f"No thread failsafe with id {proc_id} was found.")

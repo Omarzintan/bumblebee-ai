@@ -16,11 +16,8 @@ class Bumblebee():
     speech = BumbleSpeech()
     config_yaml = {}
     sleep = 0
-    global_store = {
-        "research_server_proc": '',
-        "research_topic": '',
-        "threads": []
-    }
+    thread_failsafes = []
+    global_store = {}
 
     def __init__(self, features: list = ['default'], config: dict = {}):
         assert config != {}
