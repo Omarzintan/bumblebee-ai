@@ -1,5 +1,5 @@
 # CONTRIBUTING
-Contributions are welcome, no matter how small or large. Please read this file to help you contribute to this project.
+Contributions are welcome, no matter how small or large. Please read this file to help you contribute to this project. All contributed code should follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) standards.
 
 ## Some example contributions.
 1) Adding more features (also called skills) to bumblebee-ai.
@@ -8,7 +8,7 @@ Contributions are welcome, no matter how small or large. Please read this file t
 
 ## Recommended Communication style
 1) Please leave a detailed description in the Pull Request.
-2) Always review your code first. Leaving comments in you code, noting questions or interesting things for the reviewer.
+2) Always review your code first. Leaving comments in your code, noting questions or interesting things for the reviewer.
 3) Always communicate as this helps everyone around you.
 
 ## Pull Requests
@@ -245,4 +245,4 @@ class Feature(BaseFeature):
 ```
 
 ## Community
-If you have questions. Join the conversation in our Discord[PUT LINK HERE]
+If you have questions. Join the conversation in our [Discord server](https://discord.gg/sYMhTbYs).
