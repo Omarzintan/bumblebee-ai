@@ -13,7 +13,6 @@ from halo import Halo
 class BumbleSpeech():
     def __init__(self):
         self.spinner = Halo(spinner='dots')
-        self.recognize_spinner = Halo(text='Recognizing', spinner='dots')
         self.silent_mode = False
 
     def set_silent_mode(self, bool_val):
@@ -66,7 +65,7 @@ class BumbleSpeech():
                 self.spinner.stop()
                 self.respond('Sorry I did not hear you, please repeat.')
             except sr.RequestError:
-                # This happens when there is not internet connection.
+                # This happens when there is no internet connection.
                 self.spinner.stop()
                 self.respond('No internet connection found.')
                 self.respond('Starting silent mode.')
