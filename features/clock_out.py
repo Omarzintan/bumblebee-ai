@@ -4,7 +4,7 @@ import os
 from core import Bumblebee
 from helpers import bumblebee_root
 
-from features.clock_in import StoreKeys
+from features.clock_in import StoreKeys as clock_in_store_keys
 
 
 class Feature(BaseFeature):
@@ -16,25 +16,26 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text):
         is_currently_working = self.globals_api.retrieve(
-            StoreKeys.CURRENTLY_WORKING)
+            clock_in_store_keys.CURRENTLY_WORKING)
 
         if not is_currently_working:
             self.bs.respond('You\'ve not been clocked in.')
             return
 
-        work_start_time = self.globals_api.retrieve(StoreKeys.WORK_START_TIME)
+        work_start_time = self.globals_api.retrieve(
+            clock_in_store_keys.WORK_START_TIME)
         work_stop_time = datetime.datetime.now()
         duration = (work_stop_time - work_start_time)
 
         print('Duration: ', duration)
-        self.clock_out(self.globals_api.retrieve(StoreKeys.EMPLOYER),
+        self.clock_out(self.globals_api.retrieve(clock_in_store_keys.EMPLOYER),
                        work_stop_time.strftime('%a %b %d, %Y %I:%M %p'),
                        duration)
 
         # Clear store values related to work
-        self.globals_api.store(StoreKeys.EMPLOYER, '')
-        self.globals_api.store(StoreKeys.CURRENTLY_WORKING, False)
-        self.globals_api.store(StoreKeys.WORK_START_TIME, '')
+        self.globals_api.store(clock_in_store_keys.EMPLOYER, '')
+        self.globals_api.store(clock_in_store_keys.CURRENTLY_WORKING, False)
+        self.globals_api.store(clock_in_store_keys.WORK_START_TIME, '')
 
         self.bs.respond('You\'ve been clocked out.')
         return
