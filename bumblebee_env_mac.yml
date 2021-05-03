@@ -3,7 +3,7 @@ channels:
   - defaults
 dependencies:
   - pip:
-    - ca-certificates==2021.1.19=hecd8cb5_1
+    - ca-certificates==2021.1.19
     - certifi==2020.12.5=py37hecd8cb5_0
     - libcxx==10.0.0=1
     - libffi==3.3=hb1e8313_2
