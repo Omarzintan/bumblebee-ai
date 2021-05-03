@@ -2,7 +2,6 @@
 import pvporcupine
 import pyaudio
 import struct
-import os
 import sys
 from colorama import Fore
 from halo import Halo
@@ -30,7 +29,7 @@ def run():
             format=pyaudio.paInt16,
             input=True,
             frames_per_buffer=porcupine.frame_length
-            )
+        )
 
         # add banners for wifi and mode:
         while True:

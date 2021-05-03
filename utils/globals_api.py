@@ -39,8 +39,9 @@ class GLOBALSAPI():
         Inserts a record of a running thread into the threads
         list in Bumblebee.
         Arguments: <int> proc_id (process id of the thread),
-                   <list> termination_features (list of feature tags, indicating features to run in
-                                     order to terminate thread. These features are run when exiting gracefully)
+                   <list> termination_features (list of feature tags,
+                    indicating features to run in order to terminate thread.
+                    These features are run when exiting gracefully)
         Returns: None
         """
         thread_failsafe = {}

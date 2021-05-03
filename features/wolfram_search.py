@@ -1,7 +1,6 @@
 from features.default import BaseFeature
 import wolframalpha
 from features import wiki_search
-import sys
 
 
 class Feature(BaseFeature):
@@ -13,7 +12,7 @@ class Feature(BaseFeature):
             "how many",
             "how much",
             "compute"
-            ]
+        ]
         super().__init__()
 
     def action(self, spoken_text):
@@ -21,14 +20,14 @@ class Feature(BaseFeature):
         app_id = self.config["Api_keys"]["wolframalpha"]
         try:
             client = wolframalpha.Client(app_id)
-        except:
+        except Exception:
             self.bs.respond("I cannot use the wolframalpha api key")
             return
         try:
             res = client.query(search_query, width=200)
             answer = next(res.results).text
             self.bs.respond(answer)
-        except:
+        except Exception:
             # Trying Wikipedia
             wiki_search_obj = wiki_search.Feature()
             wiki_search_obj.action(spoken_text)
@@ -41,6 +40,7 @@ class Feature(BaseFeature):
     Return type: <string> spoken_text (this is actually the search query as
     retrieved from spoken_text.)
     '''
+
     def get_search_query(self, spoken_text, patterns):
         search_terms = patterns
         query_found = False
@@ -61,6 +61,6 @@ class Feature(BaseFeature):
                 # remove phrase list from spoken_text
                 spoken_text = [
                     word for word in spoken_text if word not in phrase_list
-                    ]
+                ]
 
         return ' '.join(spoken_text)

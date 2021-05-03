@@ -2,7 +2,6 @@
 
 import speech_recognition as sr
 import os
-import sys
 import playsound
 import pyttsx3
 from helpers import bumblebee_root

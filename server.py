@@ -1,9 +1,6 @@
 from flask import Flask, jsonify, request
 import time
-import os
 import sys
-import textwrap
-import requests
 from helpers import bumblebee_root
 from logging.config import fileConfig
 
@@ -99,7 +96,7 @@ def send_url():
         # Time spent is the current time - the timestamp of the previous url
         time_spent = int(
             time.time() - parent_url_timestamp[prev_parent_url][prev_url]
-            )
+        )
 
         # The url_viewtime of the previous url is then updated with time_spent
         parent_url_viewtimes[prev_parent_url][prev_url] += time_spent
@@ -144,8 +141,8 @@ def store_data():
             'message': 'success',
             'parent_urls': list(parent_url_timestamp.keys()),
             'url_viewtimes': parent_url_viewtimes
-            }
-        ), 200
+        }
+    ), 200
 
 
 if __name__ == '__main__':

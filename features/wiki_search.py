@@ -1,6 +1,5 @@
 from features.default import BaseFeature
 import wikipedia
-import sys
 
 
 class Feature(BaseFeature):
@@ -10,7 +9,7 @@ class Feature(BaseFeature):
             "wikipedia",
             "search wikipedia for",
             "look up on wikipedia"
-            ]
+        ]
         super().__init__()
 
     def action(self, spoken_text):
@@ -20,7 +19,7 @@ class Feature(BaseFeature):
             self.bs.respond('According to Wikipedia')
             self.bs.respond(results)
             return
-        except:
+        except Exception:
             self.bs.respond('I could not find anything on Wikipedia '
                             'related to your search.')
             return
@@ -32,6 +31,7 @@ class Feature(BaseFeature):
     Return type: <string> spoken_text (this is actually the search query
     as retrieved from spoken_text.
     '''
+
     def get_search_query(self, spoken_text, patterns):
         search_terms = ['about', 'on', 'for', 'search']
         query_found = False
@@ -51,6 +51,6 @@ class Feature(BaseFeature):
                 # remove phrase list from spoken_text
                 spoken_text = [
                     word for word in spoken_text if word not in phrase_list
-                    ]
+                ]
 
         return ' '.join(spoken_text)
