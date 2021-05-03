@@ -1,6 +1,4 @@
-import sys
-from tkinter import *
-import json
+import tkinter as tk
 from tinydb import TinyDB, Query
 from features.default import BaseFeature
 
@@ -19,8 +17,8 @@ class Feature(BaseFeature):
         try:
             self.add_contact_details()
             self.bs.respond('Added new contact successfully.')
-        except:
-            print(sys.exc_info())
+        except Exception as exception:
+            print(exception)
             self.bs.respond('Could not add new contact.')
 
         return
@@ -31,22 +29,26 @@ class Feature(BaseFeature):
     Arguments: None
     Return type: <JSON> contact_details_json
     '''
+
     def add_contact_details(self):
-        root = Tk()
+        root = tk.Tk()
         root.geometry("500x150")
         root.title("Add New Contact")
-        content = Frame(root)
+        content = tk.Frame(root)
         content.pack()
         contact_details = {}
 
         # creating fields
-        Label(content, text="Name").grid(row=0, column=0, padx=5, sticky='sw')
-        Label(content, text="email").grid(row=1, column=0, padx=5, sticky='sw')
-        Label(content, text="phone").grid(row=2, column=0, padx=5, sticky='sw')
+        tk.Label(content, text="Name").grid(
+            row=0, column=0, padx=5, sticky='sw')
+        tk.Label(content, text="email").grid(
+            row=1, column=0, padx=5, sticky='sw')
+        tk.Label(content, text="phone").grid(
+            row=2, column=0, padx=5, sticky='sw')
 
-        name_entry = Entry(content, width=24)
-        email_entry = Entry(content, width=24)
-        phone_entry = Entry(content, width=24)
+        name_entry = tk.Entry(content, width=24)
+        email_entry = tk.Entry(content, width=24)
+        phone_entry = tk.Entry(content, width=24)
         name_entry.grid(row=0, column=1, padx=5)
         email_entry.grid(row=1, column=1, padx=5)
         phone_entry.grid(row=2, column=1, padx=5)
@@ -59,7 +61,7 @@ class Feature(BaseFeature):
             contact_details["phone"] = str(phone_entry.get())
             self.contact_db.upsert(
                 contact_details, Entry.name == contact_details["name"]
-                )
+            )
             root.destroy()
 
         def clear():
@@ -68,8 +70,8 @@ class Feature(BaseFeature):
             phone_entry.delete(0, "end")
 
         # Buttons for saving and clearing
-        saveButton = Button(content, text="Save", command=saveInput)
-        clearButton = Button(content, text="Clear", command=clear)
+        saveButton = tk.Button(content, text="Save", command=saveInput)
+        clearButton = tk.Button(content, text="Clear", command=clear)
         saveButton.grid(row=3, column=1, padx=5, sticky='e')
         clearButton.grid(row=3, column=1, padx=5, sticky='w')
 

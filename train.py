@@ -1,7 +1,6 @@
 # train.py
 import json
 import numpy as np
-import random
 
 import torch
 import torch.nn as nn
@@ -72,6 +71,7 @@ class IntentDataset(Dataset):
     def __len__(self):
         return self.n_samples
 
+
 dataset = IntentDataset()
 train_loader = DataLoader(dataset=dataset,
                           batch_size=batch_size,
@@ -117,7 +117,7 @@ data = {
     "output_size": output_size,
     "all_words": all_words,
     "tags": tags
-    }
+}
 
 FILE = bumblebee_root+"models/data.pth"
 torch.save(data, FILE)

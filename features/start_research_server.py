@@ -3,8 +3,7 @@ import json
 import threading
 import subprocess
 from features.default import BaseFeature
-from core import Bumblebee
-from tkinter import *
+import tkinter as tk
 
 
 class StoreKeys:
@@ -20,7 +19,7 @@ class Feature(BaseFeature):
             "research mode",
             "let's do research",
             "start research server"
-            ]
+        ]
         super().__init__()
 
     def action(self, spoken_text):
@@ -49,21 +48,22 @@ class Feature(BaseFeature):
         Argument: <string> topic
         Return type: <JSON> topic_details_json
         '''
-        root = Tk()
+        root = tk.Tk()
         root.geometry("320x100")
         root.title("Edit research topic")
-        content = Frame(root)
+        content = tk.Frame(root)
         content.pack()
         topic_details = {}
 
         # creating topic field
-        Label(content, text="Topic").grid(row=0, column=0, padx=5, sticky='sw')
+        tk.Label(content, text="Topic").grid(
+            row=0, column=0, padx=5, sticky='sw')
 
-        topic_entry = Entry(content, width=24)
+        topic_entry = tk.Entry(content, width=24)
         topic_entry.grid(row=0, column=1, padx=5)
 
         # inserting previous topic
-        topic_entry.insert(END, topic)
+        topic_entry.insert(tk.END, topic)
 
         # retrieve edited topic from window
         def saveInput():
@@ -74,8 +74,8 @@ class Feature(BaseFeature):
             topic_entry.delet(0, "end")
 
         # Buttons for saving and clearing
-        saveButton = Button(content, text="Save", command=saveInput)
-        clearButton = Button(content, text="Clear", command=clear)
+        saveButton = tk.Button(content, text="Save", command=saveInput)
+        clearButton = tk.Button(content, text="Clear", command=clear)
         saveButton.grid(row=1, column=1, padx=5, sticky='e')
         clearButton.grid(row=1, column=1, padx=5, sticky='w')
 

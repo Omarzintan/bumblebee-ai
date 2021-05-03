@@ -1,0 +1,18 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.pep8Enabled": false,
+    "python.linting.enabled": true,
+    "python.pythonPath": "/Users/zintan/opt/miniconda3/envs/bumblebee/bin/python",
+    "python.unitTest.unittestArgs": [
+        "-v",
+        "-s",
+        "./tests",
+        "-p",
+        "test_*.py"
+    ],
+    "python.unitTest.pyTestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.unittestEnabled": true,
+    "python.linting.mypyEnabled": false,
+    "python.linting.flake8Enabled": true
+}

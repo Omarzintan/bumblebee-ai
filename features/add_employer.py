@@ -1,7 +1,5 @@
 from features.default import BaseFeature
-import sys
-from tkinter import *
-import json
+import tkinter as tk
 from tinydb import TinyDB, Query
 
 
@@ -13,7 +11,7 @@ class Feature(BaseFeature):
             "new employer",
             "add a new employer",
             "add a new boss"
-            ]
+        ]
         super().__init__()
 
         # self.config defined in BaseFeature class
@@ -24,8 +22,8 @@ class Feature(BaseFeature):
         try:
             self.add_employer_details()
             self.bs.respond('Added new employer successfully.')
-        except:
-            print(sys.exc_info())
+        except Exception as exception:
+            print(exception)
             self.bs.respond('Could not add new employer.')
 
         return
@@ -37,18 +35,19 @@ class Feature(BaseFeature):
         Arguments: None
         Return type: <JSON> employer_details_json
         '''
-        root = Tk()
+        root = tk.Tk()
         root.geometry("500x150")
         root.title("Add New Employer")
-        content = Frame(root)
+        content = tk.Frame(root)
         content.pack()
 
         employer_details = {}
 
         # creating fields
-        Label(content, text="Name").grid(row=0, column=0, padx=5, sticky='sw')
+        tk.Label(content, text="Name").grid(
+            row=0, column=0, padx=5, sticky='sw')
 
-        name_entry = Entry(content, width=24)
+        name_entry = tk.Entry(content, width=24)
         name_entry.grid(row=0, column=1, padx=5)
 
         # retrieve employer details from window.
@@ -57,15 +56,15 @@ class Feature(BaseFeature):
             employer_details["name"] = str(name_entry.get().lower())
             self.employer_db.upsert(
                 employer_details, Entry.name == employer_details["name"]
-                )
+            )
             root.destroy()
 
         def clear():
             name_entry.delete(0, "end")
 
         # Buttons for saving and clearing
-        saveButton = Button(content, text="Save", command=saveInput)
-        clearButton = Button(content, text="Clear", command=clear)
+        saveButton = tk.Button(content, text="Save", command=saveInput)
+        clearButton = tk.Button(content, text="Clear", command=clear)
         saveButton.grid(row=3, column=1, padx=5, sticky='e')
         clearButton.grid(row=3, column=1, padx=5, sticky='w')
 

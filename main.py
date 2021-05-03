@@ -63,6 +63,6 @@ if __name__ == "__main__":
                 bumblebee.run()
         except KeyboardInterrupt:
             run_gracefully.exit_gracefully(bumblebee)
-        except:
+        except Exception:
             print(sys.exc_info())
             run_gracefully.exit_gracefully(bumblebee, crash_happened=True)

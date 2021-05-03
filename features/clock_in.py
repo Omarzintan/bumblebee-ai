@@ -47,7 +47,6 @@ class Feature(BaseFeature):
 
         yes_words = ['yes', 'yea', 'yeah', 'ok', 'okay', 'sure']
         no_words = ['no', 'nope', 'nah']
-        expected_response = False
 
         while True:
             yes_no_response = self.bs.hear()

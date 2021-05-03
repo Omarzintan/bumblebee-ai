@@ -1,10 +1,6 @@
 from features.default import BaseFeature
-from core import Bumblebee
 import datetime
-import json
 import requests
-import os
-import sys
 from tinydb import TinyDB, Query
 from mdutils import MdUtils
 from features.start_research_server import StoreKeys as research_store
@@ -32,10 +28,10 @@ class Feature(BaseFeature):
             filename = self.store_data()
             self.bs.respond(
                 f'Research data stored successfully at {filename}.md'
-                )
+            )
             return
-        except:
-            print("Unexpected error:", sys.exc_info())
+        except Exception as exception:
+            print(exception)
             self.bs.respond('Failed to store research data.')
             return
 
@@ -43,6 +39,7 @@ class Feature(BaseFeature):
     Retrieves research data from server and stores the data in
     the research database.
     '''
+
     def store_data(self):
         # The research files folder is gauranteed to exist.
         research_files_path = self.config['Folders']['research_files']
@@ -50,7 +47,7 @@ class Feature(BaseFeature):
 
         research_topic = self.globals_api.retrieve(
             research_store.RESEARCH_TOPIC
-            )
+        )
         filename = research_topic.replace(' ', '-')
         today = datetime.datetime.now().strftime('%a %b, %Y')
 
@@ -104,14 +101,14 @@ class Feature(BaseFeature):
         Record = Query()
         records = self.research_db.search(
             Record.research_topic == research_topic
-            )
+        )
         mdfile = MdUtils(file_name=filename, title=research_topic)
         for record in records:
             mdfile.new_line('- ' +
                             mdfile.new_inline_link(
                                 link=record["url"],
                                 text=record["page_title"]
-                                )
+                            )
                             )
         mdfile.create_md_file()
         return

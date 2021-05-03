@@ -48,5 +48,5 @@ def build_yaml():
         config = build_config()
         write_yaml(config)
         return 0
-    except:
+    except Exception:
         return -1

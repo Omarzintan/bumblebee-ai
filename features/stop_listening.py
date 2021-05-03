@@ -1,4 +1,3 @@
-from utils import run_gracefully
 from features.default import BaseFeature
 from features import clock_out
 
@@ -12,7 +11,7 @@ class Feature(BaseFeature):
     def action(self, spoken_text=''):
         self.bs.respond(
             'To get me back you will have to boot me back up. Are you sure?'
-            )
+        )
         approve = self.bs.hear()
         if self.bs.interrupt_check(approve):
             return

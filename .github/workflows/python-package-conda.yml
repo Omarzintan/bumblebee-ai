@@ -1,0 +1,41 @@
+name: Python Package using Conda
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    runs-on: macos-latest
+    strategy:
+      max-parallel: 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Setup Miniconda
+      uses: conda-incubator/setup-miniconda@v2.1.1
+      with:
+        auto-activate-base: true
+        python-version: 3.7
+    - name: Add conda to system path
+      run: |
+        # $CONDA is an environment variable pointing to the root of the miniconda directory
+        echo $CONDA/bin >> $GITHUB_PATH
+    - name: Install dependencies
+      run: |
+        brew install portaudio
+        pip install -r requirements.txt
+    - name: Lint with flake8
+      run: |
+        conda install flake8
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --show-source --max-line-length=127 --statistics
+    - name: Test with unittest
+      run: |
+        python3 -m unittest
