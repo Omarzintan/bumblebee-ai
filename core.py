@@ -16,14 +16,8 @@ class Bumblebee():
     speech = BumbleSpeech()
     config_yaml = {}
     sleep = 0
-    global_store = {
-        "currently_working": False,
-        "employer": '',
-        "work_start_time": '',
-        "research_server_proc": '',
-        "research_topic": '',
-        "threads": []
-    }
+    thread_failsafes = []
+    global_store = {}
 
     def __init__(self, features: list = ['default'], config: dict = {}):
         assert config != {}
@@ -165,3 +159,20 @@ class Bumblebee():
     def get_config(self):
         '''Get the config file that Bumblebee is running with.'''
         return self.config_yaml
+
+    @staticmethod
+    def get_internal_state():
+        return {
+            'sleep': Bumblebee.sleep,
+            'global_store': Bumblebee.global_store,
+            'thread_failsafes': Bumblebee.thread_failsafes
+        }
+
+    @staticmethod
+    def load_internal_state(state={}):
+        if not isinstance(state, dict):
+            raise Exception('Invalid argument, state. Must be a dict')
+
+        Bumblebee.sleep = state.get('sleep', 0)
+        Bumblebee.thread_failsafes = state.get('thread_failsafes', [])
+        Bumblebee.global_store = state.get('global_store', {})

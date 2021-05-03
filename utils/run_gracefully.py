@@ -15,16 +15,17 @@ CRASH_FILE = 'crash_recovery.p'
 globals_api = GLOBALSAPI()
 
 
-def store_vars():
+def store_internal_state():
     '''Stores variables in a pickle file.'''
     with open(CRASH_FILE, 'wb') as f:
         f.seek(0)
-        pickle.dump(Bumblebee.global_store, f)
+        pickle.dump(Bumblebee.get_internal_state(), f)
 
 
-def restore_vars():
+def restore_internal_state():
     '''Restores pickled variables.'''
-    Bumblebee.global_store = pickle.load(open(CRASH_FILE, "rb"))
+    restored_state = pickle.load(open(CRASH_FILE, "rb"))
+    Bumblebee.load_internal_state(restored_state)
 
 
 def start_gracefully():
@@ -32,7 +33,7 @@ def start_gracefully():
     try:
         if os.path.exists(CRASH_FILE):
             print('Starting gracefully.')
-            restore_vars()
+            restore_internal_state()
             os.remove(CRASH_FILE)
     except OSError as exception:
         print(exception)
@@ -53,12 +54,12 @@ def exit_gracefully(bumblebee, crash_happened=False):
     # includeing the proccess ids for all running
     # threads.
     if crash_happened:
-        store_vars()
+        store_internal_state()
         return
 
     # If this is a regular exiting, we ensure all threads are
     # terminated before we exit.
-    threads = globals_api.retrieve("threads")
-    for thread in threads:
-        bumblebee.run_by_tags(thread["terminate"])
+    for thread_failsafe in Bumblebee.thread_failsafes:
+        bumblebee.run_by_tags(thread_failsafe["termination_features"])
+
     wake_word_detector.stop()

@@ -7,6 +7,7 @@ from utils import config_builder
 from utils import run_gracefully
 from helpers import bumblebee_root
 from halo import Halo
+import sys
 
 if __name__ == "__main__":
 
@@ -31,7 +32,7 @@ if __name__ == "__main__":
             raise Exception("Error building config file.")
         spinner.succeed(
             text="Configuration file built successfully at 'utils/config.yaml'"
-            )
+        )
         with open(bumblebee_root+"utils/config.yaml", "r") as ymlfile:
             config = yaml.load(ymlfile, Loader=yaml.FullLoader)
     finally:
@@ -60,9 +61,8 @@ if __name__ == "__main__":
             if wake_word_detector.run():
                 Bumblebee.sleep = 0
                 bumblebee.run()
-        except IOError as exception:
-            print(exception)
-            CRASH_HAPPENED = True
-            run_gracefully.exit_gracefully(bumblebee, CRASH_HAPPENED)
         except KeyboardInterrupt:
             run_gracefully.exit_gracefully(bumblebee)
+        except:
+            print(sys.exc_info())
+            run_gracefully.exit_gracefully(bumblebee, crash_happened=True)

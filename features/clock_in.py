@@ -10,7 +10,6 @@ class StoreKeys:
     # Global Store Keys
     EMPLOYER = 'employer'
     WORK_START_TIME = 'work_start_time'
-    DATETIME = 'datetime'
     CURRENTLY_WORKING = 'currently_working'
 
 
@@ -70,7 +69,7 @@ class Feature(BaseFeature):
                     self.globals_api.retrieve(
                         StoreKeys.WORK_START_TIME).strftime(
                             '%a %b %d, %Y %I:%M %p'
-                            )
+                    )
                 )
 
                 self.bs.respond(
