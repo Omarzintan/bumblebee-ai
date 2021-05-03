@@ -1,5 +1,4 @@
 from features.default import BaseFeature
-import pprint
 
 
 class Feature(BaseFeature):
@@ -13,7 +12,6 @@ class Feature(BaseFeature):
         super().__init__()
 
     def action(self, spoken_text):
-        keywords = Keywords()
         response = """
         Hi i am Bumblebee, your virtual assistant.
         I can do many things such as telling the time, googling
@@ -21,7 +19,5 @@ class Feature(BaseFeature):
         clock you into work as well as track your browser activity
         in Google Chrome. Look at the list of commands to help.
         """
-        # list_of_commands = keywords.get('all') # THIS WILL NEED TO CHANGE
         self.bs.respond(response)
-        pprint.pprint(list_of_commands)
         return

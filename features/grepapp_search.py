@@ -10,12 +10,13 @@ class Feature(BaseFeature):
             "search github",
             "do a grep search",
             "search on github"
-            ]
+        ]
         super().__init__()
 
     def action(self, spoken_text):
         query = self.search(spoken_text)
-        self.bs.respond('I have opened a browser with your grepapp search')
+        self.bs.respond(
+            f'I have opened a browser with your grepapp search on {query}')
         return
 
     '''
@@ -25,6 +26,7 @@ class Feature(BaseFeature):
     Return type: <string> spoken_text (this is actually the search
     query as retrieved from spoken_text.)
     '''
+
     def get_search_query(self, spoken_text, patterns):
         search_terms = ['about', 'on', 'for', 'search']
         query_found = False
@@ -45,7 +47,7 @@ class Feature(BaseFeature):
                 # remove phrase list from spoken_text
                 spoken_text = [
                     word for word in spoken_text if word not in phrase_list
-                    ]
+                ]
 
         return ' '.join(spoken_text)
 

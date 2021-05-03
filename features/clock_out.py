@@ -1,7 +1,6 @@
 from features.default import BaseFeature
 import datetime
 import os
-from core import Bumblebee
 from helpers import bumblebee_root
 
 from features.clock_in import StoreKeys as clock_in_store_keys
@@ -42,13 +41,17 @@ class Feature(BaseFeature):
 
     '''
     Writes line in employer specific file saying I have logged out of work.
-    Arguments: <string> employer name, <datetime.datetime object> work_stop_time, <datetime.timedelta object> duration
+    Arguments: <string> employer name,
+               <datetime.datetime object> work_stop_time,
+               <datetime.timedelta object> duration
     Return type: None
     '''
 
     def clock_out(self, employer, work_stop_time, duration):
         # find/create employer file
         os.makedirs('work_study', exist_ok=True)
-        with open(bumblebee_root+os.path.join('work_study', '{}_hours.txt'.format(employer)), 'a+') as file:
+        with open(bumblebee_root+os.path.join(
+            'work_study', '{}_hours.txt'.format(employer)
+        ), 'a+') as file:
             file.write('Ended work: {}\n'.format(work_stop_time))
             file.write('Duration: {}\n'.format(duration))

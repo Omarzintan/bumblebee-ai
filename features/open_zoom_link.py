@@ -4,7 +4,6 @@ from features.feature_helpers import get_search_query
 from tinydb import TinyDB, Query
 import pyperclip as pc
 import webbrowser
-import os
 
 
 class Feature(BaseFeature):
@@ -29,7 +28,7 @@ class Feature(BaseFeature):
             self.bs.respond(
                 'I have copied the password to the clip board.'
                 'Press ctrl+v to paste it.'
-                )
+            )
         return
 
     def search_db(self, name):

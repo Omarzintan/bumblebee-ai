@@ -2,10 +2,8 @@ from features.default import BaseFeature
 import difflib
 import ezgmail
 import json
-import os
 import re
-from tkinter import *
-import json
+import tkinter as tk
 from tinydb import TinyDB, Query
 from features.feature_helpers import get_search_query
 
@@ -16,7 +14,7 @@ class Feature(BaseFeature):
         self.patterns = [
             "send an email",
             "send an email to"
-            ]
+        ]
         super().__init__()
 
         contacts_db_path = self.config['Database']['contacts']
@@ -38,7 +36,7 @@ class Feature(BaseFeature):
             if close_names == []:
                 self.bs.respond(
                     'Could not find this contact. Please try again'
-                    )
+                )
                 recipient = self.bs.hear()
                 if self.bs.interrupt_check(recipient):
                     break
@@ -49,7 +47,7 @@ class Feature(BaseFeature):
             self.bs.respond(
                 """An error occured.
                  I will stop trying to send an email now."""
-                 )
+            )
             return
 
         # get subject
@@ -90,7 +88,7 @@ class Feature(BaseFeature):
             ezgmail.init(
                 tokenFile=self.bumblebee_dir+'token.json',
                 credentialsFile=self.bumblebee_dir+'credentials.json'
-                )
+            )
             message += "\n\n\n Bumblebee (Zintan's ai assistant)"
             ezgmail.send(recipient_email, subject, message)
             self.bs.respond('I have sent the email.')
@@ -103,10 +101,11 @@ class Feature(BaseFeature):
     Arguments: <string> recipient, <string> subject, <string> message
     Return type: <string> summary
     '''
+
     def summary_email(self, recipient_email, subject, message):
         summary = 'To: {}\nSubject: {}\nMessage: {}'.format(
             recipient_email, subject, message
-            )
+        )
         return summary
 
     '''
@@ -115,37 +114,39 @@ class Feature(BaseFeature):
     Arguments: <string> recipient_email, <string> subject, <string> message
     Return type: <JSON> email_details_json
     '''
+
     def email_edit(self, recipient_email, subject, message):
-        root = Tk()
+        root = tk.Tk()
         root.geometry("300x300")
         root.minsize(height=350, width=500)
         root.maxsize(height=560, width=560)
         root.title("Edit Email")
-        content = Frame(root)
+        content = tk.Frame(root)
         content.pack()
         email_details = {}
 
         # creating fields
-        Label(content, text="To:").grid(row=0, column=0, padx=5, sticky='sw')
-        Label(content, text="Subject:").grid(
+        tk.Label(content, text="To:").grid(
+            row=0, column=0, padx=5, sticky='sw')
+        tk.Label(content, text="Subject:").grid(
             row=0, column=1, padx=5, sticky='sw'
-            )
-        Label(content, text="Message:").grid(
+        )
+        tk.Label(content, text="Message:").grid(
             row=2, column=0, padx=5, sticky='sw'
-            )
+        )
 
-        recip = Entry(content, width=24)
-        subj = Entry(content, width=24)
-        msg = Text(content, width=50, height=10)
+        recip = tk.Entry(content, width=24)
+        subj = tk.Entry(content, width=24)
+        msg = tk.Text(content, width=50, height=10)
 
         recip.grid(row=1, column=0, padx=5)
         subj.grid(row=1, column=1, padx=5)
         msg.grid(row=3, column=0, columnspan=2, padx=5)
 
         # inserting email info
-        recip.insert(END, recipient_email)
-        subj.insert(END, subject)
-        msg.insert(END, message)
+        recip.insert(tk.END, recipient_email)
+        subj.insert(tk.END, subject)
+        msg.insert(tk.END, message)
 
         # retrieve email details from edit fields and close windown
         def saveInput():
@@ -160,8 +161,8 @@ class Feature(BaseFeature):
             msg.delete(1.0, "end")
 
         # Buttons for saving and clearing
-        saveButton = Button(content, text="Save", command=saveInput)
-        clearButton = Button(content, text="Clear", command=clear)
+        saveButton = tk.Button(content, text="Save", command=saveInput)
+        clearButton = tk.Button(content, text="Clear", command=clear)
         saveButton.grid(row=4, column=0, padx=5, sticky='e')
         clearButton.grid(row=4, column=1, padx=5, sticky='w')
 
@@ -193,5 +194,5 @@ class Feature(BaseFeature):
             spoken_text,
             self.patterns,
             search_terms
-            )
+        )
         return recipient

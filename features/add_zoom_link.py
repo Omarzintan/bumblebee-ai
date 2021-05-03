@@ -1,7 +1,5 @@
 from features.default import BaseFeature
-import sys
-from tkinter import *
-import json
+import tkinter as tk
 from tinydb import TinyDB, Query
 
 
@@ -12,7 +10,7 @@ class Feature(BaseFeature):
             "add zoom link",
             "new zoom link",
             "add a new zoom class"
-            ]
+        ]
         super().__init__()
 
         # self.config defined in BaseFeature class
@@ -23,8 +21,8 @@ class Feature(BaseFeature):
         try:
             self.add_zoom_details()
             self.bs.respond('Added zoom link successfully.')
-        except:
-            print(sys.exc_info())
+        except Exception as exception:
+            print(exception)
             self.bs.respond('Could not add zoom link.')
 
         return
@@ -36,24 +34,26 @@ class Feature(BaseFeature):
         Arguments: None
         Return type: <JSON> zoom_details_json
         '''
-        root = Tk()
+        root = tk.Tk()
         root.geometry("500x150")
         root.title("Add Zoom")
-        content = Frame(root)
+        content = tk.Frame(root)
         content.pack()
 
         zoom_details = {}
 
         # creating fields
-        Label(content, text="Name").grid(row=0, column=0, padx=5, sticky='sw')
-        Label(content, text="Link").grid(row=1, column=0, padx=5, sticky='sw')
-        Label(content, text="Password (optional)").grid(
+        tk.Label(content, text="Name").grid(
+            row=0, column=0, padx=5, sticky='sw')
+        tk.Label(content, text="Link").grid(
+            row=1, column=0, padx=5, sticky='sw')
+        tk.Label(content, text="Password (optional)").grid(
             row=2, column=0, padx=5, sticky='sw'
-            )
+        )
 
-        name_entry = Entry(content, width=24)
-        link_entry = Entry(content, width=24)
-        password_entry = Entry(content, width=24)
+        name_entry = tk.Entry(content, width=24)
+        link_entry = tk.Entry(content, width=24)
+        password_entry = tk.Entry(content, width=24)
         name_entry.grid(row=0, column=1, padx=5)
         link_entry.grid(row=1, column=1, padx=5)
         password_entry.grid(row=2, column=1, padx=5)
@@ -66,7 +66,7 @@ class Feature(BaseFeature):
             zoom_details["password"] = str(password_entry.get())
             self.zoom_db.upsert(
                 zoom_details, Entry.name == zoom_details["name"]
-                )
+            )
             root.destroy()
 
         def clear():
@@ -75,8 +75,8 @@ class Feature(BaseFeature):
             password_entry.delete(0, "end")
 
         # Buttons for saving and clearing
-        saveButton = Button(content, text="Save", command=saveInput)
-        clearButton = Button(content, text="Clear", command=clear)
+        saveButton = tk.Button(content, text="Save", command=saveInput)
+        clearButton = tk.Button(content, text="Clear", command=clear)
         saveButton.grid(row=3, column=1, padx=5, sticky='e')
         clearButton.grid(row=3, column=1, padx=5, sticky='w')
 
