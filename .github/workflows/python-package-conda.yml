@@ -25,6 +25,7 @@ jobs:
     - name: Install dependencies
       run: |
         brew install portaudio
+        conda activate base
         pip install -r requirements.txt
     - name: Lint with flake8
       run: |
