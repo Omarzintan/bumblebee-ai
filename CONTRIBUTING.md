@@ -245,4 +245,4 @@ class Feature(BaseFeature):
 ```
 
 ## Community
-If you have questions. Join the conversation in our [Discord server](https://discord.gg/sYMhTbYs).
+If you have questions. Join the conversation in the discussions tab.
