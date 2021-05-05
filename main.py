@@ -7,12 +7,14 @@ from utils import config_builder
 from utils import run_gracefully
 from helpers import bumblebee_root
 from halo import Halo
+import pyfiglet
 import sys
 
 if __name__ == "__main__":
 
     config = {}
     spinner = Halo(spinner='noise')
+
     try:
         # %%
         # Access config file
@@ -56,6 +58,8 @@ if __name__ == "__main__":
 
     while 1:
         try:
+            bumblebee_banner = pyfiglet.figlet_format("Bumblebee")
+            print(bumblebee_banner)
             bumblebee = Bumblebee(features.__all__, config)
             run_gracefully.start_gracefully()
             if wake_word_detector.run():
