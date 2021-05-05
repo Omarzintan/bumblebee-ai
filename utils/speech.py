@@ -1,7 +1,7 @@
 '''Functions responsible for Bumblebee's speech recognition and responding'''
 
 import speech_recognition as sr
-import os
+# import os
 import playsound
 import pyttsx3
 from helpers import bumblebee_root
@@ -13,6 +13,10 @@ class BumbleSpeech():
     def __init__(self):
         self.spinner = Halo(spinner='dots')
         self.silent_mode = False
+        self.engine = pyttsx3.init()
+        self.engine.setProperty(
+            'voice', 'com.apple.speech.synthesis.voice.tessa')
+        self.engine.setProperty('rate', 210)
 
     def set_silent_mode(self, bool_val):
         '''Function to set silent mode.'''
@@ -77,16 +81,9 @@ class BumbleSpeech():
             print(Fore.YELLOW + output)
             return
 
-        num = 0
         print(Fore.YELLOW + output)
-        num += 1
-        file = bumblebee_root+str(num)+'.wav'
-        engine = pyttsx3.init()
-        engine.setProperty('voice', 'com.apple.speech.synthesis.voice.tessa')
-        engine.save_to_file(output, file)
-        engine.runAndWait()
-        playsound.playsound(file, True)
-        os.remove(file)
+        self.engine.say(output)
+        self.engine.runAndWait()
         return
 
     def interrupt_check(self, input_text):
