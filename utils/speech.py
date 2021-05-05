@@ -1,7 +1,6 @@
 '''Functions responsible for Bumblebee's speech recognition and responding'''
 
 import speech_recognition as sr
-# import os
 import playsound
 import pyttsx3
 from helpers import bumblebee_root
