@@ -10,6 +10,7 @@ from utils.wake_word_detector import WakeWordDetector
 from halo import Halo
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
+from utils.run_gracefully import GracefulRunner
 
 
 class Bee():
@@ -27,6 +28,7 @@ class Bee():
                  wake_word_detector: WakeWordDetector = None):
         self.name = name
         self.wake_word_detector = wake_word_detector
+        self.graceful_runner = GracefulRunner()
         assert config != {}
         Bee.config_yaml = config
         self.bumblebee_dir = Bee.config_yaml["Common"]["bumblebee_dir"]
@@ -107,6 +109,21 @@ class Bee():
             print(errors)
 
     def run(self):
+        while 1:
+            try:
+                self.graceful_runner.start_gracefully(self)
+                if self.wake_word_detector.run():
+                    self.sleep = 0
+                    print(self.sleep)
+                    self.take_command()
+            except KeyboardInterrupt:
+                self.graceful_runner.exit_gracefully(self)
+            except Exception as exception:
+                print(exception)
+                self.graceful_runner.exit_gracefully(
+                    self, crash_happened=True)
+
+    def take_command(self):
         """
         Main function for running features given input from user.
         """
