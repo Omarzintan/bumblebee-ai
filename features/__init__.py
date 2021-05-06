@@ -1,6 +1,8 @@
 '''
 Contains all the modules that should be available when this folder is imported.
 '''
+
+
 __all__ = [
     'google_search',
     'bumble_help',
@@ -32,16 +34,28 @@ __essential__ = [
     'stop_listening',
     'silent_mode_on',
     'silent_mode_off'
-    ]
+]
 
 '''Features to test'''
 __test__ = __essential__ + [
     'send_email',
     'open_zoom_link'
-    ]
+]
 
 '''Contains cybersecurity specific features.'''
 __cybersecurity__ = __essential__ + []
 
 '''Contains geo specific features.'''
 __geo__ = __essential__ + []
+
+
+def create_feature_lists():
+    feature_lists = {}
+    feature_lists['all'] = __all__
+    feature_lists['test'] = __test__
+    feature_lists['cybersecurity'] = __cybersecurity__
+    feature_lists['geo'] = __geo__
+    return feature_lists
+
+
+feature_lists = create_feature_lists()
