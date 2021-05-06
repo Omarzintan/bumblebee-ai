@@ -1,7 +1,7 @@
 import os
 import yaml
 import features
-from core import Bumblebee
+from core import Bee
 from utils import wake_word_detector
 from utils import config_builder
 from utils import run_gracefully
@@ -60,10 +60,10 @@ if __name__ == "__main__":
         try:
             bumblebee_banner = pyfiglet.figlet_format("Bumblebee")
             print(bumblebee_banner)
-            bumblebee = Bumblebee(features.__all__, config)
+            bumblebee = Bee(features.__all__, config)
             run_gracefully.start_gracefully()
             if wake_word_detector.run():
-                Bumblebee.sleep = 0
+                Bee.sleep = 0
                 bumblebee.run()
         except KeyboardInterrupt:
             run_gracefully.exit_gracefully(bumblebee)
