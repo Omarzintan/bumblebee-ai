@@ -85,7 +85,7 @@ class Bumblebee():
         Creates an instansce of Bee with name, feature_list and a config file.
         '''
         virtual_assistant = Bee(
-            self.name, self.feature_list, self.config)
+            self.name, self.feature_list, self.config, self.wake_word_detector)
         # bumblebee_api.set_bee_instance(virtual_assistant)
         return virtual_assistant
 
@@ -99,7 +99,8 @@ class Bumblebee():
                 print(name_banner)
                 run_gracefully.start_gracefully(self.bee)
                 if self.wake_word_detector.run():
-                    # Bumblebee.sleep = 0
+                    self.bee.sleep = 0
+                    print(self.bee.sleep)
                     # # will be replaced with our bumblebee_api command.
                     self.bee.run()
             except KeyboardInterrupt:
