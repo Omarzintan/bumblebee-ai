@@ -10,8 +10,6 @@ class GLOBALSAPI():
     Main API class
     '''
 
-    CRASH_FILE = 'crash_recovery.p'
-
     def store(self, name: str, value):
         """
         Stores variable in Bee global_store.
