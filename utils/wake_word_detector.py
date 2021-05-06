@@ -59,10 +59,4 @@ class WakeWordDetector():
 
     def stop(self):
         print(Fore.CYAN + 'Stopping...')
-        if self.porcupine is not None:
-            self.porcupine.delete()
-        if self.audio_stream is not None:
-            self.audio_stream.close()
-        if self.pa is not None:
-            self.pa.terminate()
         sys.exit()

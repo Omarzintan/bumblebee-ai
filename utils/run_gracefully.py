@@ -6,8 +6,6 @@ This also includes stopping all running subprocesses before exiting Bumblebee.
 """
 import os
 import pickle
-from core import Bumblebee
-from utils import wake_word_detector
 from utils.globals_api import GLOBALSAPI
 
 
