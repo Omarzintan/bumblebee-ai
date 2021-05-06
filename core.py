@@ -1,4 +1,4 @@
-'''The core of Bumblebee.'''
+'''The core of Bee.'''
 import importlib
 import os
 import json
@@ -11,7 +11,7 @@ from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 
 
-class Bumblebee():
+class Bee():
     # global vars
     speech = BumbleSpeech()
     config_yaml = {}
@@ -19,11 +19,15 @@ class Bumblebee():
     thread_failsafes = []
     global_store = {}
 
-    def __init__(self, features: list = ['default'], config: dict = {}):
+    def __init__(self,
+                 name: str = 'bumblebee',
+                 features: list = ['default'],
+                 config: dict = {}):
+        self.name = name
         assert config != {}
-        Bumblebee.config_yaml = config
-        self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
-        self.python3_path = Bumblebee.config_yaml["Common"]["python3_path"]
+        Bee.config_yaml = config
+        self.bumblebee_dir = Bee.config_yaml["Common"]["bumblebee_dir"]
+        self.python3_path = Bee.config_yaml["Common"]["python3_path"]
         self.path_to_trained_model = self.bumblebee_dir+"models/data.pth"
         self.spinner = Halo(spinner='dots2')
 
@@ -157,15 +161,15 @@ class Bumblebee():
                         print(f"Could not perform action for {tag}")
 
     def get_config(self):
-        '''Get the config file that Bumblebee is running with.'''
+        '''Get the config file that Bee is running with.'''
         return self.config_yaml
 
     @staticmethod
     def get_internal_state():
         return {
-            'sleep': Bumblebee.sleep,
-            'global_store': Bumblebee.global_store,
-            'thread_failsafes': Bumblebee.thread_failsafes
+            'sleep': Bee.sleep,
+            'global_store': Bee.global_store,
+            'thread_failsafes': Bee.thread_failsafes
         }
 
     @staticmethod
@@ -173,6 +177,6 @@ class Bumblebee():
         if not isinstance(state, dict):
             raise Exception('Invalid argument, state. Must be a dict')
 
-        Bumblebee.sleep = state.get('sleep', 0)
-        Bumblebee.thread_failsafes = state.get('thread_failsafes', [])
-        Bumblebee.global_store = state.get('global_store', {})
+        Bee.sleep = state.get('sleep', 0)
+        Bee.thread_failsafes = state.get('thread_failsafes', [])
+        Bee.global_store = state.get('global_store', {})
