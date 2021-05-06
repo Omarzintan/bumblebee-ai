@@ -6,6 +6,7 @@ import subprocess
 import torch
 
 from utils.speech import BumbleSpeech
+from utils.wake_word_detector import WakeWordDetector
 from halo import Halo
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
@@ -22,14 +23,17 @@ class Bee():
     def __init__(self,
                  name: str = 'bumblebee',
                  features: list = ['default'],
-                 config: dict = {}):
+                 config: dict = {},
+                 wake_word_detector: WakeWordDetector = None):
         self.name = name
+        self.wake_word_detector = wake_word_detector
         assert config != {}
         Bee.config_yaml = config
         self.bumblebee_dir = Bee.config_yaml["Common"]["bumblebee_dir"]
         self.python3_path = Bee.config_yaml["Common"]["python3_path"]
         self.path_to_trained_model = self.bumblebee_dir+"models/data.pth"
         self.spinner = Halo(spinner='dots2')
+        self.thread_failsafes = []
 
         # %%
         # Building Feature objects from list of features.
