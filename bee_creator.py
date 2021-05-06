@@ -8,12 +8,10 @@ import yaml
 from core import Bee
 from utils.wake_word_detector import WakeWordDetector
 from utils import config_builder
-from utils import run_gracefully
 from helpers import bumblebee_root
 from features import feature_lists
 from halo import Halo
 import pyfiglet
-import sys
 
 
 class Bumblebee():
@@ -93,19 +91,6 @@ class Bumblebee():
         '''
         Runs the instance of Bee we created in this class.
         '''
-        while 1:
-            try:
-                name_banner = pyfiglet.figlet_format(self.name)
-                print(name_banner)
-                run_gracefully.start_gracefully(self.bee)
-                if self.wake_word_detector.run():
-                    self.bee.sleep = 0
-                    print(self.bee.sleep)
-                    # # will be replaced with our bumblebee_api command.
-                    self.bee.run()
-            except KeyboardInterrupt:
-                run_gracefully.exit_gracefully(self.bee)
-            except Exception:
-                print(sys.exc_info())
-                run_gracefully.exit_gracefully(
-                    self.bee, crash_happened=True)
+        name_banner = pyfiglet.figlet_format(self.name)
+        print(name_banner)
+        self.bee.run()
