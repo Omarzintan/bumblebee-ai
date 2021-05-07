@@ -109,6 +109,7 @@ class Bee():
             print(errors)
 
     def run(self):
+        '''Main function that runs Bumblebee'''
         while 1:
             try:
                 self.graceful_runner.start_gracefully(self)
