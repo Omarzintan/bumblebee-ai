@@ -10,57 +10,10 @@ from nltk_utils import bag_of_words, tokenize, stem
 from model import NeuralNet
 from helpers import bumblebee_root
 
-with open(bumblebee_root+'utils/intents.json', 'r') as f:
-    intents = json.load(f)
-
-all_words = []
-tags = []
-xy = []
-# loop through each sentence in intents patterns
-for intent in intents['intents']:
-    tag = intent['tag']
-    tags.append(tag)
-    for pattern in intent['patterns']:
-        # tokenize each word in the sentence
-        w = tokenize(pattern)
-        # add to our words list
-        all_words.extend(w)
-        # add to xy pair
-        xy.append((w, tag))
-
-# stem and lower each word
-ignore_words = ['?', '.', '!']
-all_words = [stem(w) for w in all_words if w not in ignore_words]
-# remove duplicates and sort
-all_words = sorted(set(all_words))
-tags = sorted(set(tags))
-
-# create training data
-x_train = []
-y_train = []
-for (pattern_sentence, tag) in xy:
-    # x: bag of words for each pattern sentence
-    bag = bag_of_words(pattern_sentence, all_words)
-    x_train.append(bag)
-    # y: PyTorch CrossEntropyLoss needs only class labels, not one-hot
-    label = tags.index(tag)
-    y_train.append(label)
-
-x_train = np.array(x_train)
-y_train = np.array(y_train)
-
-# Hyper-parameters
-num_epochs = 1000
-batch_size = 8
-learning_rate = 0.001
-input_size = len(x_train[0])
-hidden_size = 8
-output_size = len(tags)
-
 
 class IntentDataset(Dataset):
 
-    def __init__(self):
+    def __init__(self, x_train, y_train):
         self.n_samples = len(x_train)
         self.x_data = x_train
         self.y_data = y_train
@@ -72,54 +25,112 @@ class IntentDataset(Dataset):
         return self.n_samples
 
 
-dataset = IntentDataset()
-train_loader = DataLoader(dataset=dataset,
-                          batch_size=batch_size,
-                          shuffle=True,
-                          num_workers=2)
-# if using Python3.8, set num_workers=0. Python3.8 has a spawn vs fork issue
-# that causes this to fail if num_workers > 0
+class IntentsTrainer():
+    def __init__(self, intents_filename='intents', model_name='data'):
+        self.model_name = model_name
+        with open(bumblebee_root+'utils/'+intents_filename+'.json', 'r') as f:
+            intents = json.load(f)
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.all_words = []
+        self.tags = []
+        self.xy = []
+        self.x_train = []
+        self.y_train = []
+        # loop through each sentence in intents patterns
+        for intent in intents['intents']:
+            tag = intent['tag']
+            self.tags.append(tag)
+            for pattern in intent['patterns']:
+                # tokenize each word in the sentence
+                w = tokenize(pattern)
+                # add to our words list
+                self.all_words.extend(w)
+                # add to xy pair
+                self.xy.append((w, tag))
 
-model = NeuralNet(input_size, hidden_size, output_size).to(device)
+        # stem and lower each word
+        ignore_words = ['?', '.', '!']
+        self.all_words = [stem(w)
+                          for w in self.all_words if w not in ignore_words]
+        # remove duplicates and sort
+        self.all_words = sorted(set(self.all_words))
+        self.tags = sorted(set(self.tags))
 
-# Loss and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    def create_training_data(self):
+        # create training data
 
-# Train the model
-for epoch in range(num_epochs):
-    for (words, labels) in train_loader:
-        words = words.to(device)
-        labels = labels.to(device)
+        for (pattern_sentence, tag) in self.xy:
+            # x: bag of words for each pattern sentence
+            bag = bag_of_words(pattern_sentence, self.all_words)
+            self.x_train.append(bag)
+            # y: PyTorch CrossEntropyLoss needs only class labels, not one-hot
+            label = self.tags.index(tag)
+            self.y_train.append(label)
 
-        # Forward pass
-        outputs = model(words)
-        # if y would be one-hot, we must apply
-        # labels = torch.max(labels, 1)[1]
-        loss = criterion(outputs, labels)
+        self.x_train = np.array(self.x_train)
+        self.y_train = np.array(self.y_train)
 
-        # Backwards and optimize
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+    def train(self):
+        # create_training_data first
+        self.create_training_data()
 
-    if (epoch+1) % 100 == 0:
-        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+        # Hyper-parameters
+        num_epochs = 1000
+        batch_size = 8
+        learning_rate = 0.001
+        input_size = len(self.x_train[0])
+        hidden_size = 8
+        output_size = len(self.tags)
 
-print(f'final loss: {loss.item():.4f}')
+        dataset = IntentDataset(self.x_train, self.y_train)
+        train_loader = DataLoader(dataset=dataset,
+                                  batch_size=batch_size,
+                                  shuffle=True,
+                                  num_workers=2)
+        # if using Python3.8, set num_workers=0. Python3.8 has a spawn vs
+        # fork issue that causes this to fail if num_workers > 0
 
-data = {
-    "model_state": model.state_dict(),
-    "input_size": input_size,
-    "hidden_size": hidden_size,
-    "output_size": output_size,
-    "all_words": all_words,
-    "tags": tags
-}
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-FILE = bumblebee_root+"models/data.pth"
-torch.save(data, FILE)
+        model = NeuralNet(input_size, hidden_size, output_size).to(device)
 
-print(f'training complete. file saved to {FILE}')
+        # Loss and optimizer
+        criterion = nn.CrossEntropyLoss()
+        optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
+        # Train the model
+        for epoch in range(num_epochs):
+            for (words, labels) in train_loader:
+                words = words.to(device)
+                labels = labels.to(device)
+
+                # Forward pass
+                outputs = model(words)
+                # if y would be one-hot, we must apply
+                # labels = torch.max(labels, 1)[1]
+                loss = criterion(outputs, labels)
+
+                # Backwards and optimize
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+
+            if (epoch+1) % 100 == 0:
+                print(
+                    f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+        print(f'final loss: {loss.item():.4f}')
+
+        data = {
+            "model_state": model.state_dict(),
+            "input_size": input_size,
+            "hidden_size": hidden_size,
+            "output_size": output_size,
+            "all_words": self.all_words,
+            "tags": self.tags
+        }
+
+        FILE = bumblebee_root+"models/"+self.model_name+".pth"
+        torch.save(data, FILE)
+
+        print(f'training complete. file saved to {FILE}')

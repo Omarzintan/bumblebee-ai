@@ -2,7 +2,6 @@
 import importlib
 import os
 import json
-import subprocess
 import torch
 
 from utils.speech import BumbleSpeech
@@ -11,6 +10,7 @@ from halo import Halo
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 from utils.run_gracefully import GracefulRunner
+from train import IntentsTrainer
 
 
 class Bee():
@@ -29,11 +29,13 @@ class Bee():
         self.name = name
         self.wake_word_detector = wake_word_detector
         self.graceful_runner = GracefulRunner()
+        self.trainer = IntentsTrainer(model_name=self.name)
         assert config != {}
         Bee.config_yaml = config
         self.bumblebee_dir = Bee.config_yaml["Common"]["bumblebee_dir"]
         self.python3_path = Bee.config_yaml["Common"]["python3_path"]
-        self.path_to_trained_model = self.bumblebee_dir+"models/data.pth"
+        self.models_path = Bee.config_yaml["Folders"]["models"]
+        self.trained_model_path = self.models_path+self.name+".pth"
         self.spinner = Halo(spinner='dots2')
         self.thread_failsafes = []
 
@@ -69,7 +71,7 @@ class Bee():
             # Check whether any features have been added/removed or if
             # no trained model is present.
             assert(len(self._features) == len(intents['intents']))
-            assert(os.path.exists(self.path_to_trained_model))
+            assert(os.path.exists(self.trained_model_path))
         except (FileNotFoundError, AssertionError):
             # remove intents file if it exists
             try:
@@ -99,14 +101,8 @@ class Bee():
 
             # Retrain the NeuralNet
             self.spinner.start(text='Training NeuralNet.')
-            output, errors = subprocess.Popen(
-                [self.python3_path, self.bumblebee_dir+'train.py'],
-                stdout=subprocess.PIPE,
-                text=True
-            ).communicate()
+            self.trainer.train()
             self.spinner.succeed('NeuralNet trained.')
-            print(output)
-            print(errors)
 
     def run(self):
         '''Main function that runs Bumblebee'''
@@ -131,7 +127,7 @@ class Bee():
         # Prepping the Neural Net to be used.
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-        data = torch.load(self.path_to_trained_model)
+        data = torch.load(self.trained_model_path)
 
         input_size = data["input_size"]
         hidden_size = data["hidden_size"]
