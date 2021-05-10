@@ -141,7 +141,6 @@ class Bee():
                     self.graceful_runner.start_gracefully(self)
                     if self.wake_word_detector.run():
                         self.sleep = 0
-                        print(self.sleep)
                         self.take_command()
                 except KeyboardInterrupt:
                     self.graceful_runner.exit_gracefully(self)
@@ -152,6 +151,7 @@ class Bee():
         elif self.speech.speech_mode == self.speech.speech_modes[0]:
             while 1:
                 try:
+                    self.sleep = 0
                     self.take_command()
                 except KeyboardInterrupt:
                     self.graceful_runner.exit_gracefully(self)
