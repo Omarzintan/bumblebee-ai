@@ -15,12 +15,11 @@ import pyfiglet
 
 
 class Bumblebee():
-    def __init__(self, silent_mode=False,
+    def __init__(self,
                  name='bumblebee', config_yaml_name='config',
                  feature_list="all"):
-        self.silent_mode = silent_mode
         self.name = name
-        self.config_yaml_name = config_yaml_name
+        self.config_yaml_name = config_yaml_name+"-"+self.name
         self.feature_list = feature_lists.get(feature_list,
                                               feature_lists['all'])
         self.config = {}
@@ -48,7 +47,7 @@ class Bumblebee():
             # -------------------------------------
             self.spinner.fail()
             self.spinner.start(text="Building configuration file.")
-            if config_builder.build_yaml() == -1:  # pass name into build_yaml
+            if config_builder.build_yaml(self.config_yaml_name) == -1:
                 self.spinner.fail()
                 raise Exception("Error building config file.")
             self.spinner.succeed(
@@ -82,9 +81,11 @@ class Bumblebee():
         '''
         Creates an instansce of Bee with name, feature_list and a config file.
         '''
+        # access default mode from config file
+        default_speech_mode = self.config["Utilities"]["default_speech_mode"]
         virtual_assistant = Bee(
-            self.name, self.feature_list, self.config, self.wake_word_detector)
-        # bumblebee_api.set_bee_instance(virtual_assistant)
+            self.name, self.feature_list,
+            self.config, self.wake_word_detector, default_speech_mode)
         return virtual_assistant
 
     def run_bee(self):

@@ -18,14 +18,15 @@ __all__ = [
     'stop_research_server',
     'store_research_data',
     'silent_mode_on',
-    'silent_mode_off',
+    'voice_mode_on',
     'youtube_search',
     'add_zoom_link',
     'open_zoom_link',
     'sleep',
     'stop_listening',
     'add_contact',
-    'add_employer'
+    'add_employer',
+    'set_default_speech_mode'
 ]
 
 '''Essential Features that should be included in every custon list.'''
@@ -33,7 +34,8 @@ __essential__ = [
     'sleep',
     'stop_listening',
     'silent_mode_on',
-    'silent_mode_off'
+    'voice_mode_on',
+    'set_default_speech_mode'
 ]
 
 '''Features to test'''
