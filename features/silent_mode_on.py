@@ -6,14 +6,14 @@ class Feature(BaseFeature):
     def __init__(self):
         self.tag_name = "silent_mode_on"
         self.patterns = [
-            "silent mode",
+            "silent mode on",
             "turn on silent mode",
-            "start silent mode"
-            ]
+            "start silent mode",
+        ]
         super().__init__()
 
     def action(self, spoken_text):
         self.bs.respond('Okay. Starting silent mode.')
-        self.bs.set_silent_mode(True)
+        self.bs.set_speech_mode('silent')
         self.bs.respond('Welcome to silent mode.')
         return

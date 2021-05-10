@@ -15,7 +15,7 @@ from train import IntentsTrainer
 
 class Bee():
     # global vars
-    speech = BumbleSpeech()
+    speech = ''
     config_yaml = {}
     sleep = 0
     thread_failsafes = []
@@ -25,19 +25,29 @@ class Bee():
                  name: str = 'bumblebee',
                  features: list = ['default'],
                  config: dict = {},
-                 wake_word_detector: WakeWordDetector = None):
+                 wake_word_detector: WakeWordDetector = None,
+                 default_speech_mode: str = 'voice'):
         self.name = name
         self.wake_word_detector = wake_word_detector
+        # will eventually be self.speech
+        Bee.speech = BumbleSpeech(speech_mode=default_speech_mode)
         self.graceful_runner = GracefulRunner()
         self.trainer = IntentsTrainer(model_name=self.name)
+
         assert config != {}
+        # will eventually be self.config_yaml
         Bee.config_yaml = config
+
         self.bumblebee_dir = Bee.config_yaml["Common"]["bumblebee_dir"]
         self.python3_path = Bee.config_yaml["Common"]["python3_path"]
         self.models_path = Bee.config_yaml["Folders"]["models"]
         self.trained_model_path = self.models_path+self.name+".pth"
+
         self.spinner = Halo(spinner='dots2')
+
+        self.sleep = 0
         self.thread_failsafes = []
+        self.global_store = {}
 
         # %%
         # Building Feature objects from list of features.
@@ -106,19 +116,30 @@ class Bee():
 
     def run(self):
         '''Main function that runs Bumblebee'''
-        while 1:
-            try:
-                self.graceful_runner.start_gracefully(self)
-                if self.wake_word_detector.run():
-                    self.sleep = 0
-                    print(self.sleep)
+        if self.speech.speech_mode == self.speech.speech_modes[1]:
+            while 1:
+                try:
+                    self.graceful_runner.start_gracefully(self)
+                    if self.wake_word_detector.run():
+                        self.sleep = 0
+                        print(self.sleep)
+                        self.take_command()
+                except KeyboardInterrupt:
+                    self.graceful_runner.exit_gracefully(self)
+                except Exception as exception:
+                    print(exception)
+                    self.graceful_runner.exit_gracefully(
+                        self, crash_happened=True)
+        elif self.speech.speech_mode == self.speech.speech_modes[0]:
+            while 1:
+                try:
                     self.take_command()
-            except KeyboardInterrupt:
-                self.graceful_runner.exit_gracefully(self)
-            except Exception as exception:
-                print(exception)
-                self.graceful_runner.exit_gracefully(
-                    self, crash_happened=True)
+                except KeyboardInterrupt:
+                    self.graceful_runner.exit_gracefully(self)
+                except Exception as exception:
+                    print(exception)
+                    self.graceful_runner.exit_gracefully(
+                        self, crash_happened=True)
 
     def take_command(self):
         """
