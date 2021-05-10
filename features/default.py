@@ -11,7 +11,7 @@ class BaseFeature(Bee):
     def __init__(self):
         self.bs = self.speech
         self.index = None
-        self.config = self.config_yaml
+        self.config = self.config_yaml  # get config yaml now through bumblebee api
         self.globals_api = GLOBALSAPI()
 
     def action(self, text):
