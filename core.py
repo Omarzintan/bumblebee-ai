@@ -114,6 +114,25 @@ class Bee():
             self.trainer.train()
             self.spinner.succeed('NeuralNet trained.')
 
+        finally:
+            # Prepping the Neural Net to be used.
+            self.device = torch.device(
+                'cuda' if torch.cuda.is_available() else 'cpu')
+
+            self.model_data = torch.load(self.trained_model_path)
+
+            input_size = self.model_data["input_size"]
+            hidden_size = self.model_data["hidden_size"]
+            output_size = self.model_data["output_size"]
+            self.all_words = self.model_data["all_words"]
+            self.tags = self.model_data["tags"]
+            self.model_state = self.model_data["model_state"]
+
+            self.model = NeuralNet(input_size, hidden_size,
+                                   output_size).to(self.device)
+            self.model.load_state_dict(self.model_state)
+            self.model.eval()
+
     def run(self):
         '''Main function that runs Bumblebee'''
         if self.speech.speech_mode == self.speech.speech_modes[1]:
@@ -143,37 +162,22 @@ class Bee():
 
     def take_command(self):
         """
-        Main function for running features given input from user.
+        Function for running features given input from user.
         """
-        # Prepping the Neural Net to be used.
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-        data = torch.load(self.trained_model_path)
-
-        input_size = data["input_size"]
-        hidden_size = data["hidden_size"]
-        output_size = data["output_size"]
-        all_words = data["all_words"]
-        tags = data["tags"]
-        model_state = data["model_state"]
-
-        model = NeuralNet(input_size, hidden_size, output_size).to(device)
-        model.load_state_dict(model_state)
-        model.eval()
 
         while(self.sleep == 0):
             text = ''
             text = self.speech.hear()
 
             text = tokenize(text)
-            x = bag_of_words(text, all_words)
+            x = bag_of_words(text, self.all_words)
             x = x.reshape(1, x.shape[0])
-            x = torch.from_numpy(x).to(device)
+            x = torch.from_numpy(x).to(self.device)
 
-            output = model(x)
+            output = self.model(x)
             _, predicted = torch.max(output, dim=1)
 
-            tag = tags[predicted.item()]
+            tag = self.tags[predicted.item()]
 
             probs = torch.softmax(output, dim=1)
             prob = probs[0][predicted.item()]
