@@ -17,4 +17,6 @@ class Feature(BaseFeature):
     def action(self, spoken_text):
         self.config["Utilities"]["default_speech_mode"] = self.bs.speech_mode
         self.bs.respond(f"Saved default speech mode as {self.bs.speech_mode}")
+        # Write utility to help update the yaml file properly. For now,
+        #  it does not work.
         return
