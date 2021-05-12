@@ -26,9 +26,9 @@ class IntentDataset(Dataset):
 
 
 class IntentsTrainer():
-    def __init__(self, intents_filename='intents', model_name='data'):
+    def __init__(self, intents_file_path, model_name='data'):
         self.model_name = model_name
-        with open(bumblebee_root+'utils/'+intents_filename+'.json', 'r') as f:
+        with open(intents_file_path, 'r') as f:
             intents = json.load(f)
 
         self.all_words = []
