@@ -32,7 +32,7 @@ class Bee():
         # will eventually be self.speech
         Bee.speech = BumbleSpeech(speech_mode=default_speech_mode)
         self.graceful_runner = GracefulRunner()
-        self.trainer = IntentsTrainer(model_name=self.name)
+        self.intents_filename = 'intents-'+self.name
 
         assert config != {}
         # will eventually be self.config_yaml
@@ -42,6 +42,8 @@ class Bee():
         self.python3_path = Bee.config_yaml["Common"]["python3_path"]
         self.models_path = Bee.config_yaml["Folders"]["models"]
         self.trained_model_path = self.models_path+self.name+".pth"
+        self.intents_file_path = self.bumblebee_dir + \
+            'utils/intents/'+self.intents_filename+'.json'
 
         self.spinner = Halo(spinner='dots2')
 
@@ -75,7 +77,7 @@ class Bee():
         try:
             # Check to see that intents.json file exists.
             with open(
-                self.bumblebee_dir+'utils/intents.json', 'r'
+                self.intents_file_path, 'r'
             ) as json_data:
                 intents = json.load(json_data)
             # Check whether any features have been added/removed or if
@@ -86,13 +88,13 @@ class Bee():
             # remove intents file if it exists
             try:
                 print('Detected modification in feature list.')
-                os.remove(self.bumblebee_dir+'utils/intents.json')
+                os.remove(self.intents_file_path)
             except OSError:
                 print('intents.json file not found.')
 
             # Update intents.json if features have been added/removed
             # or the file does not exist.
-            self.spinner.start(text='Generating new intents.json file...')
+            self.spinner.start(text='Generating new intents json file...')
 
             intents = {}
             intents['intents'] = []
@@ -105,10 +107,13 @@ class Bee():
 
             intents_json = json.dumps(intents, indent=4)
 
-            with open(self.bumblebee_dir+'utils/intents.json', 'w') as f:
+            with open(self.intents_file_path, 'w') as f:
                 f.write(intents_json)
-            self.spinner.succeed(text='intents.json file generated.')
+            self.spinner.succeed(
+                text=f'{self.intents_file_path} file generated.')
 
+            self.trainer = IntentsTrainer(
+                self.intents_file_path, model_name=self.name)
             # Retrain the NeuralNet
             self.spinner.start(text='Training NeuralNet.')
             self.trainer.train()
