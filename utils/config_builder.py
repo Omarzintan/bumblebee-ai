@@ -39,8 +39,8 @@ def build_config():
     return config
 
 
-def write_yaml(data, filename):
-    with open(bumblebee_root+"utils/"+filename+".yaml", "w") as config_file:
+def write_yaml(data, config_path):
+    with open(config_path, "w") as config_file:
         yaml.dump(data, config_file)
 
 
