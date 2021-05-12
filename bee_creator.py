@@ -19,12 +19,14 @@ class Bumblebee():
                  name='bumblebee', config_yaml_name='config',
                  feature_list="all"):
         self.name = name
-        self.config_yaml_name = config_yaml_name+"-"+self.name
+        self.config_yaml_name = config_yaml_name
         self.feature_list = feature_lists.get(feature_list,
                                               feature_lists['all'])
         self.config = {}
         self.spinner = Halo(spinner='noise')
         self.wake_word_detector = WakeWordDetector(self.name)
+        self.config_path = bumblebee_root+"utils/config/" + \
+            self.config_yaml_name+".yaml"
         self.__preparation_step()
         self.bee = self.__create_bee()
 
@@ -37,8 +39,7 @@ class Bumblebee():
             # Access config file
             # ------------------
             self.spinner.start(text="Accessing configuration file")
-            with open(bumblebee_root+"utils/" +
-                      self.config_yaml_name+".yaml", "r") as ymlfile:
+            with open(self.config_path, "r") as ymlfile:
                 self.config = yaml.load(ymlfile, Loader=yaml.FullLoader)
                 self.spinner.succeed()
         except FileNotFoundError:
@@ -47,15 +48,14 @@ class Bumblebee():
             # -------------------------------------
             self.spinner.fail()
             self.spinner.start(text="Building configuration file.")
-            if config_builder.build_yaml(self.config_yaml_name) == -1:
+            if config_builder.build_yaml(self.config_path) == -1:
                 self.spinner.fail()
                 raise Exception("Error building config file.")
             self.spinner.succeed(
                 text="Configuration file built successfully at 'utils/" +
                 self.config_yaml_name+".yaml'"
             )
-            with open(bumblebee_root+"utils/" +
-                      self.config_yaml_name+".yaml", "r") as ymlfile:
+            with open(self.config_path, "r") as ymlfile:
                 self.config = yaml.load(ymlfile, Loader=yaml.FullLoader)
         finally:
             # %%
