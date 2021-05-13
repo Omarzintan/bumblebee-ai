@@ -17,7 +17,7 @@ class BUMBLEBEEAPI():
 
     def store_var(self, name: str, value):
         """
-        Stores variable in Bee global_store.
+        Stores variable in global store of bee instance.
         Arguments: <string> name, value
         Returns: None
         """
@@ -25,7 +25,7 @@ class BUMBLEBEEAPI():
 
     def get_var(self, name: str):
         """
-        Retrieves a variable from Bee global_store.
+        Retrieves a variable from global store of the bee instance.
         Arguments: <string> name
         Returns if found: value of variable name stored in global_store
         Returns if not found: None
@@ -34,6 +34,34 @@ class BUMBLEBEEAPI():
             return self.bee_instance.global_store[name]
         except KeyError:
             print(f"could not retrieve {name} from global_store.")
+            return None
+
+    def remove_var(self, name: str):
+        """
+        Removes a variable from the global store of the bee instance.
+        Arguments: <string> name
+        Returns if successful: None
+        Returns if unsuccessful: None (prints error)
+        """
+        try:
+            del self.bee_instance.global_store[name]
+        except KeyError:
+            print(f"could not remove {name} from global_store")
+            return None
+
+    def pop_var(self, name: str):
+        """
+        Removes a variable from the global store of the bee instance and
+        returns it.
+        Arguments: <string> name
+        Returns if found: value of variable
+        Returns if not found: None (prints error)
+        """
+        try:
+            popped_variable = self.bee_instance.global_store.pop(name)
+            return popped_variable
+        except KeyError:
+            print(f"could not pop {name} from global_store")
             return None
 
     def add_thread_failsafe(self, proc_id: int,
