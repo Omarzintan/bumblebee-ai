@@ -17,10 +17,10 @@ import pyfiglet
 class Bumblebee():
     def __init__(self,
                  name='bumblebee', config_yaml_name='config',
-                 feature_list="all"):
+                 feature_list_name="all"):
         self.name = name
         self.config_yaml_name = config_yaml_name
-        self.feature_list = feature_lists.get(feature_list,
+        self.feature_list = feature_lists.get(feature_list_name,
                                               feature_lists['all'])
         self.config = {}
         self.spinner = Halo(spinner='noise')
