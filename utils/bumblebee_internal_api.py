@@ -84,4 +84,10 @@ class BUMBLEBEEAPI():
         return self.bee_instance.get_speech()
 
     def run_by_tags(self, feature_tags: list):
+        """
+        Run a list of feature actions given their tags.
+        """
         self.bee_instance.run_by_tags(feature_tags)
+
+    def sleep_on(self):
+        self.bee_instance.sleep = 1
