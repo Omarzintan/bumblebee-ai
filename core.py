@@ -134,8 +134,9 @@ class Bee():
 
     def run(self):
         '''Main function that runs Bumblebee'''
-        if self.speech.speech_mode == self.speech.speech_modes[1]:
-            while 1:
+
+        while 1:
+            if self.speech.speech_mode == self.speech.speech_modes[1]:
                 try:
                     self.graceful_runner.start_gracefully()
                     if self.wake_word_detector.run():
@@ -145,9 +146,9 @@ class Bee():
                     self.graceful_runner.exit_gracefully()
                 except Exception as exception:
                     print(exception)
-                    self.graceful_runner.exit_gracefully(crash_happened=True)
-        elif self.speech.speech_mode == self.speech.speech_modes[0]:
-            while 1:
+                    self.graceful_runner.exit_gracefully(
+                        crash_happened=True)
+            elif self.speech.speech_mode == self.speech.speech_modes[0]:
                 try:
                     self.sleep = 0
                     self.take_command()
@@ -155,7 +156,8 @@ class Bee():
                     self.graceful_runner.exit_gracefully()
                 except Exception as exception:
                     print(exception)
-                    self.graceful_runner.exit_gracefully(crash_happened=True)
+                    self.graceful_runner.exit_gracefully(
+                        crash_happened=True)
 
     def take_command(self):
         """
