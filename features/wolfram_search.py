@@ -11,6 +11,7 @@ class Feature(BaseFeature):
             "what is",
             "how many",
             "how much",
+            "how long",
             "compute"
         ]
         self.bs = bumblebee_api.get_speech()

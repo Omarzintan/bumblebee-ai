@@ -37,13 +37,12 @@ class Feature(BaseFeature):
         )
         return query
 
-    '''
-    Opens YouTube in a browser with the specified search query.
-    Argument: <string> spoken_text, <list> keywords
-    Return type: <string> query
-    '''
-
     def search(self, spoken_text):
+        '''
+        Opens YouTube in a browser with the specified search query.
+        Argument: <string> spoken_text, <list> keywords
+        Return type: <string> query
+        '''
         query = self.get_search_query(spoken_text, self.patterns)
         webbrowser.open(
             "https://www.youtube.com/results?search_query='{}'".format(query)
