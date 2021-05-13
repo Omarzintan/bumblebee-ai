@@ -1,9 +1,9 @@
 '''Contains default Feature class from which all other features inherit.'''
-from core import Bumblebee
+from core import Bee
 from utils.globals_api import GLOBALSAPI
 
 
-class BaseFeature(Bumblebee):
+class BaseFeature(Bee):
     '''Default Feature Class'''
     tag_name = ''
     patterns = []
@@ -11,7 +11,7 @@ class BaseFeature(Bumblebee):
     def __init__(self):
         self.bs = self.speech
         self.index = None
-        self.config = self.config_yaml
+        self.config = self.config_yaml  # get config yaml now through bumblebee api
         self.globals_api = GLOBALSAPI()
 
     def action(self, text):

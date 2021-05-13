@@ -11,54 +11,52 @@ This code was adapted from porcupine demos on github:
 https://github.com/Picovoice/porcupine/blob/master/demo/python/porcupine_demo_mic.py
 This is an implementation of wake-word detection using porcupine.
 '''
-porcupine = None
-pa = None
-audio_stream = None
-spinner = Halo(spinner='simpleDots', interval=1000)
 
 
-def run():
-    try:
-        # 'bumblebee is one of default keywords from porcupine.
-        porcupine = pvporcupine.create(keywords=['bumblebee'])
-        pa = pyaudio.PyAudio()
+class WakeWordDetector():
+    def __init__(self, keyword):
+        default_keywords = pvporcupine.KEYWORDS
+        self.keyword = keyword if keyword in default_keywords else 'bumblebee'
+        self.porcupine = None
+        self.pa = None
+        self.audio_stream = None
+        self.spinner = Halo(spinner='simpleDots', interval=1000)
 
-        audio_stream = pa.open(
-            rate=porcupine.sample_rate,
-            channels=1,
-            format=pyaudio.paInt16,
-            input=True,
-            frames_per_buffer=porcupine.frame_length
-        )
+    def run(self):
+        try:
+            self.porcupine = pvporcupine.create(keywords=[self.keyword])
+            self.pa = pyaudio.PyAudio()
 
-        # add banners for wifi and mode:
-        while True:
-            spinner.start(text="Say 'Bumblebee' to activate.")
-            pcm = audio_stream.read(porcupine.frame_length)
-            pcm = struct.unpack_from("h" * porcupine.frame_length, pcm)
+            self.audio_stream = self.pa.open(
+                rate=self.porcupine.sample_rate,
+                channels=1,
+                format=pyaudio.paInt16,
+                input=True,
+                frames_per_buffer=self.porcupine.frame_length
+            )
 
-            keyword_index = porcupine.process(pcm)
-            if keyword_index >= 0:
-                # Word detected
-                spinner.stop()
-                return True
-    except KeyboardInterrupt:
+            # add banners for wifi and mode:
+            while True:
+                self.spinner.start(text="Say '"+self.keyword+"' to activate.")
+                pcm = self.audio_stream.read(self.porcupine.frame_length)
+                pcm = struct.unpack_from(
+                    "h" * self.porcupine.frame_length, pcm)
+
+                keyword_index = self.porcupine.process(pcm)
+                if keyword_index >= 0:
+                    # Word detected
+                    self.spinner.stop()
+                    return True
+        except KeyboardInterrupt:
+            print(Fore.CYAN + 'Stopping...')
+        finally:
+            if self.porcupine is not None:
+                self.porcupine.delete()
+            if self.audio_stream is not None:
+                self.audio_stream.close()
+            if self.pa is not None:
+                self.pa.terminate()
+
+    def stop(self):
         print(Fore.CYAN + 'Stopping...')
-    finally:
-        if porcupine is not None:
-            porcupine.delete()
-        if audio_stream is not None:
-            audio_stream.close()
-        if pa is not None:
-            pa.terminate()
-
-
-def stop():
-    print(Fore.CYAN + 'Stopping...')
-    if porcupine is not None:
-        porcupine.delete()
-    if audio_stream is not None:
-        audio_stream.close()
-    if pa is not None:
-        pa.terminate()
-    sys.exit()
+        sys.exit()

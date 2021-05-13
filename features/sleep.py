@@ -1,5 +1,5 @@
 from features.default import BaseFeature
-from core import Bumblebee
+from core import Bee
 
 
 class Feature(BaseFeature):
@@ -10,5 +10,5 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text=''):
         self.bs.respond('Ok. I\'ll be listening for your command.')
-        Bumblebee.sleep = 1
+        Bee.sleep = 1
         return

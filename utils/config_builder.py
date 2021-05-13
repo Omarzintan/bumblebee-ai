@@ -30,23 +30,24 @@ def build_config():
     config["Folders"] = {}
     config["Folders"]["work_study"] = bumblebee_root+"work_study"
     config["Folders"]["research_files"] = bumblebee_root+"research_files/"
-    config["Folders"]["models"] = bumblebee_root+"models"
+    config["Folders"]["models"] = bumblebee_root+"models/"
 
     config["Utilities"] = {}
     config["Utilities"]["research_server_url"] = "http://127.0.0.1:5000"
+    config["Utilities"]["default_speech_mode"] = 'voice'
 
     return config
 
 
-def write_yaml(data):
-    with open(bumblebee_root+"utils/config.yaml", "w") as config_file:
+def write_yaml(data, config_path):
+    with open(config_path, "w") as config_file:
         yaml.dump(data, config_file)
 
 
-def build_yaml():
+def build_yaml(filename):
     try:
         config = build_config()
-        write_yaml(config)
+        write_yaml(config, filename)
         return 0
     except Exception:
         return -1

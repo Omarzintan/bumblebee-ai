@@ -35,7 +35,8 @@ class Feature(BaseFeature):
             close_names = difflib.get_close_matches(recipient, known_contacts)
             if close_names == []:
                 self.bs.respond(
-                    'Could not find this contact. Please try again'
+                    """Could not find this contact. Please try again
+                    (say 'stop' or 'cancel' to exit."""
                 )
                 recipient = self.bs.hear()
                 if self.bs.interrupt_check(recipient):

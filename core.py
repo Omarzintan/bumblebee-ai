@@ -1,31 +1,55 @@
-'''The core of Bumblebee.'''
+'''The core of Bee.'''
 import importlib
 import os
 import json
-import subprocess
 import torch
 
 from utils.speech import BumbleSpeech
+from utils.wake_word_detector import WakeWordDetector
 from halo import Halo
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
+from utils.run_gracefully import GracefulRunner
+from train import IntentsTrainer
 
 
-class Bumblebee():
+class Bee():
     # global vars
-    speech = BumbleSpeech()
+    speech = ''
     config_yaml = {}
     sleep = 0
     thread_failsafes = []
     global_store = {}
 
-    def __init__(self, features: list = ['default'], config: dict = {}):
+    def __init__(self,
+                 name: str = 'bumblebee',
+                 features: list = ['default'],
+                 config: dict = {},
+                 wake_word_detector: WakeWordDetector = None,
+                 default_speech_mode: str = 'voice'):
+        self.name = name
+        self.wake_word_detector = wake_word_detector
+        # will eventually be self.speech
+        Bee.speech = BumbleSpeech(speech_mode=default_speech_mode)
+        self.graceful_runner = GracefulRunner()
+        self.intents_filename = 'intents-'+self.name
+
         assert config != {}
-        Bumblebee.config_yaml = config
-        self.bumblebee_dir = Bumblebee.config_yaml["Common"]["bumblebee_dir"]
-        self.python3_path = Bumblebee.config_yaml["Common"]["python3_path"]
-        self.path_to_trained_model = self.bumblebee_dir+"models/data.pth"
+        # will eventually be self.config_yaml
+        Bee.config_yaml = config
+
+        self.bumblebee_dir = Bee.config_yaml["Common"]["bumblebee_dir"]
+        self.python3_path = Bee.config_yaml["Common"]["python3_path"]
+        self.models_path = Bee.config_yaml["Folders"]["models"]
+        self.trained_model_path = self.models_path+self.name+".pth"
+        self.intents_file_path = self.bumblebee_dir + \
+            'utils/intents/'+self.intents_filename+'.json'
+
         self.spinner = Halo(spinner='dots2')
+
+        self.sleep = 0
+        self.thread_failsafes = []
+        self.global_store = {}
 
         # %%
         # Building Feature objects from list of features.
@@ -53,24 +77,24 @@ class Bumblebee():
         try:
             # Check to see that intents.json file exists.
             with open(
-                self.bumblebee_dir+'utils/intents.json', 'r'
+                self.intents_file_path, 'r'
             ) as json_data:
                 intents = json.load(json_data)
             # Check whether any features have been added/removed or if
             # no trained model is present.
             assert(len(self._features) == len(intents['intents']))
-            assert(os.path.exists(self.path_to_trained_model))
+            assert(os.path.exists(self.trained_model_path))
         except (FileNotFoundError, AssertionError):
             # remove intents file if it exists
             try:
                 print('Detected modification in feature list.')
-                os.remove(self.bumblebee_dir+'utils/intents.json')
+                os.remove(self.intents_file_path)
             except OSError:
                 print('intents.json file not found.')
 
             # Update intents.json if features have been added/removed
             # or the file does not exist.
-            self.spinner.start(text='Generating new intents.json file...')
+            self.spinner.start(text='Generating new intents json file...')
 
             intents = {}
             intents['intents'] = []
@@ -83,54 +107,82 @@ class Bumblebee():
 
             intents_json = json.dumps(intents, indent=4)
 
-            with open(self.bumblebee_dir+'utils/intents.json', 'w') as f:
+            with open(self.intents_file_path, 'w') as f:
                 f.write(intents_json)
-            self.spinner.succeed(text='intents.json file generated.')
+            self.spinner.succeed(
+                text=f'{self.intents_file_path} file generated.')
 
+            self.trainer = IntentsTrainer(
+                self.intents_file_path, model_name=self.name)
             # Retrain the NeuralNet
             self.spinner.start(text='Training NeuralNet.')
-            output, errors = subprocess.Popen(
-                [self.python3_path, self.bumblebee_dir+'train.py'],
-                stdout=subprocess.PIPE,
-                text=True
-            ).communicate()
+            self.trainer.train()
             self.spinner.succeed('NeuralNet trained.')
-            print(output)
-            print(errors)
+
+        finally:
+            # Prepping the Neural Net to be used.
+            self.device = torch.device(
+                'cuda' if torch.cuda.is_available() else 'cpu')
+
+            self.model_data = torch.load(self.trained_model_path)
+
+            input_size = self.model_data["input_size"]
+            hidden_size = self.model_data["hidden_size"]
+            output_size = self.model_data["output_size"]
+            self.all_words = self.model_data["all_words"]
+            self.tags = self.model_data["tags"]
+            self.model_state = self.model_data["model_state"]
+
+            self.model = NeuralNet(input_size, hidden_size,
+                                   output_size).to(self.device)
+            self.model.load_state_dict(self.model_state)
+            self.model.eval()
 
     def run(self):
+        '''Main function that runs Bumblebee'''
+        if self.speech.speech_mode == self.speech.speech_modes[1]:
+            while 1:
+                try:
+                    self.graceful_runner.start_gracefully(self)
+                    if self.wake_word_detector.run():
+                        self.sleep = 0
+                        self.take_command()
+                except KeyboardInterrupt:
+                    self.graceful_runner.exit_gracefully(self)
+                except Exception as exception:
+                    print(exception)
+                    self.graceful_runner.exit_gracefully(
+                        self, crash_happened=True)
+        elif self.speech.speech_mode == self.speech.speech_modes[0]:
+            while 1:
+                try:
+                    self.sleep = 0
+                    self.take_command()
+                except KeyboardInterrupt:
+                    self.graceful_runner.exit_gracefully(self)
+                except Exception as exception:
+                    print(exception)
+                    self.graceful_runner.exit_gracefully(
+                        self, crash_happened=True)
+
+    def take_command(self):
         """
-        Main function for running features given input from user.
+        Function for running features given input from user.
         """
-        # Prepping the Neural Net to be used.
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-        data = torch.load(self.path_to_trained_model)
-
-        input_size = data["input_size"]
-        hidden_size = data["hidden_size"]
-        output_size = data["output_size"]
-        all_words = data["all_words"]
-        tags = data["tags"]
-        model_state = data["model_state"]
-
-        model = NeuralNet(input_size, hidden_size, output_size).to(device)
-        model.load_state_dict(model_state)
-        model.eval()
 
         while(self.sleep == 0):
             text = ''
             text = self.speech.hear()
 
             text = tokenize(text)
-            x = bag_of_words(text, all_words)
+            x = bag_of_words(text, self.all_words)
             x = x.reshape(1, x.shape[0])
-            x = torch.from_numpy(x).to(device)
+            x = torch.from_numpy(x).to(self.device)
 
-            output = model(x)
+            output = self.model(x)
             _, predicted = torch.max(output, dim=1)
 
-            tag = tags[predicted.item()]
+            tag = self.tags[predicted.item()]
 
             probs = torch.softmax(output, dim=1)
             prob = probs[0][predicted.item()]
@@ -157,15 +209,15 @@ class Bumblebee():
                         print(f"Could not perform action for {tag}")
 
     def get_config(self):
-        '''Get the config file that Bumblebee is running with.'''
+        '''Get the config file that Bee is running with.'''
         return self.config_yaml
 
     @staticmethod
     def get_internal_state():
         return {
-            'sleep': Bumblebee.sleep,
-            'global_store': Bumblebee.global_store,
-            'thread_failsafes': Bumblebee.thread_failsafes
+            'sleep': Bee.sleep,
+            'global_store': Bee.global_store,
+            'thread_failsafes': Bee.thread_failsafes
         }
 
     @staticmethod
@@ -173,6 +225,6 @@ class Bumblebee():
         if not isinstance(state, dict):
             raise Exception('Invalid argument, state. Must be a dict')
 
-        Bumblebee.sleep = state.get('sleep', 0)
-        Bumblebee.thread_failsafes = state.get('thread_failsafes', [])
-        Bumblebee.global_store = state.get('global_store', {})
+        Bee.sleep = state.get('sleep', 0)
+        Bee.thread_failsafes = state.get('thread_failsafes', [])
+        Bee.global_store = state.get('global_store', {})
