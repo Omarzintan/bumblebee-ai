@@ -3,10 +3,10 @@ from features import clock_out
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "stop_listening"
         self.patterns = ["stop listening", "shutdown", "shut down"]
-        super().__init__()
+        super().__init__(bumblebee_api)
 
     def action(self, spoken_text=''):
         self.bs.respond(

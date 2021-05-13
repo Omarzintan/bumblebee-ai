@@ -3,7 +3,7 @@ from features.default import BaseFeature
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "set_default_speech_mode"
         self.patterns = [
             "save speech mode",
@@ -12,11 +12,12 @@ class Feature(BaseFeature):
             "set default speech mode as",
             "save default speech mode as"
         ]
-        super().__init__()
+        super().__init__(bumblebee_api)
 
     def action(self, spoken_text):
         self.config["Utilities"]["default_speech_mode"] = self.bs.speech_mode
         self.bs.respond(f"Saved default speech mode as {self.bs.speech_mode}")
         # Write utility to help update the yaml file properly. For now,
         #  it does not work.
+        # yaml file update will be handled by the bumblebee_api
         return

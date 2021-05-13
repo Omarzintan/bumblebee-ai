@@ -40,8 +40,7 @@ __essential__ = [
 
 '''Features to test'''
 __test__ = __essential__ + [
-    'send_email',
-    'open_zoom_link'
+    'google_search',
 ]
 
 '''Contains cybersecurity specific features.'''

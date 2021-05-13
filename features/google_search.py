@@ -4,15 +4,15 @@ import webbrowser
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "google_search"
         self.patterns = [
             "google",
             "open a google search on",
             "google search",
             "show me on google"
-            ]
-        super().__init__()
+        ]
+        super().__init__(bumblebee_api)
 
     def action(self, spoken_text):
         query = self.search(spoken_text, self.patterns)
@@ -28,6 +28,7 @@ class Feature(BaseFeature):
     Return type: <string> spoken_text (this is actually the search query
     as retrieved from spoken_text.)
     '''
+
     def get_search_query(self, spoken_text, patterns):
         search_terms = ['about', 'on', 'for', 'search']
         query_found = False
@@ -48,7 +49,7 @@ class Feature(BaseFeature):
                 # remove phrase list from spoken_text
                 spoken_text = [
                     word for word in spoken_text if word not in phrase_list
-                    ]
+                ]
 
         return ' '.join(spoken_text)
 
@@ -57,6 +58,7 @@ class Feature(BaseFeature):
     Argument: <string> spoken_text, <list> patterns
     Return type: <string> query
     '''
+
     def search(self, spoken_text, patterns):
         query = self.get_search_query(spoken_text, patterns)
         webbrowser.open("https://google.com/search?q={}".format(query))

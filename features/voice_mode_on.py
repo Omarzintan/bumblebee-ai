@@ -3,7 +3,7 @@ from features.default import BaseFeature
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "voice_mode_on"
         self.patterns = [
             "turn on voice mode",
@@ -11,7 +11,7 @@ class Feature(BaseFeature):
             "voice mode on",
             "start voice mode"
         ]
-        super().__init__()
+        super().__init__(bumblebee_api)
 
     def action(self, spoken_text):
         self.bs.set_speech_mode('voice')
