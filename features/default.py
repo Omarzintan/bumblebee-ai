@@ -7,12 +7,7 @@ class BaseFeature():
     patterns = []
 
     def __init__(self, bumblebee_api):
-        self.index = None
-        # DO WE NEED THESE ANYMORE?
-        # Since now they can be accessed straight from the features themselves
-        self.bumblebee_api = bumblebee_api
-        self.config = self.bumblebee_api.get_config()
-        self.bs = self.bumblebee_api.get_speech()
+        pass
 
     def action(self, text):
         pass
