@@ -3,10 +3,9 @@ import tkinter as tk
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "open_notepad"
         self.patterns = ["open notepad"]
-        super().__init__()
 
     def action(self, spoken_text):
         self.notepad()

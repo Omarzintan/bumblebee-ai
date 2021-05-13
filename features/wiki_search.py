@@ -3,14 +3,14 @@ import wikipedia
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "wiki_search"
         self.patterns = [
             "wikipedia",
             "search wikipedia for",
             "look up on wikipedia"
         ]
-        super().__init__()
+        self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
         search_query = self.get_search_query(spoken_text, self.patterns)

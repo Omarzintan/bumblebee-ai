@@ -5,7 +5,7 @@ import webbrowser
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "youtube_search"
         self.patterns = [
             "youtube",
@@ -13,7 +13,7 @@ class Feature(BaseFeature):
             "show me a video about",
             "find a video on"
         ]
-        super().__init__()
+        self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
         query = self.search(spoken_text)

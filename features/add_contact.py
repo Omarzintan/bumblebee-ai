@@ -4,12 +4,12 @@ from features.default import BaseFeature
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "add_contact"
         self.patterns = ["add new contact", "new contact", "add a new contact"]
-        super().__init__()
+        self.bs = bumblebee_api.get_speech()
+        self.config = bumblebee_api.get_config()
 
-        # self.config defined in BaseFeature class
         contact_db_path = self.config['Database']['contacts']
         self.contact_db = TinyDB(contact_db_path)
 

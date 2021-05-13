@@ -9,7 +9,7 @@ import validators
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = 'store_research_data'
         self.patterns = [
             "store data",
@@ -17,7 +17,9 @@ class Feature(BaseFeature):
             "save tabs",
             "save my data"
         ]
-        super().__init__()
+        self.api = bumblebee_api
+        self.bs = self.api.get_speech()
+        self.config = self.api.get_config()
 
         # self.config defined in BaseFeature class
         research_db_path = self.config['Database']['research']
@@ -45,7 +47,7 @@ class Feature(BaseFeature):
         research_files_path = self.config['Folders']['research_files']
         server_url = self.config['Utilities']['research_server_url']
 
-        research_topic = self.globals_api.retrieve(
+        research_topic = self.api.get_var(
             research_store.RESEARCH_TOPIC
         )
         filename = research_topic.replace(' ', '-')

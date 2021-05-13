@@ -2,14 +2,14 @@ from features.default import BaseFeature
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "bumble_help"
         self.patterns = [
             "tell me about yourself",
             "identify yourself",
             "who are you?",
             "what are you?"]
-        super().__init__()
+        self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
         response = """

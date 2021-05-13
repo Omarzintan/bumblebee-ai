@@ -1,12 +1,12 @@
 #!python3
-'''THIS IS DEPRECATED AND WILL BE REPLACED WITH A CHATBOT'''
+'''THIS WILL EVENTUALLY BE REPLACED WITH A CHATBOT'''
 
 from features.default import BaseFeature
 import random
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "greeting"
         self.patterns = [
             "hello",
@@ -15,8 +15,8 @@ class Feature(BaseFeature):
             "are you there?",
             "anyone home?",
             "yo"
-            ]
-        super().__init__()
+        ]
+        self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
         response = self.greet()
@@ -28,6 +28,7 @@ class Feature(BaseFeature):
     Argument: None
     Return type: <string>
     '''
+
     def greet(self):
         greetings = [
             'Hey there!',

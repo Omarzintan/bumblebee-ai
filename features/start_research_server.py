@@ -12,7 +12,7 @@ class StoreKeys:
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "start_research_server"
         self.patterns = [
             "start research",
@@ -20,7 +20,9 @@ class Feature(BaseFeature):
             "let's do research",
             "start research server"
         ]
-        super().__init__()
+        self.api = bumblebee_api
+        self.config = self.api.get_config()
+        self.bs = self.api.get_speech()
 
     def action(self, spoken_text):
         self.bs.respond('What is the topic of your research?')
@@ -37,7 +39,7 @@ class Feature(BaseFeature):
             edited_json = json.loads(edited_topic)
             topic = edited_json["topic"]
         self.bs.respond('Starting server for research on {}'.format(topic))
-        self.globals_api.store(StoreKeys.RESEARCH_TOPIC, topic)
+        self.api.store_var(StoreKeys.RESEARCH_TOPIC, topic)
         # start python flask server in new thread
         threading.Thread(target=self.start_server).start()
 
@@ -93,11 +95,11 @@ class Feature(BaseFeature):
             [python3_path, bumblebee_dir+'server.py'],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
-        self.globals_api.store(
+        self.api.store_var(
             StoreKeys.RESEARCH_SERVER_PROC_ID,
             research_server_proc.pid
         )
-        self.globals_api.add_thread_failsafe(
+        self.api.add_thread_failsafe(
             research_server_proc.pid,
             ["store_research_data", "stop_research_server"]
         )

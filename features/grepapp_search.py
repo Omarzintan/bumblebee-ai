@@ -3,7 +3,7 @@ import webbrowser
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "grepapp_search"
         self.patterns = [
             "grep search",
@@ -11,7 +11,7 @@ class Feature(BaseFeature):
             "do a grep search",
             "search on github"
         ]
-        super().__init__()
+        self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
         query = self.search(spoken_text)

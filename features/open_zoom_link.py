@@ -7,10 +7,11 @@ import webbrowser
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "open_zoom_link"
         self.patterns = ["take me to", "time for class"]
-        super().__init__()
+        self.bs = bumblebee_api.get_speech()
+        self.config = bumblebee_api.get_config()
 
         zoom_db_path = self.config['Database']['zoom']
         self.zoom_db = TinyDB(zoom_db_path)

@@ -11,7 +11,7 @@ class Feature(BaseFeature):
             "voice mode on",
             "start voice mode"
         ]
-        super().__init__(bumblebee_api)
+        self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
         self.bs.set_speech_mode('voice')

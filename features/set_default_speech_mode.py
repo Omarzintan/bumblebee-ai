@@ -12,7 +12,8 @@ class Feature(BaseFeature):
             "set default speech mode as",
             "save default speech mode as"
         ]
-        super().__init__(bumblebee_api)
+        self.config = bumblebee_api.get_config()
+        self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
         self.config["Utilities"]["default_speech_mode"] = self.bs.speech_mode

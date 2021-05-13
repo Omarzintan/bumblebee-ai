@@ -9,13 +9,14 @@ from features.feature_helpers import get_search_query
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "send_email"
         self.patterns = [
             "send an email",
             "send an email to"
         ]
-        super().__init__()
+        self.bs = bumblebee_api.get_speech()
+        self.config = bumblebee_api.get_config()
 
         contacts_db_path = self.config['Database']['contacts']
         self.contacts_db = TinyDB(contacts_db_path)
