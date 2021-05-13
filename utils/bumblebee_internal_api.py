@@ -118,4 +118,7 @@ class BUMBLEBEEAPI():
         self.bee_instance.run_by_tags(feature_tags)
 
     def sleep_on(self):
+        """
+        Puts bee instance to sleep
+        """
         self.bee_instance.sleep = 1
