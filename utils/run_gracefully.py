@@ -31,7 +31,7 @@ class GracefulRunner():
         try:
             if os.path.exists(self.CRASH_FILE):
                 print('Starting gracefully.')
-                self.bee_instance.restore_internal_state()
+                self.restore_internal_state()
                 os.remove(self.CRASH_FILE)
         except OSError as exception:
             print(exception)
@@ -51,7 +51,7 @@ class GracefulRunner():
         # includeing the proccess ids for all running
         # threads.
         if crash_happened:
-            self.bee_instance.store_internal_state()
+            self.store_internal_state()
             return
 
         # If this is a regular exiting, we ensure all threads are
