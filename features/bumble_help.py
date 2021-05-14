@@ -7,8 +7,7 @@ class Feature(BaseFeature):
         self.patterns = [
             "tell me about yourself",
             "identify yourself",
-            "who are you?",
-            "what are you?"]
+        ]
         self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
