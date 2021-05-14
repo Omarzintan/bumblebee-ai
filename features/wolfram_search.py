@@ -8,12 +8,13 @@ class Feature(BaseFeature):
         self.tag_name = "wolfram_search"
         self.patterns = [
             "calculate",
-            "what is",
+            "evaluate",
             "how many",
             "how much",
             "how long",
             "compute"
         ]
+        self.api = bumblebee_api
         self.bs = bumblebee_api.get_speech()
         self.config = bumblebee_api.get_config()
 
@@ -31,7 +32,7 @@ class Feature(BaseFeature):
             self.bs.respond(answer)
         except Exception:
             # Trying Wikipedia
-            wiki_search_obj = wiki_search.Feature()
+            wiki_search_obj = wiki_search.Feature(self.api)
             wiki_search_obj.action(spoken_text)
             return
 

@@ -13,7 +13,7 @@ class Feature(BaseFeature):
             "google search",
             "show me on google"
         ]
-        super().__init__(bumblebee_api)
+        self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text):
         query = self.search(spoken_text, self.patterns)
