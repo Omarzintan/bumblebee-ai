@@ -73,10 +73,10 @@ class Bee():
             with open(
                 self.intents_file_path, 'r'
             ) as json_data:
-                intents = json.load(json_data)
+                intents_json = json.load(json_data)
             # Check whether any features have been added/removed or if
             # no trained model is present.
-            assert(len(self._features) == len(intents['intents']))
+            assert(len(self._features) == len(intents_json['intents']))
             assert(os.path.exists(self.trained_model_path))
         except (FileNotFoundError, AssertionError):
             # remove intents file if it exists
@@ -114,6 +114,10 @@ class Bee():
             self.spinner.succeed('NeuralNet trained.')
 
         finally:
+
+            # Save the intents json file
+            self.intents_json = intents_json
+
             # Prepping the Neural Net to be used.
             self.device = torch.device(
                 'cuda' if torch.cuda.is_available() else 'cpu')
@@ -181,7 +185,7 @@ class Bee():
             probs = torch.softmax(output, dim=1)
             prob = probs[0][predicted.item()]
 
-            if prob.item() < 0.70:
+            if prob.item() < 0.80:
                 tag_index = self.feature_indices['chatbot']
                 self._features[tag_index].action(text)
                 continue
@@ -209,6 +213,10 @@ class Bee():
     def get_speech(self):
         '''Get the BumbleSpeech instance.'''
         return self.speech
+
+    def get_intents(self):
+        '''Get the intents json file Bee is running with.'''
+        return self.intents_json
 
     def get_internal_state(self):
         return {

@@ -108,8 +108,22 @@ class BUMBLEBEEAPI():
     def get_speech(self):
         """
         Get the BumbleSpeech instance of the bee instance.
+        Return type: BumbleSpeech
         """
         return self.bee_instance.get_speech()
+
+    def get_intents(self):
+        """
+        Gets the intents json file being used by bee instance.
+        Return type: JSON file
+        """
+        return self.bee_instance.get_intents()
+
+    def get_name(self):
+        """
+        Gets the name of the bee_instance
+        """
+        return self.bee_instance.name
 
     def run_by_tags(self, feature_tags: list):
         """
