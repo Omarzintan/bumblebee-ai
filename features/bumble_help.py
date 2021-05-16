@@ -37,5 +37,7 @@ class Feature(BaseFeature):
         table.add_column("Feature")
         table.add_column("Patterns")
         for item in intents_json['intents']:
-            table.add_row(item['tag'], str(item['patterns']))
+            tag = item['tag']
+            patterns = item['patterns']
+            table.add_row(tag, str(patterns))
         console.print(table)
