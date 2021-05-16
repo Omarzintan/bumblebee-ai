@@ -33,7 +33,7 @@ class Feature(BaseFeature):
 
         console = Console()
 
-        table = Table(show_header=True, header_style="bold magenta")
+        table = Table(show_header=True, header_style="yellow")
         table.add_column("Feature")
         table.add_column("Patterns")
         for item in intents_json['intents']:
