@@ -32,15 +32,17 @@ This is Bumblebee, a voice assistant made with Python. Bumblebee was made with t
 NOTE: After initial installation, bumblebee will run automatically. If you close bumblebee and you want to run it again, go into the bumblebee folder and ensure that the bumblebee environment is activated. Otherwise, activate it by typing ```conda activate bumblebee-ai``` then type ```python main.py```. If the environment is already activated, you can type ```python main.py``` to run bumblebee.
 
 ## Features
-1) Stores and open zoom links on demand
-2) Opens up browser with Google search on any query specified
-3) Opens up browser with Youtube search on any query specified
-4) Searches for information on Wikipedia as well as Wolframalpha
-5) Does math using Wolframalpha
-6) Can send emails to any contact specified in a contacts database
-7) Can clock me in and out of work (tracking how many hours I work my various work-study jobs)
-8) Research mode *
-9) TinyDB is the database used to store information such as contacts, zoom links, research data.
+- Stores and open zoom links on demand
+- Opens up browser with Google search on any query specified
+- Opens up browser with Youtube search on any query specified
+- Searches for information on Wikipedia as well as Wolframalpha
+- Does math using Wolframalpha
+- Can send emails to any contact specified in a contacts database
+- Works both in voice mode and silent mode(text only)
+- Has a chatbot for generic conversations (uses chatterbot for this)
+- Can clock me in and out of work (tracking how many hours I work my various work-study jobs)
+- Research mode *
+- TinyDB is the database used to store information such as contacts, zoom links, research data.
 
 ### Starred Features
 1) Research mode: Research mode is a feature that I find super useful with my regular work flow. It is basically a mode that Bumblebee goes into where all the tabs I open in a google chrome 
