@@ -75,7 +75,7 @@ class IntentsTrainer():
         self.create_training_data()
 
         # Hyper-parameters
-        num_epochs = 1000
+        num_epochs = 500
         batch_size = 8
         learning_rate = 0.001
         input_size = len(self.x_train[0])

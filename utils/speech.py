@@ -17,6 +17,26 @@ class BumbleSpeech():
         self.engine.setProperty(
             'voice', 'com.apple.speech.synthesis.voice.tessa')
         self.engine.setProperty('rate', 210)
+        self.YES_TERMS = [
+            "yes",
+            "sure",
+            "yhup",
+            "yup",
+            "ye",
+            "yeah",
+        ]
+        self.NO_TERMS = [
+            "no",
+            "nope",
+            "nah",
+            "nay",
+        ]
+
+        self.CANCEL_TERMS = [
+            "stop",
+            "cancel",
+            "abort"
+        ]
 
     def change_voice(self):
         '''Function to change voice of the voice engine'''
@@ -109,3 +129,23 @@ class BumbleSpeech():
         if "stop" in input_text or "cancel" in input_text:
             self.respond("Okay.")
             return True
+
+    def approve(self, question):
+        '''
+        Seek approval from user.
+        e.g. user says yes/no to confirm question.
+        Arguments: question i.e. the question to be approved by the user.
+        Returns: True if the user approves
+                False if the user disapproves
+        '''
+        self.respond(question)
+        while True:
+            answer = self.hear()
+            if self.interrupt_check(answer):
+                return
+            if answer in self.YES_TERMS:
+                return True
+            elif answer in self.NO_TERMS:
+                return False
+            else:
+                self.respond("Please say yes or no.")

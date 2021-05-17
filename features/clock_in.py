@@ -3,7 +3,6 @@ import difflib
 import datetime
 import os
 from tinydb import TinyDB
-from helpers import bumblebee_root
 
 
 class StoreKeys:
@@ -14,10 +13,13 @@ class StoreKeys:
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "clock_in"
         self.patterns = ["clock in", "let's work", "start work", "clock me in"]
-        super().__init__()
+        self.api = bumblebee_api
+        self.config = self.api.get_config()
+        self.bs = self.api.get_speech()
+        self.work_study_dir = self.config["Folders"]["work_study"]
 
     def action(self, spoken_text):
         # TODO: what if user is already clocked in?
@@ -25,7 +27,7 @@ class Feature(BaseFeature):
         self.bs.respond('Which employer is this for?')
         print(f'List of employers: {known_employers}')
 
-        self.globals_api.store(StoreKeys.EMPLOYER, '')
+        self.api.store_var(StoreKeys.EMPLOYER, '')
 
         close_names = []
         while close_names == []:
@@ -57,15 +59,15 @@ class Feature(BaseFeature):
                 break
 
             elif yes_no_response in yes_words:
-                self.globals_api.store(StoreKeys.EMPLOYER, found_employer)
-                self.globals_api.store(
+                self.api.store_var(StoreKeys.EMPLOYER, found_employer)
+                self.api.store_var(
                     StoreKeys.WORK_START_TIME, datetime.datetime.now())
-                self.globals_api.store(StoreKeys.CURRENTLY_WORKING, True)
+                self.api.store_var(StoreKeys.CURRENTLY_WORKING, True)
 
                 # Log clock-in info into employer's file
                 self.clock_in(
-                    self.globals_api.retrieve(StoreKeys.EMPLOYER),
-                    self.globals_api.retrieve(
+                    self.api.get_var(StoreKeys.EMPLOYER),
+                    self.api.get_var(
                         StoreKeys.WORK_START_TIME).strftime(
                             '%a %b %d, %Y %I:%M %p'
                     )
@@ -73,7 +75,7 @@ class Feature(BaseFeature):
 
                 self.bs.respond(
                     'You\'ve been clocked in for {}.'
-                    .format(self.globals_api.retrieve(StoreKeys.EMPLOYER)))
+                    .format(self.api.get_var(StoreKeys.EMPLOYER)))
                 break
             else:
                 self.bs.respond(
@@ -89,10 +91,9 @@ class Feature(BaseFeature):
         Return type: None
         '''
         # find/create employer file
-        os.makedirs('work_study', exist_ok=True)
         with open(
-            bumblebee_root +
-            os.path.join('work_study', '{}_hours.txt'.format(employer)), 'a+'
+            os.path.join(self.work_study_dir,
+                         '{}_hours.txt'.format(employer)), 'a+'
         ) as file:
             file.write('Started work: {}\n'.format(work_start_time))
 

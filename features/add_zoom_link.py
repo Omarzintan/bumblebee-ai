@@ -4,16 +4,17 @@ from tinydb import TinyDB, Query
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "add_zoom_link"
         self.patterns = [
             "add zoom link",
             "new zoom link",
             "add a new zoom class"
         ]
-        super().__init__()
+        self.api = bumblebee_api
+        self.config = self.api.get_config()
+        self.bs = self.api.get_speech()
 
-        # self.config defined in BaseFeature class
         zoom_db_path = self.config['Database']['zoom']
         self.zoom_db = TinyDB(zoom_db_path)
 

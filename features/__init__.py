@@ -8,7 +8,7 @@ __all__ = [
     'bumble_help',
     'clock_in',
     'clock_out',
-    'greeting',
+    'chatbot',
     'grepapp_search',
     'send_email',
     # 'open_notepad',
@@ -40,8 +40,7 @@ __essential__ = [
 
 '''Features to test'''
 __test__ = __essential__ + [
-    'send_email',
-    'open_zoom_link'
+    'google_search',
 ]
 
 '''Contains cybersecurity specific features.'''

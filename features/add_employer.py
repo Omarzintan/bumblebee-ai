@@ -4,7 +4,7 @@ from tinydb import TinyDB, Query
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "add_employer"
         self.patterns = [
             "add new employer",
@@ -12,9 +12,9 @@ class Feature(BaseFeature):
             "add a new employer",
             "add a new boss"
         ]
-        super().__init__()
+        self.bs = bumblebee_api.get_speech()
+        self.config = bumblebee_api.get_config()
 
-        # self.config defined in BaseFeature class
         employer_db_path = self.config['Database']['employers']
         self.employer_db = TinyDB(employer_db_path)
 

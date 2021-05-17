@@ -1,14 +1,14 @@
 from features.default import BaseFeature
-from core import Bee
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "sleep"
         self.patterns = ["I am done", "all done", "exit", "go to sleep", "bye"]
-        super().__init__()
+        self.api = bumblebee_api
+        self.speech = self.api.get_speech()
 
     def action(self, spoken_text=''):
-        self.bs.respond('Ok. I\'ll be listening for your command.')
-        Bee.sleep = 1
+        self.speech.respond('Ok. I\'ll be listening for your command.')
+        self.api.sleep_on()
         return

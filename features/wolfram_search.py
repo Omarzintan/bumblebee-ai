@@ -4,16 +4,19 @@ from features import wiki_search
 
 
 class Feature(BaseFeature):
-    def __init__(self):
+    def __init__(self, bumblebee_api):
         self.tag_name = "wolfram_search"
         self.patterns = [
             "calculate",
-            "what is",
+            "evaluate",
             "how many",
             "how much",
+            "how long",
             "compute"
         ]
-        super().__init__()
+        self.api = bumblebee_api
+        self.bs = bumblebee_api.get_speech()
+        self.config = bumblebee_api.get_config()
 
     def action(self, spoken_text):
         search_query = self.get_search_query(spoken_text, self.patterns)
@@ -29,7 +32,7 @@ class Feature(BaseFeature):
             self.bs.respond(answer)
         except Exception:
             # Trying Wikipedia
-            wiki_search_obj = wiki_search.Feature()
+            wiki_search_obj = wiki_search.Feature(self.api)
             wiki_search_obj.action(spoken_text)
             return
 

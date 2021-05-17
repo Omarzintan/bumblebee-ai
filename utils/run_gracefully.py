@@ -9,36 +9,35 @@ import pickle
 
 
 class GracefulRunner():
-    def __init__(self):
+    def __init__(self, bee_instance):
         self.CRASH_FILE = 'crash_recovery.p'
+        self.bee_instance = bee_instance
 
     # Find a way of handling crash files for multiple bees.
 
-    def store_internal_state(self, bee):
+    def store_internal_state(self):
         '''Stores variables in a pickle file.'''
         with open(self.CRASH_FILE, 'wb') as f:
             f.seek(0)
-            # TODO: Make get_internal_state an instance funciton.
-            pickle.dump(bee.get_internal_state(), f)
+            pickle.dump(self.bee_instance.get_internal_state(), f)
 
-    def restore_internal_state(self, bee):
+    def restore_internal_state(self):
         '''Restores pickled variables.'''
         restored_state = pickle.load(open(self.CRASH_FILE, "rb"))
-        # TODO: Make load_internal_state and instance function.
-        bee.load_internal_state(restored_state)
+        self.bee_instance.load_internal_state(restored_state)
 
-    def start_gracefully(self, bee):
+    def start_gracefully(self):
         '''Restores stored global vars from before crash happened.'''
         try:
             if os.path.exists(self.CRASH_FILE):
                 print('Starting gracefully.')
-                self.restore_internal_state(bee)
+                self.restore_internal_state()
                 os.remove(self.CRASH_FILE)
         except OSError as exception:
             print(exception)
             print('Start gracefully failed.')
 
-    def exit_gracefully(self, bee, crash_happened=False):
+    def exit_gracefully(self, crash_happened=False):
         '''
         Exiting gracefully means checking for any running threads
         and terminating them as well as storing global variables if
@@ -52,12 +51,13 @@ class GracefulRunner():
         # includeing the proccess ids for all running
         # threads.
         if crash_happened:
-            self.store_internal_state(bee)
+            self.store_internal_state()
             return
 
         # If this is a regular exiting, we ensure all threads are
         # terminated before we exit.
-        for thread_failsafe in bee.thread_failsafes:
-            bee.run_by_tags(thread_failsafe["termination_features"])
+        for thread_failsafe in self.bee_instance.thread_failsafes:
+            self.bee_instance.run_by_tags(
+                thread_failsafe["termination_features"])
 
-        bee.wake_word_detector.stop()
+        self.bee_instance.wake_word_detector.stop()
