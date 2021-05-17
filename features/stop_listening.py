@@ -9,13 +9,7 @@ class Feature(BaseFeature):
         self.speech = self.api.get_speech()
 
     def action(self, spoken_text=''):
-        self.speech.respond(
-            'To get me back you will have to boot me back up. Are you sure?'
-        )
-        approve = self.speech.hear()
-        if self.speech.interrupt_check(approve):
-            return
-        if 'yes' in approve:
+        if self.speech.approve('Are you sure?'):
             currently_working = self.api.get_var("currently_working")
             if currently_working:
                 self.api.run_by_tags(['clock_out'])

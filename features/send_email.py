@@ -69,11 +69,7 @@ class Feature(BaseFeature):
         print(self.summary_email(recipient_email, subject, message))
 
         # edit email
-        self.bs.respond('Would you like to edit this?')
-        edit = self.bs.hear()
-        if self.bs.interrupt_check(edit):
-            return
-        if 'yes' in edit or 'yeah' in edit or 'sure' in edit:
+        if self.bs.approve("Would you like to edit this?"):
             edited_email = self.email_edit(recipient_email, subject, message)
             edited_email_json = json.loads(edited_email)
             recipient_email = edited_email_json["recipient_email"]
@@ -81,11 +77,7 @@ class Feature(BaseFeature):
             message = edited_email_json["message"]
             self.bs.respond('Here is another summary of your email:')
             print(self.summary_email(recipient_email, subject, message))
-        self.bs.respond('Would you like to send this email?')
-        approve = self.bs.hear()
-        if self.bs.interrupt_check(approve):
-            return
-        if approve == 'yes' or approve == 'sure' or approve == 'yeah':
+        if self.bs.approve("Would you like to send this email?"):
             # send email
             ezgmail.init(
                 tokenFile=self.bumblebee_dir+'token.json',
