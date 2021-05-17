@@ -21,7 +21,6 @@ class Feature(BaseFeature):
         self.bs = self.api.get_speech()
         self.config = self.api.get_config()
 
-        # self.config defined in BaseFeature class
         research_db_path = self.config['Database']['research']
         self.research_db = TinyDB(research_db_path)
 
