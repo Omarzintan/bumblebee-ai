@@ -12,7 +12,7 @@ if __name__ == "__main__":
                          'bumblebee', 'picovoice', 'ok google'],
                         default_value='bumblebee',
                         key='wake_phrase')],
-              [sg.Text("Pick your desired list of features")],
+              [sg.Text("Pick your desired feature-list")],
               [sg.Combo(['all', 'test', 'cybersecurity', 'geo'],
                         default_value='all',
                         key='feature_list_name')],
