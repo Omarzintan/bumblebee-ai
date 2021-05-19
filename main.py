@@ -19,28 +19,17 @@ if __name__ == "__main__":
               [sg.Text(
                   "Enter the config file name (recommended to leave as is):"),
                sg.InputText(default_text="config", key="config_file")],
-              [sg.Button("Run"), sg.Button("Cancel")]
+              [sg.Submit(), sg.Cancel()]
 
               ]
 
-    # Create the Window
-    window = sg.Window("Bumblebee Main Menu", layout)
-    # Event Loop to process "events" and get the "values of the inputs"
-    ready_to_run = False
-    while True:
-        event, values = window.read()
-        if event == sg.WIN_CLOSED or event == "Cancel":
-            break
-        if event == "Run":
-            ready_to_run = True
-            wake_phrase = values['wake_phrase']
-            feature_list_name = values['feature_list_name']
-            config_file = values['config_file']
-            window.close()
-            break
+    # Create the Window and read inputs
+    event, values = sg.Window("Bumblebee Main Menu", layout).read(close=True)
+    wake_phrase = values['wake_phrase']
+    feature_list_name = values['feature_list_name']
+    config_file = values['config_file']
 
-    if ready_to_run:
-        bee_runner = Bumblebee(
-            name=wake_phrase, feature_list_name=feature_list_name,
-            config_yaml_name=config_file)
-        bee_runner.run_bee()
+    bee_runner = Bumblebee(
+        name=wake_phrase, feature_list_name=feature_list_name,
+        config_yaml_name=config_file)
+    bee_runner.run_bee()
