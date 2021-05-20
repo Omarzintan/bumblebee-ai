@@ -44,42 +44,24 @@ class Feature(BaseFeature):
                     'I don\'t know this employer. Please try again or cancel')
 
         found_employer = close_names[0]
-        self.bs.respond('Should I clock you in for ' +
-                        found_employer + '?')
+        if self.bs.approve(f'Should I clock you in for {found_employer}?'):
+            self.api.store_var(StoreKeys.EMPLOYER, found_employer)
+            self.api.store_var(
+                StoreKeys.WORK_START_TIME, datetime.datetime.now())
+            self.api.store_var(StoreKeys.CURRENTLY_WORKING, True)
 
-        yes_words = ['yes', 'yea', 'yeah', 'ok', 'okay', 'sure']
-        no_words = ['no', 'nope', 'nah']
-
-        while True:
-            yes_no_response = self.bs.hear()
-
-            if yes_no_response in no_words or \
-                    self.bs.interrupt_check(yes_no_response):
-                self.bs.respond('Clock-in cancelled')
-                break
-
-            elif yes_no_response in yes_words:
-                self.api.store_var(StoreKeys.EMPLOYER, found_employer)
-                self.api.store_var(
-                    StoreKeys.WORK_START_TIME, datetime.datetime.now())
-                self.api.store_var(StoreKeys.CURRENTLY_WORKING, True)
-
-                # Log clock-in info into employer's file
-                self.clock_in(
-                    self.api.get_var(StoreKeys.EMPLOYER),
-                    self.api.get_var(
-                        StoreKeys.WORK_START_TIME).strftime(
-                            '%a %b %d, %Y %I:%M %p'
-                    )
+            # Log clock-in info into employer's file
+            self.clock_in(
+                self.api.get_var(StoreKeys.EMPLOYER),
+                self.api.get_var(
+                    StoreKeys.WORK_START_TIME).strftime(
+                        '%a %b %d, %Y %I:%M %p'
                 )
+            )
 
-                self.bs.respond(
-                    'You\'ve been clocked in for {}.'
-                    .format(self.api.get_var(StoreKeys.EMPLOYER)))
-                break
-            else:
-                self.bs.respond(
-                    'Sorry, I did not get that. Please say yes, no or cancel.')
+            self.bs.respond(
+                'You\'ve been clocked in for {}.'
+                .format(self.api.get_var(StoreKeys.EMPLOYER)))
 
         return
 

@@ -3,7 +3,7 @@ import json
 import threading
 import subprocess
 from features.default import BaseFeature
-import tkinter as tk
+import PySimpleGUI as sg
 
 
 class StoreKeys:
@@ -30,11 +30,7 @@ class Feature(BaseFeature):
         if self.bs.interrupt_check(topic):
             return
         self.bs.respond('Starting research mode on {}'.format(topic))
-        self.bs.respond('Would you like to edit this?')
-        edit = self.bs.hear()
-        if self.bs.interrupt_check(edit):
-            return
-        if 'yes' in edit or 'yeah' in edit:
+        if self.bs.approve("Would you like to edit this?"):
             edited_topic = self.topic_edit(topic)
             edited_json = json.loads(edited_topic)
             topic = edited_json["topic"]
@@ -45,44 +41,21 @@ class Feature(BaseFeature):
 
     def topic_edit(self, topic):
         '''
-        Opens a Tkinter window to allow the user to edit the research
+        Opens a PySimpleGUI window to allow the user to edit the research
         topic as heard.
         Argument: <string> topic
         Return type: <JSON> topic_details_json
         '''
-        root = tk.Tk()
-        root.geometry("320x100")
-        root.title("Edit research topic")
-        content = tk.Frame(root)
-        content.pack()
+        sg.theme('DarkAmber')
+        layout = [[sg.Text("Topic:"),
+                   sg.InputText(default_text=topic, key="topic")],
+                  [sg.Submit(), sg.Cancel()]
+                  ]
+        event, values = sg.Window(
+            "Edit Research Topic", layout).read(close=True)
+
         topic_details = {}
-
-        # creating topic field
-        tk.Label(content, text="Topic").grid(
-            row=0, column=0, padx=5, sticky='sw')
-
-        topic_entry = tk.Entry(content, width=24)
-        topic_entry.grid(row=0, column=1, padx=5)
-
-        # inserting previous topic
-        topic_entry.insert(tk.END, topic)
-
-        # retrieve edited topic from window
-        def saveInput():
-            topic_details["topic"] = str(topic_entry.get())
-            root.destroy()
-
-        def clear():
-            topic_entry.delet(0, "end")
-
-        # Buttons for saving and clearing
-        saveButton = tk.Button(content, text="Save", command=saveInput)
-        clearButton = tk.Button(content, text="Clear", command=clear)
-        saveButton.grid(row=1, column=1, padx=5, sticky='e')
-        clearButton.grid(row=1, column=1, padx=5, sticky='w')
-
-        root.mainloop()
-
+        topic_details["topic"] = str(values['topic'])
         topic_details_json = json.dumps(topic_details)
         return topic_details_json
 
