@@ -142,7 +142,7 @@ class BumbleSpeech():
         while True:
             answer = self.hear()
             if self.interrupt_check(answer):
-                return
+                return False
             if answer in self.YES_TERMS:
                 return True
             elif answer in self.NO_TERMS:

@@ -1,6 +1,3 @@
-#!python3
-'''THIS WILL EVENTUALLY BE REPLACED WITH A CHATBOT'''
-
 from features.default import BaseFeature
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer

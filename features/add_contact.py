@@ -1,5 +1,5 @@
-import tkinter as tk
 from tinydb import TinyDB, Query
+import PySimpleGUI as sg
 from features.default import BaseFeature
 
 
@@ -23,58 +23,26 @@ class Feature(BaseFeature):
 
         return
 
-    '''
-    Opens a Tkinter window to allow the user to add a new contact
-    to the database.
-    Arguments: None
-    Return type: <JSON> contact_details_json
-    '''
-
     def add_contact_details(self):
-        root = tk.Tk()
-        root.geometry("500x150")
-        root.title("Add New Contact")
-        content = tk.Frame(root)
-        content.pack()
+        '''
+        Opens a PysimpleGUI window to allow the user to add a new contact
+        to the database.
+        Arguments: None
+        Return type: None
+        '''
+        sg.theme('DarkAmber')
+        layout = [[sg.Text("Name:"), sg.InputText(key="name")],
+                  [sg.Text("Email:"), sg.InputText(key="email")],
+                  [sg.Text("phone:"), sg.InputText(key="phone")],
+                  [sg.Submit(), sg.Cancel()]
+                  ]
+        event, values = sg.Window("Add Contact", layout).read(close=True)
+
+        Entry = Query()
         contact_details = {}
-
-        # creating fields
-        tk.Label(content, text="Name").grid(
-            row=0, column=0, padx=5, sticky='sw')
-        tk.Label(content, text="email").grid(
-            row=1, column=0, padx=5, sticky='sw')
-        tk.Label(content, text="phone").grid(
-            row=2, column=0, padx=5, sticky='sw')
-
-        name_entry = tk.Entry(content, width=24)
-        email_entry = tk.Entry(content, width=24)
-        phone_entry = tk.Entry(content, width=24)
-        name_entry.grid(row=0, column=1, padx=5)
-        email_entry.grid(row=1, column=1, padx=5)
-        phone_entry.grid(row=2, column=1, padx=5)
-
-        # retrieve contact details from window.
-        def saveInput():
-            Entry = Query()
-            contact_details["name"] = str(name_entry.get().lower())
-            contact_details["email"] = str(email_entry.get().lower())
-            contact_details["phone"] = str(phone_entry.get())
-            self.contact_db.upsert(
-                contact_details, Entry.name == contact_details["name"]
-            )
-            root.destroy()
-
-        def clear():
-            name_entry.delete(0, "end")
-            email_entry.delete(0, "end")
-            phone_entry.delete(0, "end")
-
-        # Buttons for saving and clearing
-        saveButton = tk.Button(content, text="Save", command=saveInput)
-        clearButton = tk.Button(content, text="Clear", command=clear)
-        saveButton.grid(row=3, column=1, padx=5, sticky='e')
-        clearButton.grid(row=3, column=1, padx=5, sticky='w')
-
-        root.mainloop()
-
-        return contact_details
+        contact_details["name"] = str(values['name'].lower())
+        contact_details["email"] = str(values['email'].lower())
+        contact_details["phone"] = str(values['phone'])
+        self.contact_db.upsert(
+            contact_details, Entry.name == contact_details["name"]
+        )

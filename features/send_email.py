@@ -3,7 +3,7 @@ import difflib
 import ezgmail
 import json
 import re
-import tkinter as tk
+import PySimpleGUI as sg
 from tinydb import TinyDB, Query
 from features.feature_helpers import get_search_query
 
@@ -102,66 +102,30 @@ class Feature(BaseFeature):
         )
         return summary
 
-    '''
-    Opens up a Tkinter window with email details to allow the user to edit
-    any of these details.
-    Arguments: <string> recipient_email, <string> subject, <string> message
-    Return type: <JSON> email_details_json
-    '''
-
     def email_edit(self, recipient_email, subject, message):
-        root = tk.Tk()
-        root.geometry("300x300")
-        root.minsize(height=350, width=500)
-        root.maxsize(height=560, width=560)
-        root.title("Edit Email")
-        content = tk.Frame(root)
-        content.pack()
+        '''
+        Opens up a PySimpleGUI window with email details to allow the user to
+        edit any of these details.
+        Arguments: <string> recipient_email, <string> subject, <string> message
+        Return type: <JSON> email_details_json
+        '''
+        sg.theme('DarkAmber')
+        layout = [[sg.Text("To:"),
+                   sg.InputText(default_text=recipient_email,
+                                key="recipient_email")],
+                  [sg.Text("Subject:"),
+                   sg.InputText(default_text=subject, key="subject")],
+                  [sg.Text("Message:"),
+                   sg.InputText(default_text=message, size=(50, 10),
+                                key="message")],
+                  [sg.Submit(), sg.Cancel()]
+                  ]
+        event, values = sg.Window(
+            "Edit Email", layout).read(close=True)
         email_details = {}
-
-        # creating fields
-        tk.Label(content, text="To:").grid(
-            row=0, column=0, padx=5, sticky='sw')
-        tk.Label(content, text="Subject:").grid(
-            row=0, column=1, padx=5, sticky='sw'
-        )
-        tk.Label(content, text="Message:").grid(
-            row=2, column=0, padx=5, sticky='sw'
-        )
-
-        recip = tk.Entry(content, width=24)
-        subj = tk.Entry(content, width=24)
-        msg = tk.Text(content, width=50, height=10)
-
-        recip.grid(row=1, column=0, padx=5)
-        subj.grid(row=1, column=1, padx=5)
-        msg.grid(row=3, column=0, columnspan=2, padx=5)
-
-        # inserting email info
-        recip.insert(tk.END, recipient_email)
-        subj.insert(tk.END, subject)
-        msg.insert(tk.END, message)
-
-        # retrieve email details from edit fields and close windown
-        def saveInput():
-            email_details["recipient_email"] = str(recip.get())
-            email_details["subject"] = subj.get()
-            email_details["message"] = msg.get(1.0, "end-1c")
-            root.destroy()
-
-        def clear():
-            recip.delete(0, "end")
-            subj.delete(0, "end")
-            msg.delete(1.0, "end")
-
-        # Buttons for saving and clearing
-        saveButton = tk.Button(content, text="Save", command=saveInput)
-        clearButton = tk.Button(content, text="Clear", command=clear)
-        saveButton.grid(row=4, column=0, padx=5, sticky='e')
-        clearButton.grid(row=4, column=1, padx=5, sticky='w')
-
-        root.mainloop()
-
+        email_details["recipient_email"] = str(values['recipient_email'])
+        email_details["subject"] = str(values["subject"])
+        email_details["message"] = str(values["message"])
         email_details_json = json.dumps(email_details)
         return email_details_json
 

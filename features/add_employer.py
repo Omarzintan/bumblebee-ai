@@ -1,5 +1,5 @@
 from features.default import BaseFeature
-import tkinter as tk
+import PySimpleGUI as sg
 from tinydb import TinyDB, Query
 
 
@@ -30,44 +30,20 @@ class Feature(BaseFeature):
 
     def add_employer_details(self):
         '''
-        Opens a Tkinter window to allow the user to add a new employer to
+        Opens a PySimpleGui window to allow the user to add a new employer to
         the database.
         Arguments: None
-        Return type: <JSON> employer_details_json
+        Return type: None
         '''
-        root = tk.Tk()
-        root.geometry("500x150")
-        root.title("Add New Employer")
-        content = tk.Frame(root)
-        content.pack()
+        sg.theme('DarkAmber')
+        layout = [[sg.Text("Name:"), sg.InputText(key="name")],
+                  [sg.Submit(), sg.Cancel()]
+                  ]
+        event, values = sg.Window("Add Employer", layout).read(close=True)
 
+        Entry = Query()
         employer_details = {}
-
-        # creating fields
-        tk.Label(content, text="Name").grid(
-            row=0, column=0, padx=5, sticky='sw')
-
-        name_entry = tk.Entry(content, width=24)
-        name_entry.grid(row=0, column=1, padx=5)
-
-        # retrieve employer details from window.
-        def saveInput():
-            Entry = Query()
-            employer_details["name"] = str(name_entry.get().lower())
-            self.employer_db.upsert(
-                employer_details, Entry.name == employer_details["name"]
-            )
-            root.destroy()
-
-        def clear():
-            name_entry.delete(0, "end")
-
-        # Buttons for saving and clearing
-        saveButton = tk.Button(content, text="Save", command=saveInput)
-        clearButton = tk.Button(content, text="Clear", command=clear)
-        saveButton.grid(row=3, column=1, padx=5, sticky='e')
-        clearButton.grid(row=3, column=1, padx=5, sticky='w')
-
-        root.mainloop()
-
-        return employer_details
+        employer_details["name"] = str(values['name'].lower())
+        self.employer_db.upsert(
+            employer_details, Entry.name == employer_details["name"]
+        )
