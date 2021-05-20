@@ -15,7 +15,7 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text):
         try:
-            self.add_contact_details2()
+            self.add_contact_details()
             self.bs.respond('Added new contact successfully.')
         except Exception as exception:
             print(exception)
