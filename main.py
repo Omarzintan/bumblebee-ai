@@ -24,10 +24,13 @@ if __name__ == "__main__":
               ]
 
     # Create the Window and read inputs
-    event, values = sg.Window("Bumblebee Main Menu", layout).read(close=True)
+    window = sg.Window("Bumblebee Main Menu", layout)
+    event, values = window.read()
     wake_phrase = values['wake_phrase']
     feature_list_name = values['feature_list_name']
     config_file = values['config_file']
+
+    window.close()
 
     bee_runner = Bumblebee(
         name=wake_phrase, feature_list_name=feature_list_name,
