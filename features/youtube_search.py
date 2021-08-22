@@ -20,7 +20,7 @@ class Feature(BaseFeature):
         self.bs.respond(
             'I have opened YouTube with a search on {}'.format(query)
         )
-        return
+        return query
 
     def get_search_query(self, spoken_text, patterns):
         '''

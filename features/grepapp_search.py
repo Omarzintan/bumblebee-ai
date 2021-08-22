@@ -18,7 +18,7 @@ class Feature(BaseFeature):
         query = self.search(spoken_text)
         self.bs.respond(
             f'I have opened a browser with your grepapp search on {query}')
-        return
+        return query
 
     def get_search_query(self, spoken_text, patterns):
         '''

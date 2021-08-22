@@ -290,7 +290,7 @@ def store_var(self, name: str, value):
     Stores variable in global store of bee instance.
     Arguments: <string> name, value
     Returns: None
-    Example: bumblebee_api.store_var(myvariable, "variable value")
+    Example: bumblebee_api.store_var("my_variable", variable value)
     """
 
 def get_var(self, name: str):
@@ -299,7 +299,7 @@ def get_var(self, name: str):
     Arguments: <string> name
     Returns if found: value of variable name stored in global_store
     Returns if not found: None
-    Example: bumblebee_api.get_var(myvariable)
+    Example: bumblebee_api.get_var("my_variable")
     """
 
 def remove_var(self, name: str):
@@ -308,7 +308,7 @@ def remove_var(self, name: str):
     Arguments: <string> name
     Returns if successful: None
     Returns if unsuccessful: None (prints error)
-    Example: bumblebee_api.remove_var(myvariable)
+    Example: bumblebee_api.remove_var("my_variable")
     """
 
 def pop_var(self, name: str):
@@ -318,7 +318,7 @@ def pop_var(self, name: str):
     Arguments: <string> name
     Returns if found: value of variable
     Returns if not found: None (prints error)
-    Example: bumblebee_api.pop_var(myvariable)
+    Example: bumblebee_api.pop_var("my_variable")
     """
 
 def add_thread_failsafe(self, proc_id: int,
@@ -358,6 +358,14 @@ def get_speech(self):
     Arguments: None
     Returns: speech instance of bee instance
     Example: bumblebee_api.get_speech()
+    """
+    
+def get_name(self):
+    """
+    Gets the name of the bee_instance
+    Arguments: None
+    Returns: name of bee instance
+    Example: bumblebee_api.get_name()
     """
 
 def run_by_tags(self, feature_tags: list):
