@@ -1,11 +1,10 @@
 '''
-This is a class responsible for spawning a bee (virtual assistant)
-based on Bumblebee-Framework.
+This is a class responsible for spawning a bee (virtual assistant).
 '''
 
 import os
 import yaml
-from core import Bee
+from bee import Bee
 from utils.wake_word_detector import WakeWordDetector
 from utils import config_builder
 from helpers import bumblebee_root
@@ -14,7 +13,7 @@ from halo import Halo
 import pyfiglet
 
 
-class Bumblebee():
+class BumblebeeWrapper():
     def __init__(self,
                  name='bumblebee', config_yaml_name='config',
                  feature_list_name="all"):

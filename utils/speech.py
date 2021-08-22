@@ -31,7 +31,6 @@ class BumbleSpeech():
             "nah",
             "nay",
         ]
-
         self.CANCEL_TERMS = [
             "stop",
             "cancel",
