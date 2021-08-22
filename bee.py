@@ -114,7 +114,6 @@ class Bee():
             self.spinner.succeed('NeuralNet trained.')
 
         finally:
-
             # Save the intents json file
             self.intents_json = intents_json
 
