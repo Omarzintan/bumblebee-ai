@@ -40,7 +40,11 @@ def get_search_query(
     '''
     query_found = False
     query = ""
-    tokenized_text = tokenize(spoken_text)
+    # spoken_text from features is already in a tokenized form. If not, we
+    # tokenize the text here.
+    tokenized_text = spoken_text
+    if type(tokenized_text) == str:
+        tokenized_text = tokenize(spoken_text)
 
     while not query_found and tokenized_text != []:
         for search_term in search_terms:
