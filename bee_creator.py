@@ -18,16 +18,17 @@ class Bumblebee():
     def __init__(self,
                  name='bumblebee', config_yaml_name='config',
                  feature_list_name="all"):
-        self.name = name
         self.config_yaml_name = config_yaml_name
-        self.feature_list = feature_lists.get(feature_list_name,
-                                              feature_lists['all'])
         self.config = {}
         self.spinner = Halo(spinner='noise')
-        self.wake_word_detector = WakeWordDetector(self.name)
         self.config_path = bumblebee_root+"utils/config/" + \
             self.config_yaml_name+".yaml"
         self.__preparation_step()
+        self.name = self.config["Preferences"]["wake_phrase"]
+        feature_list_name = self.config["Preferences"]["feature_list"]
+        self.feature_list = feature_lists.get(feature_list_name,
+                                              feature_lists['all'])
+        self.wake_word_detector = WakeWordDetector(self.name)
         self.bee = self.__create_bee()
 
     def __preparation_step(self):
@@ -58,6 +59,7 @@ class Bumblebee():
             with open(self.config_path, "r") as ymlfile:
                 self.config = yaml.load(ymlfile, Loader=yaml.FullLoader)
         finally:
+            self.name = self.config["Preferences"]["wake_phrase"]
             # %%
             # Ensure that necessary directories exist.
             # ----------------------------------------
