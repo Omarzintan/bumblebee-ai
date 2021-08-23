@@ -25,7 +25,7 @@ google-auth-httplib2==0.1.0
 google-auth-oauthlib==0.4.3
 google-pasta==0.2.0
 googleapis-common-protos==1.52.0
-#grpcio==1.32.0
+grpcio==1.32.0
 gTTS==2.2.2
 h5py==2.10.0
 halo==0.0.31
