@@ -5,7 +5,7 @@ from helpers import bumblebee_root
 from logging.config import fileConfig
 
 '''
-This file contains server code to be used by bumblebee.py research mode.
+This file contains server code to be used for researching.
 The server works hand in hand with a chrome extension to implement
 research mode. (Found in the extension folder)
 '''
