@@ -44,7 +44,6 @@ def get_search_query(
     tokenized_text = spoken_text
     if type(tokenized_text) == str:
         tokenized_text = tokenize(spoken_text)
-
     while not query_found and tokenized_text != []:
         for search_term in search_terms:
             if search_term in tokenized_text:
@@ -70,7 +69,6 @@ def get_search_query(
             query = [
                 word for word in spoken_text if word not in phrase_list
             ]
-
     query = ' '.join(query)
     # Need to remove whitespace before and after the wanted query.
     # This if useful for doing database searches on the query.
