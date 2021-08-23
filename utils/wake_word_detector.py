@@ -1,4 +1,3 @@
-#!python3
 import pvporcupine
 import pyaudio
 import struct

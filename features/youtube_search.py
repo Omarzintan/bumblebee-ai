@@ -1,4 +1,3 @@
-#!python3
 from features.default import BaseFeature
 from features.feature_helpers import get_search_query
 import webbrowser

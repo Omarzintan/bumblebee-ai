@@ -67,6 +67,7 @@ class TestFeatureHelpers(unittest.TestCase):
         false_search_term_indicators = ['want', 'like']
         spoken_text1 = 'I want to send an email to'
         spoken_text2 = 'I would like to do a google search on'
+        spoken_text3 = 'send an email'
 
         response1 = feature_helpers.get_search_query(
             spoken_text1, patterns, search_terms, false_search_term_indicators
@@ -74,9 +75,13 @@ class TestFeatureHelpers(unittest.TestCase):
         response2 = feature_helpers.get_search_query(
             spoken_text2, patterns, search_terms, false_search_term_indicators
         )
+        response3 = feature_helpers.get_search_query(
+            spoken_text3, patterns, search_terms, false_search_term_indicators
+        )
 
         self.assertEqual(response1, "")
         self.assertEqual(response2, "")
+        self.assertEqual(response3, "")
 
 
 if __name__ == '__main__':
