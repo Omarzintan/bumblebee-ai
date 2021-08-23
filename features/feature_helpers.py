@@ -32,7 +32,6 @@ def get_search_query(
         search term = to
         query found = Alex
 
-
     Arguments: <string> spoken_text, <list> feature_patterns,
                 <list> search_terms, <list> false_search_term_indicators
     Return type: <string> spoken_text (now stripped down to
