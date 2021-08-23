@@ -1,4 +1,4 @@
-# inltk_utils.py
+# nltk_utils.py
 from nltk.stem.porter import PorterStemmer
 import numpy as np
 import nltk

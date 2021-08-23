@@ -9,6 +9,8 @@ class BaseFeature():
     def __init__(self, bumblebee_api):
         pass
 
+    # Note that features the Bee.py class run function tokenizes text before
+    # passing it to features. So features receive text in a tokenized form.
     def action(self, text):
         pass
 

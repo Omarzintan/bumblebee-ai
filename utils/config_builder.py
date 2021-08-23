@@ -22,6 +22,7 @@ def build_config():
     config["Database"]["employers"] = bumblebee_root+"database/employers_db" \
                                                      ".json"
     config["Database"]["contacts"] = bumblebee_root+"database/contacts_db.json"
+    config["Database"]["chatbot"] = bumblebee_root+"database/chatbot.sqlite3"
 
     config["Api_keys"] = {}
     config["Api_keys"]["wolframalpha"] = "YOUR_API_KEY_HERE"
@@ -35,6 +36,17 @@ def build_config():
     config["Utilities"] = {}
     config["Utilities"]["research_server_url"] = "http://127.0.0.1:5000"
     config["Utilities"]["default_speech_mode"] = 'voice'
+
+    config["Preferences"] = {}
+    # Other possible wake_phrases are: 'porcupine', 'grasshopper', 'jarvis',
+    # 'terminator', 'americano', 'alexa', 'blueberry', 'hey siri',
+    # 'hey google', 'computer', 'grapefruit', 'pico clock', 'bumblebee',
+    # 'picovoice', 'ok google'
+    config["Preferences"]["wake_phrase"] = "bumblebee"
+    # Other possible feature_lists are: test, geo, cybersecurity
+    config["Preferences"]["feature_list"] = "all"
+    # The name of the config file to use.
+    config["Preferences"]["config_file"] = "config"
 
     return config
 

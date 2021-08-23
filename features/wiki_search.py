@@ -17,12 +17,15 @@ class Feature(BaseFeature):
         search_query = self.get_search_query(spoken_text, self.patterns)
         try:
             results = wikipedia.summary(search_query, sentences=2)
-            self.bs.respond('According to Wikipedia')
-            self.bs.respond(results)
+            self.bs.respond('According to Wikipedia, ' + results)
             return
-        except Exception:
-            self.bs.respond('I could not find anything on Wikipedia '
+        except wikipedia.exceptions.PageError:
+            self.bs.respond('I could not find any pages '
                             'related to your search.')
+        except wikipedia.exceptions.DisambiguationError:
+            self.bs.respond('Please be more specific in your '
+                            'search as there are a couple of'
+                            'other options meaning the same.')
             return
 
     def get_search_query(self, spoken_text, patterns):

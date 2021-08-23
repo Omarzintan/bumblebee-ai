@@ -1,4 +1,4 @@
-'''The core of Bee.'''
+'''The core code of the virtual assistant.'''
 import importlib
 import os
 import json
@@ -114,7 +114,6 @@ class Bee():
             self.spinner.succeed('NeuralNet trained.')
 
         finally:
-
             # Save the intents json file
             self.intents_json = intents_json
 
@@ -138,7 +137,6 @@ class Bee():
 
     def run(self):
         '''Main function that runs Bumblebee'''
-
         while 1:
             if self.speech.speech_mode == self.speech.speech_modes[1]:
                 try:
@@ -167,7 +165,6 @@ class Bee():
         """
         Function for running features given input from user.
         """
-
         while(self.sleep == 0):
             text = ''
             text = self.speech.hear()

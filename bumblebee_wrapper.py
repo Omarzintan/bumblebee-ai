@@ -1,11 +1,10 @@
 '''
-This is a class responsible for spawning a bee (virtual assistant)
-based on Bumblebee-Framework.
+This is a class responsible for spawning a bee (virtual assistant).
 '''
 
 import os
 import yaml
-from core import Bee
+from bee import Bee
 from utils.wake_word_detector import WakeWordDetector
 from utils import config_builder
 from helpers import bumblebee_root
@@ -14,20 +13,21 @@ from halo import Halo
 import pyfiglet
 
 
-class Bumblebee():
+class BumblebeeWrapper():
     def __init__(self,
                  name='bumblebee', config_yaml_name='config',
                  feature_list_name="all"):
-        self.name = name
         self.config_yaml_name = config_yaml_name
-        self.feature_list = feature_lists.get(feature_list_name,
-                                              feature_lists['all'])
         self.config = {}
         self.spinner = Halo(spinner='noise')
-        self.wake_word_detector = WakeWordDetector(self.name)
         self.config_path = bumblebee_root+"utils/config/" + \
             self.config_yaml_name+".yaml"
         self.__preparation_step()
+        self.name = self.config["Preferences"]["wake_phrase"]
+        feature_list_name = self.config["Preferences"]["feature_list"]
+        self.feature_list = feature_lists.get(feature_list_name,
+                                              feature_lists['all'])
+        self.wake_word_detector = WakeWordDetector(self.name)
         self.bee = self.__create_bee()
 
     def __preparation_step(self):
@@ -58,6 +58,7 @@ class Bumblebee():
             with open(self.config_path, "r") as ymlfile:
                 self.config = yaml.load(ymlfile, Loader=yaml.FullLoader)
         finally:
+            self.name = self.config["Preferences"]["wake_phrase"]
             # %%
             # Ensure that necessary directories exist.
             # ----------------------------------------

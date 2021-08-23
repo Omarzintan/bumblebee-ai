@@ -20,7 +20,7 @@ class Feature(BaseFeature):
         self.bs.respond(
             'I have opened a browser window with your search on {}.'
             .format(query))
-        return
+        return query
 
     def get_search_query(self, spoken_text, patterns):
         '''

@@ -1,4 +1,5 @@
 '''Contains helper functions that can be used by any feature.'''
+from nltk_utils import tokenize
 
 
 def get_search_query(
@@ -13,21 +14,23 @@ def get_search_query(
     Some possible search terms include 'to', 'on', 'for', 'about'
     e.g. 'do a google search on Python.'
         search term = on
-        query = Python
+        query found = Python
 
     This function also ignores false search_term_indicators such
     as 'like to', 'love to', 'want to'
     e.g. 'I want to do a google search on Python'
-        false search term indicator = like
-        search term = on
-        query = Python
+        false search term = to
+        false search term indicator = want
+        actual search term = on
+        query found = Python
 
-        Thus the function will correctly ignore 'like to google'
+        Thus the function will correctly ignore 'do a google search on Python'
         as a possible search query and will capture 'Python' as
         the right query.
 
     Other exmaples of use cases: 'Send an email to Alex'
-
+        search term = to
+        query found = Alex
 
     Arguments: <string> spoken_text, <list> feature_patterns,
                 <list> search_terms, <list> false_search_term_indicators
@@ -35,35 +38,39 @@ def get_search_query(
     only the search query.)
     '''
     query_found = False
-
-    for search_term in search_terms:
-        if search_term in spoken_text:
-            search_index = spoken_text.index(search_term)
-
-            # ignore cases with "like to", "love to" "ready to"
-            if spoken_text[search_index-1] in false_search_term_indicators:
-                # looking for the search term in rest of text after
-                # the false_search_term_indicator.
-                search_index = spoken_text[
-                    search_index+1:
-                ].index(search_term)
-            # get everything after the search term
-            spoken_text = spoken_text[search_index+1:]
-            query_found = True
-            break
+    query = ""
+    # spoken_text from features is already in a tokenized form. If not, we
+    # tokenize the text here.
+    tokenized_text = spoken_text
+    if type(tokenized_text) == str:
+        tokenized_text = tokenize(spoken_text)
+    while not query_found and tokenized_text != []:
+        for search_term in search_terms:
+            if search_term in tokenized_text:
+                search_index = tokenized_text.index(search_term)
+                # ignore cases with "like to", "love to" "ready to"
+                if (tokenized_text[search_index-1] in
+                        false_search_term_indicators):
+                    phrase_after_false_term = tokenized_text[search_index+1:]
+                    tokenized_text = phrase_after_false_term
+                    break
+                # get everything after the search term
+                query = tokenized_text[search_index+1:]
+                query_found = True
+                break
 
     # In case none of the search terms are included in spoken_text.
+    # This is just a fallback and is not expected to be used very often.
     if not query_found:
         for phrase in patterns:
             # split the phrase into individual words
             phrase_list = phrase.split(' ')
             # remove phrase list from spoken_text
-            spoken_text = [
+            query = [
                 word for word in spoken_text if word not in phrase_list
             ]
-
-    spoken_text = ' '.join(spoken_text)
+    query = ' '.join(query)
     # Need to remove whitespace before and after the wanted query.
     # This if useful for doing database searches on the query.
-    spoken_text = spoken_text.strip()
-    return spoken_text
+    query = query.strip()
+    return query
