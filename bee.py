@@ -192,16 +192,17 @@ class Bee():
 
     def run_by_tags(self, feature_tags: list):
         '''Run a list of features given their tags.'''
-        if len(feature_tags) > 0:
-            for tag in feature_tags:
-                try:
-                    tag_index = self.feature_indices[tag]
-                    self._features[tag_index].action("")
-                except KeyError:
-                    if not tag_index:
-                        print(f"Could not find feature index of {tag}.")
-                    else:
-                        print(f"Could not perform action for {tag}")
+        for tag in feature_tags:
+            try:
+                tag_index = self.feature_indices[tag]
+                self._features[tag_index].action("")
+            except KeyError:
+                if not tag_index:
+                    self.speech.respond(
+                        f"Could not find feature index of {tag}.")
+                else:
+                    self.speech.respond(
+                        f"Could not perform action for {tag}")
 
     def get_config(self):
         '''Get the config file that Bee is running with.'''
@@ -225,7 +226,6 @@ class Bee():
     def load_internal_state(self, state={}):
         if not isinstance(state, dict):
             raise Exception('Invalid argument, state. Must be a dict')
-
         self.sleep = state.get('sleep', 0)
         self.thread_failsafes = state.get('thread_failsafes', [])
         self.global_store = state.get('global_store', {})

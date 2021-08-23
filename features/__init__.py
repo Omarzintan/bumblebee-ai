@@ -38,11 +38,6 @@ __essential__ = [
     'set_default_speech_mode'
 ]
 
-'''Features to test'''
-__test__ = __essential__ + [
-    'google_search',
-]
-
 '''Contains cybersecurity specific features.'''
 __cybersecurity__ = __essential__ + []
 
@@ -53,7 +48,6 @@ __geo__ = __essential__ + []
 def create_feature_lists():
     feature_lists = {}
     feature_lists['all'] = __all__
-    feature_lists['test'] = __test__
     feature_lists['cybersecurity'] = __cybersecurity__
     feature_lists['geo'] = __geo__
     return feature_lists

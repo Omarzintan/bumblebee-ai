@@ -42,7 +42,7 @@ def get_search_query(
     # spoken_text from features is already in a tokenized form. If not, we
     # tokenize the text here.
     tokenized_text = spoken_text
-    if type(tokenized_text) == str:
+    if isinstance(tokenized_text, str):
         tokenized_text = tokenize(spoken_text)
     has_search_term = any(
         search_term in tokenized_text for search_term in search_terms)
