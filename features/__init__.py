@@ -11,7 +11,7 @@ __all__ = [
     'chatbot',
     'grepapp_search',
     'send_email',
-    # 'open_notepad',
+    'open_notepad',
     'wiki_search',
     'wolfram_search',
     'start_research_server',
@@ -26,7 +26,9 @@ __all__ = [
     'stop_listening',
     'add_contact',
     'add_employer',
-    'set_default_speech_mode'
+    'set_default_speech_mode',
+    'load_routines',
+    'run_routine'
 ]
 
 '''Essential Features that should be included in every custon list.'''

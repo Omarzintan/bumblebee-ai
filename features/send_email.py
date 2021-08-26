@@ -22,7 +22,15 @@ class Feature(BaseFeature):
         self.contacts_db = TinyDB(contacts_db_path)
         self.bumblebee_dir = self.config['Common']['bumblebee_dir']
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
+        # Set the input queue of the speech object to the arguments list if it
+        # exists. This will ensure that all hear & approve commands in this
+        # feature will get input from the arguments list in order instead of
+        # asking the user for input. Hence, the arguments list provided should
+        # have as many items as there are hear & approve commands in this
+        # feature.
+        if (len(arguments_list) > 0):
+            self.bs.set_input_queue(arguments_list)
         recipient = self.get_recipient(spoken_text)
         if not recipient:
             self.bs.respond('Who do you want to send the email to?')

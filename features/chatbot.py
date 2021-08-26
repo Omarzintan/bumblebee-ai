@@ -49,7 +49,7 @@ class Feature(BaseFeature):
                 database_uri='sqlite:///'+chatbot_db_path
             )
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         response = self.chatbot.get_response(' '.join(spoken_text))
         self.bs.respond(str(response))
         return

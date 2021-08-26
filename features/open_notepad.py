@@ -7,7 +7,7 @@ class Feature(BaseFeature):
         self.tag_name = "open_notepad"
         self.patterns = ["open notepad"]
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         self.notepad()
         return
 

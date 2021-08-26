@@ -18,7 +18,7 @@ class Feature(BaseFeature):
         zoom_db_path = self.config['Database']['zoom']
         self.zoom_db = TinyDB(zoom_db_path)
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         try:
             self.add_zoom_details()
             self.bs.respond('Added zoom link successfully.')

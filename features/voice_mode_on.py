@@ -13,7 +13,7 @@ class Feature(BaseFeature):
         ]
         self.bs = bumblebee_api.get_speech()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text: str = "", arguments_list: list = []):
         self.bs.set_speech_mode('voice')
         self.bs.respond('Welcome to voice mode.')
         return

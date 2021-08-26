@@ -6,6 +6,7 @@ import pyttsx3
 from helpers import bumblebee_root
 from colorama import Fore
 from halo import Halo
+from collections import deque
 
 
 class BumbleSpeech():
@@ -17,6 +18,7 @@ class BumbleSpeech():
         self.engine.setProperty(
             'voice', 'com.apple.speech.synthesis.voice.tessa')
         self.engine.setProperty('rate', 210)
+        self.input_queue = deque()
         self.YES_TERMS = [
             "yes",
             "sure",
@@ -46,6 +48,17 @@ class BumbleSpeech():
         '''Function to change the speaking rate'''
         # TODO
         return
+
+    def set_input_queue(self, input_list: list):
+        '''
+        Function to set the input queue to be used to simulate user responses
+        to Bumblebee. This is useful for programatically answering prompts when
+        a feature is being run in a routine.
+        Note: The input queue should have fewer or as many items as hear calls
+        that the feature has. This will prevent items set by one feature to be
+        encountered by other features which are called afterwards.
+        '''
+        self.input_queue = deque(input_list)
 
     def set_speech_mode(self, mode: str):
         '''Function to set speech mode.'''
@@ -77,11 +90,17 @@ class BumbleSpeech():
         '''
         Function to capture requests/questions.
         '''
+        # If there are items in the input queue, use the queue to provide
+        # input to the feature which is seeking for input.
+        if (len(self.input_queue) > 0):
+            return self.input_queue.popleft()
 
+        # For silent mode.
         if self.speech_mode == self.speech_modes[0]:
             input_text = input(Fore.WHITE + 'type your response here: ')
             return input_text
 
+        # For voice mode.
         elif self.speech_mode == self.speech_modes[1]:
             recognizer = sr.Recognizer()
 
@@ -113,7 +132,9 @@ class BumbleSpeech():
 
     def respond(self, output):
         ''' Respond to requests/questions.'''
-        if self.speech_mode == self.speech_modes[0]:
+        # If we are in silent mode or the input queue is being used.
+        if self.speech_mode == self.speech_modes[0] or \
+                len(self.input_queue) > 0:
             print(Fore.YELLOW + output)
             return
 
@@ -125,6 +146,7 @@ class BumbleSpeech():
 
     def interrupt_check(self, input_text):
         '''Check for cancel command from user.'''
+        # TODO: use cancel terms here.
         if "stop" in input_text or "cancel" in input_text:
             self.respond("Okay.")
             return True

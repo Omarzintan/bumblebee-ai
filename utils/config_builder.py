@@ -23,6 +23,7 @@ def build_config():
                                                      ".json"
     config["Database"]["contacts"] = bumblebee_root+"database/contacts_db.json"
     config["Database"]["chatbot"] = bumblebee_root+"database/chatbot.sqlite3"
+    config["Database"]["routines"] = bumblebee_root+"database/routines_db.json"
 
     config["Api_keys"] = {}
     config["Api_keys"]["wolframalpha"] = "YOUR_API_KEY_HERE"
@@ -32,6 +33,7 @@ def build_config():
     config["Folders"]["work_study"] = bumblebee_root+"work_study"
     config["Folders"]["research_files"] = bumblebee_root+"research_files/"
     config["Folders"]["models"] = bumblebee_root+"models/"
+    config["Folders"]["routines"] = bumblebee_root+"routines/"
 
     config["Utilities"] = {}
     config["Utilities"]["research_server_url"] = "http://127.0.0.1:5000"
@@ -63,3 +65,7 @@ def build_yaml(filename):
         return 0
     except Exception:
         return -1
+
+
+def create_fake_config():
+    return build_config()

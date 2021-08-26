@@ -1,5 +1,6 @@
 from utils.speech import BumbleSpeech
 from utils.bumblebee_internal_api import BUMBLEBEEAPI
+from utils import config_builder
 from helpers import bumblebee_root
 
 
@@ -13,12 +14,16 @@ class MockBee():
         self.bumblebee_api = BUMBLEBEEAPI(self)
         self.thread_failsafes = []
         self.global_store = {}
+        self.config = config_builder.create_fake_config()
 
     def run_feature(self, feature, input):
         return feature.action
 
     def get_speech(self):
         return self.speech
+
+    def get_config(self):
+        return self.config
 
     def get_internal_state(self):
         return {

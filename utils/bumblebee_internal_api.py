@@ -125,11 +125,11 @@ class BUMBLEBEEAPI():
         """
         return self.bee_instance.name
 
-    def run_by_tags(self, feature_tags: list):
+    def run_by_tags(self, feature_tags: list, argmuments_list: list = []):
         """
-        Run a list of feature actions given their tags.
+        Run a list of feature actions given their tags and arguments lists.
         """
-        self.bee_instance.run_by_tags(feature_tags)
+        self.bee_instance.run_by_tags(feature_tags, argmuments_list)
 
     def sleep_on(self):
         """

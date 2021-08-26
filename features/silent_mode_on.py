@@ -12,7 +12,7 @@ class Feature(BaseFeature):
         ]
         self.speech = bumblebee_api.get_speech()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         self.speech.respond('Okay. Starting silent mode.')
         self.speech.set_speech_mode('silent')
         self.speech.respond('Welcome to silent mode.')
