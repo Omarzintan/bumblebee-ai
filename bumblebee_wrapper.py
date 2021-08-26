@@ -48,6 +48,9 @@ class BumblebeeWrapper():
             # -------------------------------------
             self.spinner.fail()
             self.spinner.start(text="Building configuration file.")
+            # Ensure that config folder exists
+            os.makedirs(os.path.join(bumblebee_root,
+                        "utils", "config"), exist_ok=True)
             if config_builder.build_yaml(self.config_path) == -1:
                 self.spinner.fail()
                 raise Exception("Error building config file.")
