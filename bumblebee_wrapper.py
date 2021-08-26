@@ -68,14 +68,10 @@ class BumblebeeWrapper():
             self.spinner.start(
                 text="Verifying existence of necessary folders.")
             database_path = self.config['Database']['path']
-            research_files_path = self.config['Folders']['research_files']
-            work_study_files_path = self.config['Folders']['work_study']
-            models_path = self.config['Folders']['models']
             try:
                 os.makedirs(database_path, exist_ok=True)
-                os.makedirs(research_files_path, exist_ok=True)
-                os.makedirs(work_study_files_path, exist_ok=True)
-                os.makedirs(models_path, exist_ok=True)
+                for folder_path in self.config["Folders"]:
+                    os.makedirs(folder_path, exist_ok=True)
                 self.spinner.succeed(text="All necessary folders exist.")
             except OSError as exception:
                 self.spinner.fail()
