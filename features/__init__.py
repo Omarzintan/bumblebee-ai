@@ -8,7 +8,7 @@ __all__ = [
     'bumble_help',
     'clock_in',
     'clock_out',
-    'chatbot',
+    # 'chatbot',
     'grepapp_search',
     'send_email',
     'open_notepad',
