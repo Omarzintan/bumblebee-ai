@@ -8,5 +8,6 @@ if [ ! -f "$BUMBLEBEE_APP_FILE" ]; then
     chmod +x bumblebee_app
     echo "copying executable to /usr/local/bin/bumblebee"
     cp ./bumblebee_app $BUMBLEBEE_APP_FILE
+fi
 echo "run 'bumblebee' from anywhere in terminal to activate bumblebee."
 python main.py
