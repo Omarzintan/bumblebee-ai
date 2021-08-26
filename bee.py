@@ -35,9 +35,11 @@ class Bee():
         self.bumblebee_dir = self.config_yaml["Common"]["bumblebee_dir"]
         self.python3_path = self.config_yaml["Common"]["python3_path"]
         self.models_path = self.config_yaml["Folders"]["models"]
-        self.trained_model_path = self.models_path+self.name+".pth"
-        self.intents_file_path = self.bumblebee_dir + \
-            'utils/intents/'+self.intents_filename+'.json'
+        self.intents_folder_path = self.config_yaml["Folders"]["intents"]
+        self.trained_model_path = os.path.join(
+            self.models_path, self.name+".pth")
+        self.intents_file_path = os.path.join(
+            self.intents_folder_path, self.intents_filename+'.json')
 
         self.spinner = Halo(spinner='dots2')
 
