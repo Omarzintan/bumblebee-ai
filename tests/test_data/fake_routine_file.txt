@@ -1,5 +1,5 @@
 fake routine
 
-google_search kobe,steph,giannis
-youtube_search python,java,kotlin
-send_email zintan,subject,message,no,yes
+google_search->kobe;steph;giannis
+youtube_search->python;java;kotlin
+send_email->zintan;subject;message;no;yes
