@@ -13,7 +13,7 @@ class Feature(BaseFeature):
         ]
         self.bs = bumblebee_api.get_speech()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         search_query = self.get_search_query(spoken_text, self.patterns)
         try:
             results = wikipedia.summary(search_query, sentences=2)

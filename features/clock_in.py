@@ -21,7 +21,7 @@ class Feature(BaseFeature):
         self.bs = self.api.get_speech()
         self.work_study_dir = self.config["Folders"]["work_study"]
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         # TODO: what if user is already clocked in?
         known_employers = self.get_employers()
         self.bs.respond('Which employer is this for?')

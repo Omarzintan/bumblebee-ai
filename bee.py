@@ -12,6 +12,7 @@ from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 from utils.run_gracefully import GracefulRunner
 from train import IntentsTrainer
+from itertools import zip_longest
 
 
 class Bee():
@@ -190,12 +191,16 @@ class Bee():
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
 
-    def run_by_tags(self, feature_tags: list):
-        '''Run a list of features given their tags.'''
-        for tag in feature_tags:
+    def run_by_tags(self, feature_tags: list, arguments_list: list = []):
+        '''Run a list of features given their tags and arguments.'''
+        tags_with_arguments = zip_longest(
+            feature_tags, arguments_list, fillvalue=[])
+        for tag_argument_tuple in list(tags_with_arguments):
             try:
+                tag = tag_argument_tuple[0]
+                arguments = tag_argument_tuple[1]
                 tag_index = self.feature_indices[tag]
-                self._features[tag_index].action("")
+                self._features[tag_index].action("", arguments)
             except KeyError:
                 if not tag_index:
                     self.speech.respond(

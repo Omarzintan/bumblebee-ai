@@ -18,7 +18,7 @@ class Feature(BaseFeature):
         employer_db_path = self.config['Database']['employers']
         self.employer_db = TinyDB(employer_db_path)
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         try:
             self.add_employer_details()
             self.bs.respond('Added new employer successfully.')

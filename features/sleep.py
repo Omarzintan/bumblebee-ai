@@ -8,7 +8,7 @@ class Feature(BaseFeature):
         self.api = bumblebee_api
         self.speech = self.api.get_speech()
 
-    def action(self, spoken_text=''):
+    def action(self, spoken_text: str = "", arguments_list: list = []):
         self.speech.respond('Ok. I\'ll be listening for your command.')
         self.api.sleep_on()
         return

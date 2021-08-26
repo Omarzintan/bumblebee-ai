@@ -15,7 +15,7 @@ class Feature(BaseFeature):
         self.config = bumblebee_api.get_config()
         self.bs = bumblebee_api.get_speech()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         self.config["Utilities"]["default_speech_mode"] = self.bs.speech_mode
         self.bs.respond(f"Saved default speech mode as {self.bs.speech_mode}")
         # Write utility to help update the yaml file properly. For now,

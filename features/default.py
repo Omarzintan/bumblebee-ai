@@ -11,8 +11,5 @@ class BaseFeature():
 
     # Note that features the Bee.py class run function tokenizes text before
     # passing it to features. So features receive text in a tokenized form.
-    def action(self, text):
+    def action(self, text: str = "", arguments_list: list = []):
         pass
-
-    def set_index(self, value: int):
-        self.index = value

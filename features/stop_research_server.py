@@ -15,7 +15,7 @@ class Feature(BaseFeature):
         self.api = bumblebee_api
         self.bs = self.api.get_speech()
 
-    def action(self, spoken_text=''):
+    def action(self, spoken_text: str = "", arguments_list: list = []):
         self.bs.respond('Stopping research server.')
         self.stop_server()
         return

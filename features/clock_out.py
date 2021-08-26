@@ -15,7 +15,7 @@ class Feature(BaseFeature):
         self.config = self.api.get_config()
         self.work_study_dir = self.config["Folders"]["work_study"]
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         is_currently_working = self.api.pop_var(
             clock_in_store_keys.CURRENTLY_WORKING)
 

@@ -1,0 +1,6 @@
+voice
+
+voice_mode_on
+silent_mode_on
+voice_mode_on
+send_email->zintan;test;test;no;yes

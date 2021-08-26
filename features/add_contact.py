@@ -13,7 +13,7 @@ class Feature(BaseFeature):
         contact_db_path = self.config['Database']['contacts']
         self.contact_db = TinyDB(contact_db_path)
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         try:
             self.add_contact_details()
             self.bs.respond('Added new contact successfully.')

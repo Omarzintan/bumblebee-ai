@@ -24,7 +24,7 @@ class Feature(BaseFeature):
         self.config = self.api.get_config()
         self.bs = self.api.get_speech()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         self.bs.respond('What is the topic of your research?')
         topic = self.bs.hear()
         if self.bs.interrupt_check(topic):

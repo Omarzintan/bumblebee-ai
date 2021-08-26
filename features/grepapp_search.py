@@ -14,7 +14,7 @@ class Feature(BaseFeature):
         ]
         self.bs = bumblebee_api.get_speech()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         query = self.search(spoken_text)
         self.bs.respond(
             f'I have opened a browser with your grepapp search on {query}')

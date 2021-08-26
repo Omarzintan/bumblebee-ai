@@ -16,7 +16,7 @@ class Feature(BaseFeature):
         self.api = bumblebee_api
         self.bs = bumblebee_api.get_speech()
 
-    def action(self, spoken_text):
+    def action(self, spoken_text, arguments_list: list = []):
         name = self.api.get_name()
         response = f"""
         Hi i am {name}, your virtual assistant.
