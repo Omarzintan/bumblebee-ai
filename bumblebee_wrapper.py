@@ -71,7 +71,8 @@ class BumblebeeWrapper():
             try:
                 os.makedirs(database_path, exist_ok=True)
                 for folder_path in self.config["Folders"]:
-                    os.makedirs(folder_path, exist_ok=True)
+                    os.makedirs(self.config["Folders"]
+                                [folder_path], exist_ok=True)
                 self.spinner.succeed(text="All necessary folders exist.")
             except OSError as exception:
                 self.spinner.fail()
