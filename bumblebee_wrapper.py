@@ -20,8 +20,8 @@ class BumblebeeWrapper():
         self.config_yaml_name = config_yaml_name
         self.config = {}
         self.spinner = Halo(spinner='noise')
-        self.config_path = bumblebee_root+"utils/config/" + \
-            self.config_yaml_name+".yaml"
+        self.config_path = os.path.join(bumblebee_root, "utils/config/",
+                                        self.config_yaml_name+".yaml")
         self.__preparation_step()
         self.name = self.config["Preferences"]["wake_phrase"]
         feature_list_name = self.config["Preferences"]["feature_list"]

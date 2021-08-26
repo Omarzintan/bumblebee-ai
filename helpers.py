@@ -57,7 +57,8 @@ def get_root_directory():
         bumblebee_root_dir = os.path.dirname(
             os.path.abspath(top_level_filename)
         )
-    return bumblebee_root_dir + "/"
+        return bumblebee_root_dir + "/"
+    return bumblebee_root_dir
 
 
 def get_python3_path():
