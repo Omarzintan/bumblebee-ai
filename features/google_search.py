@@ -15,7 +15,14 @@ class Feature(BaseFeature):
         self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text, arguments_list: list = []):
-        query = self.search(spoken_text, self.patterns)
+        if arguments_list:
+            for argument in arguments_list:
+                self.search(argument)
+            self.bs.respond(
+                f"I have opened browser tabs for the following search terms \
+                 {arguments_list}")
+            return arguments_list
+        query = self.search(self.get_search_query(spoken_text, self.patterns))
         self.bs.respond(
             'I have opened a browser window with your search on {}.'
             .format(query))
@@ -39,11 +46,10 @@ class Feature(BaseFeature):
 
     '''
     Opens up google search in browser with search string.
-    Argument: <string> spoken_text, <list> patterns
+    Argument: <string> query
     Return type: <string> query
     '''
 
-    def search(self, spoken_text, patterns):
-        query = self.get_search_query(spoken_text, patterns)
+    def search(self, query):
         webbrowser.open("https://google.com/search?q={}".format(query))
         return query
