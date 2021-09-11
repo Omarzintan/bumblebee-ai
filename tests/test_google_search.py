@@ -2,6 +2,7 @@ import unittest
 from features import google_search
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from unittest.mock import call
 from tests import MockBee
 
 mock_bee = MockBee()
@@ -21,11 +22,9 @@ class TestGoogleSearch(unittest.TestCase):
         arguments_list = ["python", "java", "c++", "kotlin"]
         google_search_obj.search = MagicMock()
         google_search_obj.action("", arguments_list)
-        # TODO: fix test
-        # google_search_obj.search.assert_called_with("python")
-        # google_search_obj.search.assert_called_with("java")
-        # google_search_obj.search.assert_called_with("c++")
-        google_search_obj.search.assert_called_with("kotlin")
+        google_search_obj.search.assert_has_calls([
+            call("python"), call("java"), call("c++"), call("kotlin")],
+            any_order=False)
 
     def test_browser_open_function_called(self):
         input = "do a google search of my query"
