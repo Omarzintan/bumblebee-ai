@@ -2,6 +2,7 @@ import unittest
 from features import youtube_search
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from unittest.mock import call
 from tests import MockBee
 
 mock_bee = MockBee()
@@ -14,9 +15,16 @@ class TestYoutubeSearch(unittest.TestCase):
         input = "show me a video on youtube videos"
         youtube_search_obj.search = MagicMock(return_value="youtube videos")
         query = youtube_search_obj.action(input)
-        youtube_search_obj.search.assert_called_once_with(
-            input)
+        youtube_search_obj.search.assert_called_once_with(query)
         self.assertEquals(query, "youtube videos")
+
+    def test_search_with_arguments_list(self):
+        arguments_list = ["python", "java", "c++", "kotlin"]
+        youtube_search_obj.search = MagicMock()
+        youtube_search_obj.action("", arguments_list)
+        youtube_search_obj.search.assert_has_calls([
+            call("python"), call("java"), call("c++"), call("kotlin")],
+            any_order=False)
 
     def test_browser_open_function_called(self):
         input = "show me a video on youtube videos"

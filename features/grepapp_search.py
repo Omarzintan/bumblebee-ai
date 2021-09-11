@@ -15,7 +15,14 @@ class Feature(BaseFeature):
         self.bs = bumblebee_api.get_speech()
 
     def action(self, spoken_text, arguments_list: list = []):
-        query = self.search(spoken_text)
+        if arguments_list:
+            for argument in arguments_list:
+                self.search(argument)
+            self.bs.respond(
+                f"I have opened browser tabs for the following search terms \
+                 {arguments_list}")
+            return arguments_list
+        query = self.search(self.get_search_query(spoken_text, self.patterns))
         self.bs.respond(
             f'I have opened a browser with your grepapp search on {query}')
         return query
@@ -36,12 +43,11 @@ class Feature(BaseFeature):
         )
         return query
 
-    def search(self, spoken_text):
+    def search(self, query):
         '''
         Opens up a grep.app search in browser.
-        Argument: <string> spoken_text, <list> keywords
+        Argument: <string> query
         Return type: <string> query
         '''
-        query = self.get_search_query(spoken_text, self.patterns)
         webbrowser.open('https://grep.app/search?q={}'.format(query))
         return query
