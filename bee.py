@@ -186,10 +186,13 @@ class Bee():
             prob = probs[0][predicted.item()]
 
             if prob.item() < 0.80:
+                # think about how to use the chatbot more in a more
+                # in-depth way.
                 # tag_index = self.feature_indices['chatbot']
                 # self._features[tag_index].action(text)
                 # continue
                 self.speech.respond("I do not understand.")
+                continue
 
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
