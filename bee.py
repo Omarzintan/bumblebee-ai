@@ -221,12 +221,13 @@ class Bee():
         """
         while(self.sleep == 0):
             text = ''
-            text = self.speech.hear()
+            text = self.speech.hear().lower()
             action_found = False
 
             for feature in self._features:
                 # Check to see if phrase said in text is in any feature's
                 # patterns.
+
                 if any(phrase in text for phrase in feature.patterns):
                     action_found = True
                     feature.action(text)

@@ -102,7 +102,8 @@ class BumbleSpeech():
 
         # For voice mode.
         elif self.speech_mode == self.speech_modes[1]:
-            self.spinner.start(text="Wait for beep to start talking...")
+            self.spinner.start(
+                text=(Fore.RED + "Wait for beep to start talking..."))
             recognizer = sr.Recognizer()
 
             with sr.Microphone() as source:
@@ -140,10 +141,12 @@ class BumbleSpeech():
             print(Fore.YELLOW + output)
             return
 
+        # Voice mode
         elif self.speech_mode == self.speech_modes[1]:
-            print(Fore.YELLOW + output)
+            self.spinner.start(text=(Fore.YELLOW + output))
             self.engine.say(output)
             self.engine.runAndWait()
+            self.spinner.stop_and_persist()
             return
 
     def interrupt_check(self, input_text):
