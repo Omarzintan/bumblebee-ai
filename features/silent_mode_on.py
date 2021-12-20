@@ -9,6 +9,7 @@ class Feature(BaseFeature):
             "silent mode on",
             "turn on silent mode",
             "start silent mode",
+            "silent mode"
         ]
         self.speech = bumblebee_api.get_speech()
 

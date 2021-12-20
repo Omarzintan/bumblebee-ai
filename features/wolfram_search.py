@@ -38,7 +38,8 @@ class Feature(BaseFeature):
 
     '''
     Parses spoken text to retrieve a search query for Wolframalpha
-    Argument: <list> spoken_text (tokenized. i.e. list of words),
+    Argument: <list> spoken_text (tokenized. i.e. list of words), OR
+                <str> spoken_text (not tokenized),
                <list> patterns
     Return type: <string> spoken_text (this is actually the search query as
     retrieved from spoken_text.)
