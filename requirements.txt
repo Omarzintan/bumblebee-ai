@@ -205,6 +205,7 @@ selenium==3.141.0
 six==1.15.0
 soupsieve==2.2.1
 SpeechRecognition==3.8.1
+speedtest-cli
 spinners==0.0.24
 termcolor==1.1.0
 tinydb==4.4.0

@@ -31,7 +31,8 @@ class Feature(BaseFeature):
     def get_search_query(self, spoken_text, patterns):
         '''
         Parses spoken text to retrieve a search query for Youtube
-        Argument: <list> spoken_text (tokenized. i.e. list of words),
+        Argument: <list> spoken_text (tokenized. i.e. list of words), OR
+                <str> spoken_text (not tokenized),
         <list> patterns
         Return type: <string> query
         '''

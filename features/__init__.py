@@ -8,7 +8,7 @@ __all__ = [
     'bumble_help',
     'clock_in',
     'clock_out',
-    # 'chatbot',
+    'chatbot',
     'grepapp_search',
     'send_email',
     'open_notepad',
@@ -28,7 +28,8 @@ __all__ = [
     'add_employer',
     'set_default_speech_mode',
     'load_routines',
-    'run_routine'
+    'run_routine',
+    'internet_speed_test'
 ]
 
 '''Essential Features that should be included in every custon list.'''
