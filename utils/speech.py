@@ -102,6 +102,7 @@ class BumbleSpeech():
 
         # For voice mode.
         elif self.speech_mode == self.speech_modes[1]:
+            self.spinner.start(text="Wait for beep to start talking...")
             recognizer = sr.Recognizer()
 
             with sr.Microphone() as source:
@@ -110,6 +111,7 @@ class BumbleSpeech():
                 recognizer.adjust_for_ambient_noise(source, duration=1)
                 playsound.playsound(
                     bumblebee_root+'sounds/tone-beep.wav', True)
+                self.spinner.stop()
                 self.spinner.start(text='Listening')
                 audio = recognizer.listen(source)
                 self.spinner.stop()
