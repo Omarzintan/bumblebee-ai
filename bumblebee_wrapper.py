@@ -16,7 +16,7 @@ import pyfiglet
 class BumblebeeWrapper():
     def __init__(self,
                  name='bumblebee', config_yaml_name='config',
-                 feature_list_name="all"):
+                 feature_list_name="all", decision_type="rule-based"):
         self.config_yaml_name = config_yaml_name
         self.config = {}
         self.spinner = Halo(spinner='noise')
@@ -27,6 +27,7 @@ class BumblebeeWrapper():
         feature_list_name = self.config["Preferences"]["feature_list"]
         self.feature_list = feature_lists.get(feature_list_name,
                                               feature_lists['all'])
+        self.decision_type = self.config["Preferences"]["decision_type"]
         self.wake_word_detector = WakeWordDetector(self.name)
         self.bee = self.__create_bee()
 
@@ -35,15 +36,13 @@ class BumblebeeWrapper():
         Steps to prepare for the creation of a virtual assistant.
         '''
         try:
-            # %%
             # Access config file
             # ------------------
             self.spinner.start(text="Accessing configuration file")
             with open(self.config_path, "r") as ymlfile:
-                self.config = yaml.load(ymlfile, Loader=yaml.FullLoader)
+                self.config = yaml.load(ymlfile)
                 self.spinner.succeed()
         except FileNotFoundError:
-            # %%
             # Build config file if it is not found.
             # -------------------------------------
             self.spinner.fail()
@@ -59,10 +58,9 @@ class BumblebeeWrapper():
                 self.config_yaml_name+".yaml'"
             )
             with open(self.config_path, "r") as ymlfile:
-                self.config = yaml.load(ymlfile, Loader=yaml.FullLoader)
+                self.config = yaml.load(ymlfile)
         finally:
             self.name = self.config["Preferences"]["wake_phrase"]
-            # %%
             # Ensure that necessary directories exist.
             # ----------------------------------------
             self.spinner.start(
@@ -84,9 +82,13 @@ class BumblebeeWrapper():
         '''
         # access default mode from config file
         default_speech_mode = self.config["Utilities"]["default_speech_mode"]
+
         virtual_assistant = Bee(
-            self.name, self.feature_list,
-            self.config, self.wake_word_detector, default_speech_mode)
+            name=self.name, features=self.feature_list, config=self.config,
+            wake_word_detector=self.wake_word_detector,
+            default_speech_mode=default_speech_mode,
+            decision_type=self.decision_type
+        )
         return virtual_assistant
 
     def run_bee(self):

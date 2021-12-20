@@ -9,7 +9,7 @@ class Feature(BaseFeature):
         self.tag_name = "run_routine"
         self.patterns = [
             "run routine for", "start routine",
-            "start routine for"
+            "start routine for", "run routine"
         ]
         self.api = bumblebee_api
         self.bs = bumblebee_api.get_speech()
