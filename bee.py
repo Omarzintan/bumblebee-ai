@@ -21,6 +21,7 @@ class Bee():
                  name: str = 'bumblebee',
                  features: list = ['default'],
                  config: dict = {},
+                 decision_type: str = 'rule-based',
                  wake_word_detector: WakeWordDetector = None,
                  default_speech_mode: str = 'voice'):
         self.name = name
@@ -28,6 +29,7 @@ class Bee():
         self.speech = BumbleSpeech(speech_mode=default_speech_mode)
         self.graceful_runner = GracefulRunner(self)
         self.intents_filename = 'intents-'+self.name
+        self.decision_type = decision_type
 
         assert config != {}
         self.config_yaml = config
@@ -48,7 +50,6 @@ class Bee():
         self.thread_failsafes = []
         self.global_store = {}
 
-        # %%
         # Building Feature objects from list of features.
         # -----------------------------------------------
         if features != []:
@@ -68,95 +69,107 @@ class Bee():
             self.feature_indices = {feature: x for x,
                                     feature in enumerate(features)}
 
-        # %%
-        # Accessing intents.json file.
-        # ----------------------------
-        try:
-            # Check to see that intents.json file exists.
-            with open(
-                self.intents_file_path, 'r'
-            ) as json_data:
-                intents_json = json.load(json_data)
-            # Check whether any features have been added/removed or if
-            # no trained model is present.
-            assert(len(self._features) == len(intents_json['intents']))
-            assert(os.path.exists(self.trained_model_path))
-        except (FileNotFoundError, AssertionError):
-            # remove intents file if it exists
+        if decision_type == "neural-network":
+            # Accessing intents.json file.
+            # ----------------------------
             try:
-                print('Detected modification in feature list.')
-                os.remove(self.intents_file_path)
-            except OSError:
-                print('intents.json file not found.')
+                # Check to see that intents.json file exists.
+                with open(
+                    self.intents_file_path, 'r'
+                ) as json_data:
+                    intents_json = json.load(json_data)
+                # Check whether any features have been added/removed or if
+                # no trained model is present.
+                assert(len(self._features) == len(intents_json['intents']))
+                assert(os.path.exists(self.trained_model_path))
+            except (FileNotFoundError, AssertionError):
+                # remove intents file if it exists
+                try:
+                    print('Detected modification in feature list.')
+                    os.remove(self.intents_file_path)
+                except OSError:
+                    print('intents.json file not found.')
 
-            # Update intents.json if features have been added/removed
-            # or the file does not exist.
-            self.spinner.start(text='Generating new intents json file...')
+                # Update intents.json if features have been added/removed
+                # or the file does not exist.
+                self.spinner.start(text='Generating new intents json file...')
 
-            intents = {}
-            intents['intents'] = []
-            for x, feature in enumerate(self._features):
-                tag = {}
-                tag["tag"] = feature.tag_name
-                tag["patterns"] = feature.patterns
-                tag["index"] = x
-                intents['intents'].append(tag)
+                intents = {}
+                intents['intents'] = []
+                for x, feature in enumerate(self._features):
+                    tag = {}
+                    tag["tag"] = feature.tag_name
+                    tag["patterns"] = feature.patterns
+                    tag["index"] = x
+                    intents['intents'].append(tag)
 
-            intents_json = json.dumps(intents, indent=4)
+                intents_json = json.dumps(intents, indent=4)
 
-            with open(self.intents_file_path, 'w') as f:
-                f.write(intents_json)
-            self.spinner.succeed(
-                text=f'{self.intents_file_path} file generated.')
+                with open(self.intents_file_path, 'w') as f:
+                    f.write(intents_json)
+                self.spinner.succeed(
+                    text=f'{self.intents_file_path} file generated.')
 
-            self.trainer = IntentsTrainer(
-                self.intents_file_path, model_name=self.name)
-            # Retrain the NeuralNet
-            self.spinner.start(text='Training NeuralNet.')
-            self.trainer.train()
-            self.spinner.succeed('NeuralNet trained.')
+                self.trainer = IntentsTrainer(
+                    self.intents_file_path, model_name=self.name)
+                # Retrain the NeuralNet
+                self.spinner.start(text='Training NeuralNet.')
+                self.trainer.train()
+                self.spinner.succeed('NeuralNet trained.')
 
-        finally:
-            # Save the intents json file
-            self.intents_json = intents_json
+            finally:
+                # Save the intents json file
+                self.intents_json = intents_json
 
-            # Prepping the Neural Net to be used.
-            self.device = torch.device(
-                'cuda' if torch.cuda.is_available() else 'cpu')
+                # Prepping the Neural Net to be used.
+                self.device = torch.device(
+                    'cuda' if torch.cuda.is_available() else 'cpu')
 
-            self.model_data = torch.load(self.trained_model_path)
+                self.model_data = torch.load(self.trained_model_path)
 
-            input_size = self.model_data["input_size"]
-            hidden_size = self.model_data["hidden_size"]
-            output_size = self.model_data["output_size"]
-            self.all_words = self.model_data["all_words"]
-            self.tags = self.model_data["tags"]
-            self.model_state = self.model_data["model_state"]
+                input_size = self.model_data["input_size"]
+                hidden_size = self.model_data["hidden_size"]
+                output_size = self.model_data["output_size"]
+                self.all_words = self.model_data["all_words"]
+                self.tags = self.model_data["tags"]
+                self.model_state = self.model_data["model_state"]
 
-            self.model = NeuralNet(input_size, hidden_size,
-                                   output_size).to(self.device)
-            self.model.load_state_dict(self.model_state)
-            self.model.eval()
+                self.model = NeuralNet(input_size, hidden_size,
+                                       output_size).to(self.device)
+                self.model.load_state_dict(self.model_state)
+                self.model.eval()
 
     def run(self):
         '''Main function that runs Bumblebee'''
         while 1:
+            # Voice mode
             if self.speech.speech_mode == self.speech.speech_modes[1]:
                 try:
                     self.graceful_runner.start_gracefully()
                     if self.wake_word_detector.run():
                         self.sleep = 0
-                        self.take_command()
+                        if self.decision_type == "neural-network":
+                            self.take_command_neural_network()
+                        elif self.decision_type == "rule-based":
+                            self.take_command_rule_based()
+                        else:
+                            raise Exception("Could not find decision engine.")
                 except KeyboardInterrupt:
                     self.graceful_runner.exit_gracefully()
                 except Exception as exception:
                     print(exception)
                     self.graceful_runner.exit_gracefully(
                         crash_happened=True)
+            # Silent mode
             elif self.speech.speech_mode == self.speech.speech_modes[0]:
                 try:
                     self.sleep = 0
-                    self.take_command()
+                    if self.decision_type == "neural-network":
+                        self.take_command_neural_network()
+                    elif self.decision_type == "rule-based":
+                        self.take_command_rule_based()
+                    else:
+                        raise Exception("Could not find decision engine.")
                 except KeyboardInterrupt:
                     self.graceful_runner.exit_gracefully()
                 except Exception as exception:
@@ -164,13 +177,18 @@ class Bee():
                     self.graceful_runner.exit_gracefully(
                         crash_happened=True)
 
-    def take_command(self):
+    def take_command_neural_network(self):
         """
-        Function for running features given input from user.
+        Function for running features given input from user. This function
+        utilizes a neural network to determine the intents of input from the
+        user.
         """
         while(self.sleep == 0):
             text = ''
             text = self.speech.hear()
+
+            # Check for some rule-based commands first
+            # TODO
 
             text = tokenize(text)
             x = bag_of_words(text, self.all_words)
@@ -186,16 +204,37 @@ class Bee():
             prob = probs[0][predicted.item()]
 
             if prob.item() < 0.80:
-                # think about how to use the chatbot more in a more
-                # in-depth way.
-                # tag_index = self.feature_indices['chatbot']
-                # self._features[tag_index].action(text)
-                # continue
-                self.speech.respond("I do not understand.")
+                # if no accurate action is found from input
+                # text, default to chatbot feature.
+                tag_index = self.feature_indices['chatbot']
+                self._features[tag_index].action(text)
                 continue
 
             tag_index = self.feature_indices[tag]
             self._features[tag_index].action(text)
+
+    def take_command_rule_based(self):
+        """
+        Function for running features given input from user.
+        This function decides which features to run based without
+        a neural network. All the logic here works based on rules.
+        """
+        while(self.sleep == 0):
+            text = ''
+            text = self.speech.hear()
+            action_found = False
+
+            for feature in self._features:
+                # Check to see if phrase said in text is in any feature's
+                # patterns.
+                if any(phrase in text for phrase in feature.patterns):
+                    action_found = True
+                    feature.action(text)
+                    break
+            if not action_found:
+                tag_index = self.feature_indices['chatbot']
+                self._features[tag_index].action(text)
+                continue
 
     def run_by_tags(self, feature_tags: list, arguments_list: list = []):
         '''Run a list of features given their tags and arguments.'''

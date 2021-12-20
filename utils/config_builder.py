@@ -50,6 +50,9 @@ def build_config():
     config["Preferences"]["feature_list"] = "all"
     # The name of the config file to use.
     config["Preferences"]["config_file"] = "config"
+    # How decisions will be made by the Bee. Options are: rule-based or
+    # neural-network
+    config["Preferences"]["decision_type"] = "rule-based"
 
     return config
 
