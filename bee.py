@@ -147,13 +147,7 @@ class Bee():
                 try:
                     self.graceful_runner.start_gracefully()
                     if self.wake_word_detector.run():
-                        self.sleep = 0
-                        if self.decision_type == "neural-network":
-                            self.take_command_neural_network()
-                        elif self.decision_type == "rule-based":
-                            self.take_command_rule_based()
-                        else:
-                            raise Exception("Could not find decision engine.")
+                        self.choose_inference_approach()
                 except KeyboardInterrupt:
                     self.graceful_runner.exit_gracefully()
                 except Exception as exception:
@@ -163,13 +157,7 @@ class Bee():
             # Silent mode
             elif self.speech.speech_mode == self.speech.speech_modes[0]:
                 try:
-                    self.sleep = 0
-                    if self.decision_type == "neural-network":
-                        self.take_command_neural_network()
-                    elif self.decision_type == "rule-based":
-                        self.take_command_rule_based()
-                    else:
-                        raise Exception("Could not find decision engine.")
+                    self.choose_inference_approach()
                 except KeyboardInterrupt:
                     self.graceful_runner.exit_gracefully()
                 except Exception as exception:
@@ -179,59 +167,68 @@ class Bee():
 
     def take_command_neural_network(self):
         """
-        Function for running features given input from user. This function
-        utilizes a neural network to determine the intents of input from the
-        user.
+        Function for running features given input from user
+        using a neural-network based action decider.
         """
         while(self.sleep == 0):
             text = ''
             text = self.speech.hear()
-
-            text = tokenize(text)
-            x = bag_of_words(text, self.all_words)
-            x = x.reshape(1, x.shape[0])
-            x = torch.from_numpy(x).to(self.device)
-
-            output = self.model(x)
-            _, predicted = torch.max(output, dim=1)
-
-            tag = self.tags[predicted.item()]
-
-            probs = torch.softmax(output, dim=1)
-            prob = probs[0][predicted.item()]
-
-            if prob.item() < 0.80:
-                # if no accurate action is found from input
-                # text, default to chatbot feature.
-                tag_index = self.feature_indices['chatbot']
-                self._features[tag_index].action(text)
-                continue
-
-            tag_index = self.feature_indices[tag]
-            self._features[tag_index].action(text)
+            self.find_action_neural_network(text)
 
     def take_command_rule_based(self):
         """
-        Function for running features given input from user.
-        This function decides which features to run based without
-        a neural network. All the logic here works based on rules.
+        Function for running features given input from user
+        using rule-based action decider.
         """
         while(self.sleep == 0):
             text = ''
             text = self.speech.hear().lower()
-            action_found = False
+            self.find_action_rule_based(text)
 
-            for feature in self._features:
-                # Check to see if phrase said in text is in any feature's
-                # patterns.
-                if any(phrase in text for phrase in feature.patterns):
-                    action_found = True
-                    feature.action(text)
-                    break
-            if not action_found:
-                tag_index = self.feature_indices['chatbot']
-                self._features[tag_index].action(text)
-                continue
+    def find_action_neural_network(self, text):
+        """
+        This function utilizes a neural network to determine
+        which feature to run based on the input text.
+        """
+        text = tokenize(text)
+        x = bag_of_words(text, self.all_words)
+        x = x.reshape(1, x.shape[0])
+        x = torch.from_numpy(x).to(self.device)
+
+        output = self.model(x)
+        _, predicted = torch.max(output, dim=1)
+
+        tag = self.tags[predicted.item()]
+
+        probs = torch.softmax(output, dim=1)
+        prob = probs[0][predicted.item()]
+
+        if prob.item() < 0.80:
+            # if no accurate action is found from input
+            # text, default to chatbot feature.
+            tag_index = self.feature_indices['chatbot']
+            self._features[tag_index].action(text)
+
+        tag_index = self.feature_indices[tag]
+        self._features[tag_index].action(text)
+
+    def find_action_rule_based(self, text):
+        """
+        This function decides which features to run from the given
+        text input without using a neural network. All the logic
+        here works based on rules.
+        """
+        action_found = False
+        for feature in self._features:
+            # Check to see if phrase said in text is in any feature's
+            # patterns.
+            if any(phrase in text for phrase in feature.patterns):
+                action_found = True
+                feature.action(text)
+
+        if not action_found:
+            tag_index = self.feature_indices['chatbot']
+            self._features[tag_index].action(text)
 
     def run_by_tags(self, feature_tags: list, arguments_list: list = []):
         '''Run a list of features given their tags and arguments.'''
@@ -250,6 +247,33 @@ class Bee():
                 else:
                     self.speech.respond(
                         f"Could not perform action for {tag}")
+
+    def run_by_input_list(self, input_list: list):
+        """
+        Runs actions as infered from a list of commands.
+        """
+        if self.decision_type == "rule-based":
+            for input in input_list:
+                self.find_action_rule_based(input)
+        elif self.decision_type == "neural-network":
+            for input in input_list:
+                self.find_action_neural_network(input)
+        else:
+            self.speech.respond(
+                "Could not find decision engine type.")
+
+    def choose_inference_approach(self):
+        """
+        Chooses method of infering intent of command based on
+        the decision_type set at the initialization of the Bee.
+        """
+        self.sleep = 0
+        if self.decision_type == "neural-network":
+            self.take_command_neural_network()
+        elif self.decision_type == "rule-based":
+            self.take_command_rule_based()
+        else:
+            raise Exception("Could not find decision engine type.")
 
     def get_config(self):
         '''Get the config file that Bee is running with.'''
