@@ -187,9 +187,6 @@ class Bee():
             text = ''
             text = self.speech.hear()
 
-            # Check for some rule-based commands first
-            # TODO
-
             text = tokenize(text)
             x = bag_of_words(text, self.all_words)
             x = x.reshape(1, x.shape[0])
@@ -227,7 +224,6 @@ class Bee():
             for feature in self._features:
                 # Check to see if phrase said in text is in any feature's
                 # patterns.
-
                 if any(phrase in text for phrase in feature.patterns):
                     action_found = True
                     feature.action(text)
