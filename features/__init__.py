@@ -29,7 +29,8 @@ __all__ = [
     'set_default_speech_mode',
     'load_routines',
     'run_routine',
-    'internet_speed_test'
+    'internet_speed_test',
+    'run_online_tasks'
 ]
 
 '''Essential Features that should be included in every custon list.'''
