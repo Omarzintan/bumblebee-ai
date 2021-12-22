@@ -52,7 +52,7 @@ def build_config():
     config["Preferences"]["config_file"] = "config"
     # How decisions will be made by the Bee. Options are: rule-based or
     # neural-network
-    config["Preferences"]["decision_type"] = "rule-based"
+    config["Preferences"]["decision_strategy"] = "rule-based"
 
     return config
 
