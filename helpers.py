@@ -2,6 +2,7 @@ import os
 import logging
 import subprocess
 from colorlog import ColoredFormatter
+from halo import Halo
 
 
 def get_logger(
@@ -77,3 +78,5 @@ def get_python3_path():
 
 bumblebee_root = get_root_directory()
 python3_path = get_python3_path()
+
+spinner = Halo(spinner='dots2')
