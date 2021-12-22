@@ -31,7 +31,6 @@ class Feature(BaseFeature):
     def action(self, spoken_text, arguments_list: list = []):
         if isinstance(spoken_text, list):
             spoken_text = ' '.join(spoken_text)
-        print("Spoken text:" + spoken_text)
         response = self.chatbot.get_response(spoken_text)
         self.bs.respond(str(response))
         return

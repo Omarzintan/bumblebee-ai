@@ -131,6 +131,12 @@ class BUMBLEBEEAPI():
         """
         self.bee_instance.run_by_tags(feature_tags, argmuments_list)
 
+    def run_by_input_list(self, input_list: list):
+        """
+        Run features based on a list of inputs.
+        """
+        self.bee_instance.run_by_input_list(input_list)
+
     def sleep_on(self):
         """
         Puts bee instance to sleep
