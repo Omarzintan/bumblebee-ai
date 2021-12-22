@@ -99,5 +99,5 @@ class BumblebeeWrapper():
         '''
         name_banner = pyfiglet.figlet_format(self.name)
         print(name_banner)
-        spinner.succeed("Brain model: " + self.decision_strategy)
+        spinner.succeed("Decision Strategy: " + self.decision_strategy)
         self.bee.run()
