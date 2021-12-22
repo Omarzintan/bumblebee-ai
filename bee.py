@@ -133,7 +133,7 @@ class Bee():
     def take_and_run_command(self):
         """
         Gets user input and executes feature action that matches
-        the decided tag 
+        the decided tag.
         """
         self.sleep = 0
         while(self.sleep == 0):
