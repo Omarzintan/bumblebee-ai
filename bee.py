@@ -1,18 +1,14 @@
 '''The core code of the virtual assistant.'''
+from itertools import zip_longest
+from utils.run_gracefully import GracefulRunner
+from utils.wake_word_detector import WakeWordDetector
+from utils.bumblebee_internal_api import BUMBLEBEEAPI
+from utils.speech import BumbleSpeech
 import importlib
 import os
-import json
-import torch
-
-from utils.speech import BumbleSpeech
-from utils.bumblebee_internal_api import BUMBLEBEEAPI
-from utils.wake_word_detector import WakeWordDetector
-from halo import Halo
-from model import NeuralNet
-from nltk_utils import bag_of_words, tokenize
-from utils.run_gracefully import GracefulRunner
-from train import IntentsTrainer
-from itertools import zip_longest
+from utils.bumblebee_tag_deciders \
+    import NeuralNetworkTagDecider, \
+    RuleBasedTagTagDecider
 
 
 class Bee():
@@ -21,7 +17,7 @@ class Bee():
                  name: str = 'bumblebee',
                  features: list = ['default'],
                  config: dict = {},
-                 decision_type: str = 'rule-based',
+                 decision_strategy: str = 'rule-based',
                  wake_word_detector: WakeWordDetector = None,
                  default_speech_mode: str = 'voice'):
         self.name = name
@@ -29,7 +25,8 @@ class Bee():
         self.speech = BumbleSpeech(speech_mode=default_speech_mode)
         self.graceful_runner = GracefulRunner(self)
         self.intents_filename = 'intents-'+self.name
-        self.decision_type = decision_type
+
+        self.tag_decider = None
 
         assert config != {}
         self.config_yaml = config
@@ -42,8 +39,6 @@ class Bee():
             self.models_path, self.name+".pth")
         self.intents_file_path = os.path.join(
             self.intents_folder_path, self.intents_filename+'.json')
-
-        self.spinner = Halo(spinner='dots2')
 
         self.bumblebee_api = BUMBLEBEEAPI(self)
         self.sleep = 0
@@ -69,75 +64,17 @@ class Bee():
             self.feature_indices = {feature: x for x,
                                     feature in enumerate(features)}
 
-        if decision_type == "neural-network":
-            # Accessing intents.json file.
-            # ----------------------------
-            try:
-                # Check to see that intents.json file exists.
-                with open(
-                    self.intents_file_path, 'r'
-                ) as json_data:
-                    intents_json = json.load(json_data)
-                # Check whether any features have been added/removed or if
-                # no trained model is present.
-                assert(len(self._features) == len(intents_json['intents']))
-                assert(os.path.exists(self.trained_model_path))
-            except (FileNotFoundError, AssertionError):
-                # remove intents file if it exists
-                try:
-                    print('Detected modification in feature list.')
-                    os.remove(self.intents_file_path)
-                except OSError:
-                    print('intents.json file not found.')
-
-                # Update intents.json if features have been added/removed
-                # or the file does not exist.
-                self.spinner.start(text='Generating new intents json file...')
-
-                intents = {}
-                intents['intents'] = []
-                for x, feature in enumerate(self._features):
-                    tag = {}
-                    tag["tag"] = feature.tag_name
-                    tag["patterns"] = feature.patterns
-                    tag["index"] = x
-                    intents['intents'].append(tag)
-
-                intents_json = json.dumps(intents, indent=4)
-
-                with open(self.intents_file_path, 'w') as f:
-                    f.write(intents_json)
-                self.spinner.succeed(
-                    text=f'{self.intents_file_path} file generated.')
-
-                self.trainer = IntentsTrainer(
-                    self.intents_file_path, model_name=self.name)
-                # Retrain the NeuralNet
-                self.spinner.start(text='Training NeuralNet.')
-                self.trainer.train()
-                self.spinner.succeed('NeuralNet trained.')
-
-            finally:
-                # Save the intents json file
-                self.intents_json = intents_json
-
-                # Prepping the Neural Net to be used.
-                self.device = torch.device(
-                    'cuda' if torch.cuda.is_available() else 'cpu')
-
-                self.model_data = torch.load(self.trained_model_path)
-
-                input_size = self.model_data["input_size"]
-                hidden_size = self.model_data["hidden_size"]
-                output_size = self.model_data["output_size"]
-                self.all_words = self.model_data["all_words"]
-                self.tags = self.model_data["tags"]
-                self.model_state = self.model_data["model_state"]
-
-                self.model = NeuralNet(input_size, hidden_size,
-                                       output_size).to(self.device)
-                self.model.load_state_dict(self.model_state)
-                self.model.eval()
+            if decision_strategy == 'neural-network':
+                self.tag_decider = NeuralNetworkTagDecider(
+                    intents_file_path=self.intents_file_path,
+                    trained_model_path=self.trained_model_path,
+                    features=self._features,
+                    model_name=self.name)
+            elif decision_strategy == 'rule-based':
+                self.tag_decider = RuleBasedTagTagDecider(
+                    features=self._features)
+            else:
+                raise Exception('Could not find decision strategy')
 
     def run(self):
         '''Main function that runs Bumblebee'''
@@ -147,7 +84,7 @@ class Bee():
                 try:
                     self.graceful_runner.start_gracefully()
                     if self.wake_word_detector.run():
-                        self.choose_inference_approach()
+                        self.take_and_run_command()
                 except KeyboardInterrupt:
                     self.graceful_runner.exit_gracefully()
                 except Exception as exception:
@@ -157,78 +94,13 @@ class Bee():
             # Silent mode
             elif self.speech.speech_mode == self.speech.speech_modes[0]:
                 try:
-                    self.choose_inference_approach()
+                    self.take_and_run_command()
                 except KeyboardInterrupt:
                     self.graceful_runner.exit_gracefully()
                 except Exception as exception:
                     print(exception)
                     self.graceful_runner.exit_gracefully(
                         crash_happened=True)
-
-    def take_command_neural_network(self):
-        """
-        Function for running features given input from user
-        using a neural-network based action decider.
-        """
-        while(self.sleep == 0):
-            text = ''
-            text = self.speech.hear()
-            self.find_action_neural_network(text)
-
-    def take_command_rule_based(self):
-        """
-        Function for running features given input from user
-        using rule-based action decider.
-        """
-        while(self.sleep == 0):
-            text = ''
-            text = self.speech.hear().lower()
-            self.find_action_rule_based(text)
-
-    def find_action_neural_network(self, text):
-        """
-        This function utilizes a neural network to determine
-        which feature to run based on the input text.
-        """
-        text = tokenize(text)
-        x = bag_of_words(text, self.all_words)
-        x = x.reshape(1, x.shape[0])
-        x = torch.from_numpy(x).to(self.device)
-
-        output = self.model(x)
-        _, predicted = torch.max(output, dim=1)
-
-        tag = self.tags[predicted.item()]
-
-        probs = torch.softmax(output, dim=1)
-        prob = probs[0][predicted.item()]
-
-        if prob.item() < 0.80:
-            # if no accurate action is found from input
-            # text, default to chatbot feature.
-            tag_index = self.feature_indices['chatbot']
-            self._features[tag_index].action(text)
-
-        tag_index = self.feature_indices[tag]
-        self._features[tag_index].action(text)
-
-    def find_action_rule_based(self, text):
-        """
-        This function decides which features to run from the given
-        text input without using a neural network. All the logic
-        here works based on rules.
-        """
-        action_found = False
-        for feature in self._features:
-            # Check to see if phrase said in text is in any feature's
-            # patterns.
-            if any(phrase in text for phrase in feature.patterns):
-                action_found = True
-                feature.action(text)
-
-        if not action_found:
-            tag_index = self.feature_indices['chatbot']
-            self._features[tag_index].action(text)
 
     def run_by_tags(self, feature_tags: list, arguments_list: list = []):
         '''Run a list of features given their tags and arguments.'''
@@ -252,28 +124,24 @@ class Bee():
         """
         Runs actions as infered from a list of commands.
         """
-        if self.decision_type == "rule-based":
-            for input in input_list:
-                self.find_action_rule_based(input)
-        elif self.decision_type == "neural-network":
-            for input in input_list:
-                self.find_action_neural_network(input)
-        else:
-            self.speech.respond(
-                "Could not find decision engine type.")
+        tag = None
+        for input in input_list:
+            tag = self.tag_decider.decide(input)
+            tag_index = self.feature_indices[tag]
+            self._features[tag_index].action(input)
 
-    def choose_inference_approach(self):
+    def take_and_run_command(self):
         """
-        Chooses method of infering intent of command based on
-        the decision_type set at the initialization of the Bee.
+        Gets user input and executes feature action that matches
+        the decided tag 
         """
         self.sleep = 0
-        if self.decision_type == "neural-network":
-            self.take_command_neural_network()
-        elif self.decision_type == "rule-based":
-            self.take_command_rule_based()
-        else:
-            raise Exception("Could not find decision engine type.")
+        while(self.sleep == 0):
+            text = ''
+            text = self.speech.hear()
+            tag = self.tag_decider.decide(text)
+            tag_index = self.feature_indices[tag]
+            self._features[tag_index].action(text)
 
     def get_config(self):
         '''Get the config file that Bee is running with.'''
