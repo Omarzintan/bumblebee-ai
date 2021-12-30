@@ -33,9 +33,9 @@ class Feature(BaseFeature):
             self.bs.set_input_queue(arguments_list)
         recipient = self.get_recipient(spoken_text)
         if not recipient:
-            self.bs.respond('Who do you want to send the email to?')
-            recipient = self.bs.hear()
-            if self.bs.interrupt_check(recipient):
+            recipient = self.bs.ask_question(
+                'Who do you want to send the email to?')
+            if not recipient:
                 return
 
         close_names = []
@@ -43,13 +43,12 @@ class Feature(BaseFeature):
         while close_names == []:
             close_names = difflib.get_close_matches(recipient, known_contacts)
             if close_names == []:
-                self.bs.respond(
+                recipient = self.bs.ask_question(
                     """Could not find this contact. Please try again
                     (say 'stop' or 'cancel' to exit."""
                 )
-                recipient = self.bs.hear()
-                if self.bs.interrupt_check(recipient):
-                    break
+                if not recipient:
+                    return
         try:
             recipient_email = self.get_email(close_names[0])
         except Exception as e:
@@ -61,15 +60,13 @@ class Feature(BaseFeature):
             return
 
         # get subject
-        self.bs.respond('What is the subject of your email?')
-        subject = self.bs.hear()
-        if self.bs.interrupt_check(subject):
+        subject = self.bs.ask_question('What is the subject of your email?')
+        if not subject:
             return
 
         # get message
-        self.bs.respond('What is the message of your email?')
-        message = self.bs.hear()
-        if self.bs.interrupt_check(message):
+        message = self.bs.ask_question('What is the message of your email?')
+        if not message:
             return
 
         # show summary email
