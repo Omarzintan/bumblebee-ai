@@ -175,3 +175,16 @@ class BumbleSpeech():
                 return False
             else:
                 self.respond("Please say yes or no.")
+
+    def ask_question(self, question):
+        '''
+        Ask the user a question and get a response from them.
+        Returns 0 if the answer to the question expresses desire
+        to cease the operation. Otherwise, return the answer to 
+        the question.
+        '''
+        self.respond(question)
+        answer = self.hear()
+        if self.interrupt_check(answer):
+            return 0
+        return answer
