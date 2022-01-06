@@ -1,8 +1,17 @@
 import os
 import logging
+import stdiomask
+import requests
 import subprocess
 from colorlog import ColoredFormatter
 from halo import Halo
+
+
+BUMBLEBEE_ONLINE_API_KEY_FILENAME = 'bumblebee_token'
+BUMBLEBEE_ONLINE_GET_API_KEY_URL = "https://c9o8fm.deta.dev/api-key/new"
+BUMBLEBEE_ONLINE_LOGIN_URL = "https://c9o8fm.deta.dev/auth/jwt/login"
+TEST_URL_BUMBLEBEE_LOGIN = "http://127.0.0.1:8000/api-key/new"
+TEST_URL_GET_BUMBLEBEE_API_KEY = "http://127.0.0.1:8000/api-key/new"
 
 
 def get_logger(
@@ -78,5 +87,64 @@ def get_python3_path():
 
 bumblebee_root = get_root_directory()
 python3_path = get_python3_path()
+
+
+def log_user_in():
+    '''
+    Allows user to login to Bumblebee Online account.
+    '''
+    decision_prompt = """
+Enter the number of the desired option to proceed:
+1. Log in
+2. Skip
+Note: To log in, you need to have signed up for an account
+on Bumblebee Online here: https://c9o8fm.deta.dev/
+"""
+    print(decision_prompt)
+    while True:
+        decision = input("type here:")
+        if decision == '1':
+            # Get username
+            username = input("Email:")
+            # Get password
+            password = stdiomask.getpass()
+            # Send post req to Bumblebee online to log user in.
+            headers = {"Content-Type": "application/x-www-form-urlencoded"}
+            payload = {
+                "username": username,
+                "password": password,
+            }
+            try:
+                response = requests.post(TEST_URL_BUMBLEBEE_LOGIN,
+                                         headers=headers, data=payload)
+                if response.status_code == 200:
+                    return response.json().get("access_token")
+                return
+            except(requests.ConnectionError):
+                print("Failed to connect to server.")
+                return
+        elif decision == '2':
+            print("Log in skipped.")
+            return
+        else:
+            print("Please enter 1 or 2 to proceed")
+
+
+def get_api_key(jwt: str = None):
+    '''
+    Gets Bumblebee Online Api Key for a logged in user.
+    '''
+    # Use jwt token to ask for api key from Bumblebee Online
+    # api.
+    headers = {"Authorization": f"Bearer {jwt}"}
+    response = requests.post(TEST_URL_GET_BUMBLEBEE_API_KEY, headers=headers)
+    # Store the api key in a file locally under a specified
+    # BUMBLEBEE_ONLINE_API_KEY filename.
+    if response.status_code == 200:
+        with open(
+                bumblebee_root+BUMBLEBEE_ONLINE_API_KEY_FILENAME, "w") as file:
+            file.write(response.json().get("value"))
+    return response.status_code
+
 
 spinner = Halo(spinner='dots2')
