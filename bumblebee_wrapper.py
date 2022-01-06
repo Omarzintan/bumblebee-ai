@@ -29,7 +29,8 @@ class BumblebeeWrapper():
         feature_list_name = self.config["Preferences"]["feature_list"]
         self.feature_list = feature_lists.get(feature_list_name,
                                               feature_lists['all'])
-        self.decision_strategy = self.config["Preferences"]["decision_strategy"]
+        self.decision_strategy = self.config[
+            "Preferences"]["decision_strategy"]
         self.wake_word_detector = WakeWordDetector(self.name)
         self.bee = self.__create_bee()
 
@@ -86,12 +87,12 @@ class BumblebeeWrapper():
                 jwt_token = log_user_in()
                 if jwt_token:
                     spinner.start(text="Getting api key from online server.")
-                    response_status_code = get_api_key(jwt_token)
-                    if response_status_code == 200:
+                    if get_api_key(jwt_token) == -1:
+                        spinner.fail(text="Could not download api key.")
+                    else:
                         spinner.succeed(
                             text="Api key successfully downloaded.")
-                    else:
-                        spinner.fail(text="Could not download api key.")
+
             else:
                 spinner.succeed(text="Found Bumblebee token.")
 
