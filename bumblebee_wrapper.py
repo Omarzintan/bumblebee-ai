@@ -7,10 +7,10 @@ import yaml
 from bee import Bee
 from utils.wake_word_detector import WakeWordDetector
 from utils import config_builder
-from helpers import bumblebee_root
+from helpers import bumblebee_root, spinner, \
+    BUMBLEBEE_ONLINE_API_KEY_FILENAME, log_user_in, get_api_key
 from features import feature_lists
 import pyfiglet
-from helpers import spinner
 
 
 class BumblebeeWrapper():
@@ -77,12 +77,29 @@ class BumblebeeWrapper():
             except OSError as exception:
                 spinner.fail()
                 raise OSError(exception)
+            # Check that Bumblebee API key exists.
+            # ----------------------------------------
+            spinner.start("Checking existence of Bumblebee token.")
+            if not os.path.exists(os.path.join(
+                    bumblebee_root, BUMBLEBEE_ONLINE_API_KEY_FILENAME)):
+                spinner.fail(text="Bumblebee token not found.")
+                jwt_token = log_user_in()
+                if jwt_token:
+                    spinner.start(text="Getting api key from online server.")
+                    response_status_code = get_api_key(jwt_token)
+                    if response_status_code == 200:
+                        spinner.succeed(
+                            text="Api key successfully downloaded.")
+                    else:
+                        spinner.fail(text="Could not download api key.")
+            else:
+                spinner.succeed(text="Found Bumblebee token.")
 
     def __create_bee(self):
         '''
         Creates an instance of Bee with name, feature_list and a config file.
         '''
-        # access default mode from config file
+        # access default speech mode from config file
         default_speech_mode = self.config["Utilities"]["default_speech_mode"]
 
         virtual_assistant = Bee(
