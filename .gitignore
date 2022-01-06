@@ -1,4 +1,4 @@
-# Do not push these files
+# These files don't get pushed to GitHub
 credentials.json
 token.json
 experimentation
@@ -16,3 +16,7 @@ __pycache__
 .DS_Store
 models/*.pth
 intents*.json
+routines
+crash_recovery.p
+bumblebee_token
+logging.*
