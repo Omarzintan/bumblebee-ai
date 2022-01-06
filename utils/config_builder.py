@@ -4,7 +4,7 @@ Any updates to the config.yaml file should be made directly into
 config/config.yaml
 '''
 import yaml
-from helpers import bumblebee_root
+from helpers import BUMBLEBEE_ONLINE_API_KEY_FILENAME, bumblebee_root
 from helpers import python3_path
 
 
@@ -28,6 +28,8 @@ def build_config():
     config["Api_keys"] = {}
     config["Api_keys"]["wolframalpha"] = "YOUR_API_KEY_HERE"
     config["Api_keys"]["gmail"] = "YOUR_PATH_TO_GMAIL_CREDENTIALS_FILE"
+    config["Api_keys"]["bumblebee_online"] = bumblebee_root + \
+        BUMBLEBEE_ONLINE_API_KEY_FILENAME
 
     config["Folders"] = {}
     config["Folders"]["work_study"] = bumblebee_root+"work_study"
