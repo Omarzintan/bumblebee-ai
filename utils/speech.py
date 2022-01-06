@@ -180,7 +180,7 @@ class BumbleSpeech():
         '''
         Ask the user a question and get a response from them.
         Returns 0 if the answer to the question expresses desire
-        to cease the operation. Otherwise, return the answer to 
+        to cease the operation. Otherwise, return the answer to
         the question.
         '''
         self.respond(question)
