@@ -20,3 +20,4 @@ routines
 crash_recovery.p
 bumblebee_token
 logging.*
+*.env
