@@ -131,5 +131,5 @@ class BumblebeeWrapper():
         name_banner = pyfiglet.figlet_format(self.name)
         print(name_banner)
         spinner.succeed("Decision Strategy: " + self.decision_strategy)
-        spinner.succeed('Environment: ' + env.environment)
+        spinner.succeed('Environment: ' + env.bumblebee_environment)
         self.bee.run()

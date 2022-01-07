@@ -14,5 +14,5 @@ import os
 
 load_dotenv()
 
-environment = os.environ.get('BUMBLEBEE_ENV', 'production')
-is_local = environment == 'local'
+bumblebee_environment = os.environ.get('BUMBLEBEE_ENV', 'production').lower()
+is_local = bumblebee_environment == 'local'
