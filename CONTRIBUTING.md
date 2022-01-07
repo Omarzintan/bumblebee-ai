@@ -42,17 +42,13 @@ Contributions are welcome, no matter how small or large. Please read this file t
         # We define our action function where all the action happens :).
         # This function has to be called action.
         def action(self, spoken_text):
-            # use the respond function from the bs (bumble speech) class to let Bumblebee ask for your name.
-            self.speech.respond("What is your name?")
-            
-            # this is how Bumblebee would receive a response from the user
-            # hear is a function that keeps asking for input if your speech is not recognized
-            # correctly. 
-            name = self.speech.hear()
-            
-            # stops running feature if 'cancel' or 'stop' is in input
-            if self.speech.interrupt_check(name):
-               return
+            # this is how Bumblebee would ask the user a question to the user.
+            name = self.speech.ask_question("What is your name?")
+
+            # the speech.ask_question() function returns 0 if the user expresses the 
+            # desire to abort the feature by saying "cancel" or "stop".
+            if not name:
+              return
                
             # We use the respond function from the bs (bumble speech) class to let Bumblebee say "Hello, world".
             self.speech.respond(f"Hey {name}")
@@ -66,7 +62,7 @@ Contributions are welcome, no matter how small or large. Please read this file t
         'hello_world'
     ]
    ``` 
-5) When you run `python main.py` from the bumblebee folder, you should see that the `intents.json` file is regenerated and the model is retrained. Now when you say "Bumblebee" and Bumblebee asks "how may I help you?" you can say any sentence similar to the sentence `patterns` you defined in your `hello_world.py` file and the action for your feature should be executed!
+5) If you are using the neural-network-based approach as the decision strategy, when you run `python main.py` from the bumblebee folder, you should see that the `intents.json` file is regenerated and the model is retrained. Now when you say "Bumblebee" and Bumblebee asks "how may I help you?" you can say any sentence similar to the sentence `patterns` you defined in your `hello_world.py` file and the action for your feature should be executed! Note: If you are using the rule-based approach as the decision strategy, make sure what you say to Bumblebee contains at least one of the phrases you listed in the `self.patterns`.
 
 ## Useful information for creating new features.
 ### Using the bumblebee_api to store global variables across features.
@@ -368,12 +364,23 @@ def get_name(self):
     Example: bumblebee_api.get_name()
     """
 
-def run_by_tags(self, feature_tags: list):
+def run_by_tags(self, feature_tags: list, argmuments_list: list = []):
     """
-    Run a list of feature actions given their tags.
-    Arguments: <list> feature_tags
+    Run a list of feature actions given their tags and arguments lists.
+    Arguments: <list> feature_tags, <list<list>> arguments_list
     Returns: whatever the feature ran will return
-    Example: bumblebee_api.run_by_tags([feature_1_tag, feature_2_tag, feature_3_tag])
+    Example: 
+    feature_tags = [feature_1_tag, feature_2_tag, feature_3_tag, feature_4_tag]
+    arguments_list = [[arg1_for_feature1, arg2_for_feature1], [arg1_for_feature2, arg2_for_feature2, arg_3_for_feature2], [arg1_for_feature3], []]
+    bumblebee_api.run_by_tags(feature_tags, arguments_list)
+    """
+
+def run_by_input_list(self, input_list: list):
+    """
+    Run features based on a list of inputs.
+    Arguments: <list> input_list
+    Returns: whatever the features chosen do with the input given to them.
+    Example: bumblebee_api.run_by_input_list(["say hello world", "what is the time?"])
     """
 
 def sleep_on(self):

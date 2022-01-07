@@ -2,7 +2,9 @@
 Virtual Assistant in Python
 
 ## About
-This is Bumblebee, a voice assistant made with Python. Bumblebee was made with the intention of automating certain boring or otherwise tedious tasks that I perform on a daily basis. Bumblebee was also made with the goal of being easily extendible. I also used this as an opportunity to learn about Neural Networks. Bumblebee works with a Deep Neural Network that is trained based on intent data and is able to find out the intent of a sentence spoken to it. Upon finding the intent of the input, Bumblebee runs the action of the corresponding feature.
+Bumblebee is a voice assistant that was made with the intention of automating certain boring or otherwise tedious tasks on the computer. Bumblebee was also made with the goal of being easily extendible. Bumblebee has two approached to inferring the intent of commands, namely a neural-network-based approach and a rule-based approach. 
+* The neural-network-based approach works with a Deep Neural Network that is trained on the input patterns of the all features (skills) that the assistant can perform. This trained Deep Neural Network is then used to infer which feature a user wants to run based on their input.
+* The rule-based approach basically examines the input text from a user to see if the input matches any of the input patterns of the features (skills).
 
 *So far, Bumblebee works well with:*
    - MacOS Big Sur
@@ -29,25 +31,7 @@ This is Bumblebee, a voice assistant made with Python. Bumblebee was made with t
    source setup.sh
    ```
 
-NOTE: After initial installation, bumblebee will run automatically. If you close bumblebee and you want to run it again, go into the bumblebee folder and ensure that the bumblebee environment is activated. Otherwise, activate it by typing ```conda activate bumblebee-ai``` then type ```python main.py```. If the environment is already activated, you can type ```python main.py``` to run bumblebee.
-
-## Features
-- Stores and open zoom links on demand
-- Opens up browser with Google search on any query specified
-- Opens up browser with Youtube search on any query specified
-- Searches for information on Wikipedia as well as Wolframalpha
-- Does math using Wolframalpha
-- Can send emails to any contact specified in a contacts database
-- Works both in voice mode and silent mode(text only)
-- Has a chatbot for generic conversations (uses chatterbot for this)
-- Can clock me in and out of work (tracking how many hours I work my various work-study jobs)
-- Research mode *
-- TinyDB is the database used to store information such as contacts, zoom links, research data.
-
-### Starred Features
-1) Research mode: Research mode is a feature that I find super useful with my regular work flow. It is basically a mode that Bumblebee goes into where all the tabs I open in a google chrome 
-browser and how long I spend on each tab are stored. The information is then stored in a file whose name Bumblebee requests before starting research mode. The file is stored in markdown. This feature makes conducting research easier since I will not have to worry about bookmarking certain pages or having to go through my whole history in order to find a site I visited weeks ago.
-Research mode can be turned on/off on demand and so it doesn't store all the sites I visit all of the time.
+NOTE: After initial installation, bumblebee will run automatically. If you close bumblebee and you want to run it again, you should be able to run `bumblebee` from your terminal to start it up since the installation automatically adds this `bumblebee` command to your path. If this still does not work you can go into the bumblebee folder and ensure that the bumblebee environment is activated. Otherwise, activate it by typing ```conda activate bumblebee-ai``` then type ```python main.py```.
 
 ## Contributing
 Contributions are welcome, no matter how small or large. Please read this file to help you contribute to this project. Please see our [CONTRIBUTE.md](/CONTRIBUTING.md) to learn more about how to contribute.
