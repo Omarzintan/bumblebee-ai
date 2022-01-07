@@ -100,10 +100,10 @@ on Bumblebee Online here: https://c9o8fm.deta.dev/
     # type in the wrong username/password.
     print(decision_prompt)
     while True:
-        decision = input("type here:")
+        decision = input("Type here: ")
         if decision == '1':
             # Get username
-            username = input("Email:")
+            username = input("Email: ")
             # Get password
             password = stdiomask.getpass()
             # Send post req to Bumblebee online to log user in.
