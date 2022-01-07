@@ -5,16 +5,9 @@ import requests
 import subprocess
 from colorlog import ColoredFormatter
 from halo import Halo
-
-
-BUMBLEBEE_ONLINE_API_KEY_FILENAME = 'bumblebee_token'
-BUMBLEBEE_ONLINE_GET_NEW_API_KEY_URL = "https://c9o8fm.deta.dev/api-key/new"
-BUMBLEBEE_ONLINE_GET_ACTIVE_API_KEY_URL = \
-    "https://c9o8fm.deta.dev/api-key/active"
-BUMBLEBEE_ONLINE_LOGIN_URL = "https://c9o8fm.deta.dev/auth/jwt/login"
-TEST_URL_BUMBLEBEE_LOGIN = "http://127.0.0.1:8000/auth/jwt/login"
-TEST_URL_GET_NEW_BUMBLEBEE_API_KEY = "http://127.0.0.1:8000/api-key/new"
-TEST_URL_GET_ACTIVE_BUMBLEBEE_API_KEY = "http://127.0.0.1:8000/api-key/active"
+from utils.constants import BUMBLEBEE_ONLINE_LOGIN_URL, \
+    BUMBLEBEE_ONLINE_GET_NEW_API_KEY_URL, \
+    BUMBLEBEE_ONLINE_GET_ACTIVE_API_KEY_URL
 
 
 def get_logger(
@@ -120,7 +113,7 @@ on Bumblebee Online here: https://c9o8fm.deta.dev/
                 "password": password,
             }
             try:
-                response = requests.post(TEST_URL_BUMBLEBEE_LOGIN,
+                response = requests.post(BUMBLEBEE_ONLINE_LOGIN_URL,
                                          headers=headers, data=payload)
                 if response.status_code == 200:
                     return response.json().get("access_token")
@@ -143,17 +136,14 @@ def get_api_key(jwt: str = None):
     # Try getting already existent active key for user
     # from bumblebee-online server.
     api_key = get_active_api_key_for_user(jwt)
+
     if not api_key:
         # If active key is not found for the user, get
         # a new one from bumblebee-online server.
         print("Getting new api_key.\n")
         api_key = get_new_api_key_for_user(jwt)
-    if not api_key:
-        return -1
-    with open(
-            bumblebee_root+BUMBLEBEE_ONLINE_API_KEY_FILENAME, "w") as file:
-        file.write(api_key)
-    return
+
+    return api_key
 
 
 def get_new_api_key_for_user(jwt: str = None):
@@ -163,7 +153,7 @@ def get_new_api_key_for_user(jwt: str = None):
     '''
     headers = {"Authorization": f"Bearer {jwt}"}
     response = requests.post(
-        TEST_URL_GET_NEW_BUMBLEBEE_API_KEY, headers=headers)
+        BUMBLEBEE_ONLINE_GET_NEW_API_KEY_URL, headers=headers)
     if response.status_code == 200:
         return response.json().get("value")
     print(
@@ -178,7 +168,7 @@ def get_active_api_key_for_user(jwt: str = None):
     '''
     headers = {"Authorization": f"Bearer {jwt}"}
     response = requests.get(
-        TEST_URL_GET_ACTIVE_BUMBLEBEE_API_KEY, headers=headers)
+        BUMBLEBEE_ONLINE_GET_ACTIVE_API_KEY_URL, headers=headers)
     if response.status_code == 200:
         return response.json().get("value")
     print(f"{response.status_code} active api_key not found.\n")
