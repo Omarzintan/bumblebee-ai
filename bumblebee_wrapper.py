@@ -89,7 +89,7 @@ class BumblebeeWrapper():
                 spinner.succeed(text="Found Bumblebee token.")
             else:
                 spinner.fail(text="Bumblebee token not found.")
-                jwt_token = log_user_in()
+                jwt_token = log_user_in(retry=True)
                 if jwt_token:
                     spinner.start(text="Getting api key from online server.")
 

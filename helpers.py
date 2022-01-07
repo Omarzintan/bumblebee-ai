@@ -5,7 +5,8 @@ import requests
 import subprocess
 from colorlog import ColoredFormatter
 from halo import Halo
-from utils.constants import BUMBLEBEE_ONLINE_LOGIN_URL, \
+from utils.constants import BUMBLEBEE_ONLINE_BASE_URL, \
+    BUMBLEBEE_ONLINE_LOGIN_URL, \
     BUMBLEBEE_ONLINE_GET_NEW_API_KEY_URL, \
     BUMBLEBEE_ONLINE_GET_ACTIVE_API_KEY_URL
 
@@ -85,27 +86,31 @@ bumblebee_root = get_root_directory()
 python3_path = get_python3_path()
 
 
-def log_user_in():
+def log_user_in(retry=False):
     '''
     Allows user to login to Bumblebee Online account.
     '''
-    decision_prompt = """
+
+    decision_prompt = f"""
 Enter the number of the desired option to proceed:
-1. Log in
-2. Skip
+  1. Log in
+  2. Skip
+
 Note: To log in, you need to have signed up for an account
-on Bumblebee Online here: https://c9o8fm.deta.dev/
+on Bumblebee Online here: {BUMBLEBEE_ONLINE_BASE_URL}
 """
-    # TODO: make it so that the user is allowed to retry if they
-    # type in the wrong username/password.
     print(decision_prompt)
     while True:
         decision = input("Type here: ")
+        print()
+
         if decision == '1':
+            print('Enter login details')
             # Get username
             username = input("Email: ")
             # Get password
             password = stdiomask.getpass()
+            print()
             # Send post req to Bumblebee online to log user in.
             headers = {"Content-Type": "application/x-www-form-urlencoded"}
             payload = {
@@ -117,7 +122,12 @@ on Bumblebee Online here: https://c9o8fm.deta.dev/
                                          headers=headers, data=payload)
                 if response.status_code == 200:
                     return response.json().get("access_token")
-                return
+                else:
+                    spinner.fail(
+                        text='Login unsuccessful.' +
+                        ' Please retry, or skip to continue.' if retry else '')
+                    return log_user_in() if retry else None
+
             except(requests.ConnectionError):
                 print("Failed to connect to server.")
                 return
