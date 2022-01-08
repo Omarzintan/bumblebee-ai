@@ -1,11 +1,7 @@
 '''Runs features based on tasks retrieved from online.'''
 import requests
-
-
 from features.default import BaseFeature
-
-BUMBLEBEE_ONLINE_GET_COMMANDS_URL = "https://c9o8fm.deta.dev/commands"
-TEST_URL_GET_COMMANDS = "http://127.0.0.1:8000/commands"
+from utils.constants import BUMBLEBEE_ONLINE_GET_COMMANDS_URL
 
 
 class Feature(BaseFeature):
@@ -19,18 +15,21 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text, arguments_list: list = []):
         # Get api key
-        bumblebee_auth_file_path = self.config["Api_keys"]["bumblebee_online"]
         api_key = ""
         try:
-            with open(bumblebee_auth_file_path, 'r') as file:
-                api_key = file.read()
-        except IOError:
-            self.bs.respond("Could not access token file.")
+            api_key = self.config["Api_keys"]["bumblebee_online"]
+        except KeyError:
+            # TODO: allow user to log in right here and continue as normal
+            self.bs.respond(
+                "Could not access token from config.\n" +
+                "Please restart bumblebee and login to use this feature.")
+            return
+
         # Get list of tasks from online api.
         try:
             headers = {"api_key": api_key}
             response = requests.get(
-                url=TEST_URL_GET_COMMANDS, headers=headers)
+                url=BUMBLEBEE_ONLINE_GET_COMMANDS_URL, headers=headers)
             if response.status_code == 200:
                 response_json = response.json()
                 commands_list = response_json["commands"]

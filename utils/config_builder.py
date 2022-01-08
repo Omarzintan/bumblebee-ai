@@ -3,9 +3,11 @@ This file is just for building a default config file on first install.
 Any updates to the config.yaml file should be made directly into
 config/config.yaml
 '''
+from typing import Any, List
 import yaml
-from helpers import BUMBLEBEE_ONLINE_API_KEY_FILENAME, bumblebee_root
+from helpers import bumblebee_root
 from helpers import python3_path
+import copy
 
 
 def build_config():
@@ -28,8 +30,7 @@ def build_config():
     config["Api_keys"] = {}
     config["Api_keys"]["wolframalpha"] = "YOUR_API_KEY_HERE"
     config["Api_keys"]["gmail"] = "YOUR_PATH_TO_GMAIL_CREDENTIALS_FILE"
-    config["Api_keys"]["bumblebee_online"] = bumblebee_root + \
-        BUMBLEBEE_ONLINE_API_KEY_FILENAME
+    config["Api_keys"]["bumblebee_online"] = "YOUR_BUMBLEBEE_ONLINE_API_KEY"
 
     config["Folders"] = {}
     config["Folders"]["work_study"] = bumblebee_root+"work_study"
@@ -71,6 +72,30 @@ def build_yaml(filename):
         return 0
     except Exception:
         return -1
+
+
+def _update_dict(d: dict, keypath: List[str], value: Any):
+    '''Updates a dictionary by inserting value at specified keypath'''
+    updated_dict = copy.deepcopy(d)
+
+    current = updated_dict
+
+    nested_key_path = keypath[:-1]
+    final_key = keypath[len(keypath) - 1]
+
+    for key in nested_key_path:
+        current = current.get(key, {})
+
+    current[final_key] = value
+
+    return updated_dict
+
+
+def update_yaml(filename: str, keypath: List[str], value: Any):
+    with open(filename, "r") as yamlfile:
+        data: dict = yaml.safe_load(yamlfile)
+        updated_data = _update_dict(data, keypath, value)
+        write_yaml(updated_data, filename)
 
 
 def create_fake_config():
