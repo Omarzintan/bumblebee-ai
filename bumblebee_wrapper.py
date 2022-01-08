@@ -6,9 +6,8 @@ import os
 import yaml
 from bee import Bee
 from utils.wake_word_detector import WakeWordDetector
-from utils import config_builder
-from helpers import bumblebee_root, spinner, \
-    BUMBLEBEE_ONLINE_API_KEY_FILENAME, log_user_in, get_api_key
+from utils import config_builder, env
+from helpers import bumblebee_root, spinner, log_user_in, get_api_key
 from features import feature_lists
 import pyfiglet
 
@@ -44,6 +43,8 @@ class BumblebeeWrapper():
             spinner.start(text="Accessing configuration file")
             with open(self.config_path, "r") as ymlfile:
                 self.config = yaml.load(ymlfile)
+                # TODO: add exception to catch if the config file is
+                # corrupted/not of the right shape/vital configs are missing
                 spinner.succeed()
         except FileNotFoundError:
             # Build config file if it is not found.
@@ -81,20 +82,30 @@ class BumblebeeWrapper():
             # Check that Bumblebee API key exists.
             # ----------------------------------------
             spinner.start("Checking existence of Bumblebee token.")
-            if not os.path.exists(os.path.join(
-                    bumblebee_root, BUMBLEBEE_ONLINE_API_KEY_FILENAME)):
+            existing_api_key = self.config.get(
+                'Api_keys', {}).get('bumblebee_online', None)
+
+            if existing_api_key:
+                spinner.succeed(text="Found Bumblebee token.")
+            else:
                 spinner.fail(text="Bumblebee token not found.")
-                jwt_token = log_user_in()
+                jwt_token = log_user_in(retry=True)
                 if jwt_token:
                     spinner.start(text="Getting api key from online server.")
-                    if get_api_key(jwt_token) == -1:
+
+                    api_key = get_api_key(jwt_token)
+
+                    if not api_key:
                         spinner.fail(text="Could not download api key.")
                     else:
+                        # set api key in config and update config
+                        config_builder.update_yaml(
+                            self.config_path,
+                            ['Api_keys', 'bumblebee_online'],
+                            api_key)
+
                         spinner.succeed(
                             text="Api key successfully downloaded.")
-
-            else:
-                spinner.succeed(text="Found Bumblebee token.")
 
     def __create_bee(self):
         '''
@@ -104,7 +115,9 @@ class BumblebeeWrapper():
         default_speech_mode = self.config["Utilities"]["default_speech_mode"]
 
         virtual_assistant = Bee(
-            name=self.name, features=self.feature_list, config=self.config,
+            name=self.name,
+            features=self.feature_list,
+            config=self.config,
             wake_word_detector=self.wake_word_detector,
             default_speech_mode=default_speech_mode,
             decision_strategy=self.decision_strategy
@@ -118,4 +131,5 @@ class BumblebeeWrapper():
         name_banner = pyfiglet.figlet_format(self.name)
         print(name_banner)
         spinner.succeed("Decision Strategy: " + self.decision_strategy)
+        spinner.succeed('Environment: ' + env.bumblebee_environment)
         self.bee.run()
