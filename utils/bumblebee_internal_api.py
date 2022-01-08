@@ -8,11 +8,13 @@ the features.
     Utility functions for tracking and safely removing threaded
 feature actions.
 '''
+from typing import Any, List
+from bee import Bee
 
 
 class BUMBLEBEEAPI():
 
-    def __init__(self, bee_instance):
+    def __init__(self, bee_instance: Bee):
         self.bee_instance = bee_instance
 
     def store_var(self, name: str, value):
@@ -104,6 +106,14 @@ class BUMBLEBEEAPI():
         Get the config file for the bee instance.
         """
         return self.bee_instance.get_config()
+
+    def update_config(self, keypath: List[str], value: Any):
+        # TODO: implement this function in order to allow features
+        # to also be able to modify the config file. This
+        # implementation should make use of config_builder.update_yaml
+        # as well as the bee_instance.update_config function. It should
+        # also make use of the config_builder.load_yaml function.
+        pass
 
     def get_speech(self):
         """
