@@ -1,7 +1,11 @@
 #!/bin/bash
 
-conda env create --name bumblebee-ai --file environment_mac.yml --force
-conda activate bumblebee-ai
+conda env create --name bumblebee-ai-test --file environment.yml --force
+conda activate bumblebee-ai-test
+pip install -r requirements.txt
+pip install -e git+git://github.com/Omarzintan/ChatterBot.git@master#egg=chatterbot
+python -m spacy download en_core_web_sm
+
 BUMBLEBEE_APP_FILE=/usr/local/bin/bumblebee
 if [ ! -f "$BUMBLEBEE_APP_FILE" ]; then
     python create_bumblebee_app.py
