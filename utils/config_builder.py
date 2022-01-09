@@ -98,5 +98,10 @@ def update_yaml(filename: str, keypath: List[str], value: Any):
         write_yaml(updated_data, filename)
 
 
+def laod_yaml(filepath: str):
+    with open(filepath, "r") as ymlfile:
+        return yaml.load(ymlfile)
+
+
 def create_fake_config():
     return build_config()

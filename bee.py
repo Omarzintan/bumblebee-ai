@@ -147,6 +147,10 @@ class Bee():
         '''Get the config file that Bee is running with.'''
         return self.config_yaml
 
+    def update_config(self, new_config_yaml: dict):
+        '''Overwrite the config file that Bee is running with.'''
+        self.config_yaml = new_config_yaml
+
     def get_speech(self):
         '''Get the BumbleSpeech instance.'''
         return self.speech
