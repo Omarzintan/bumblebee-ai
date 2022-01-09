@@ -9,12 +9,11 @@ the features.
 feature actions.
 '''
 from typing import Any, List
-from bee import Bee
 
 
 class BUMBLEBEEAPI():
 
-    def __init__(self, bee_instance: Bee):
+    def __init__(self, bee_instance):
         self.bee_instance = bee_instance
 
     def store_var(self, name: str, value):
