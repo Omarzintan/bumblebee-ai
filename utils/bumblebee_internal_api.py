@@ -9,6 +9,7 @@ the features.
 feature actions.
 '''
 from typing import Any, List
+from utils import config_builder
 
 
 class BUMBLEBEEAPI():
@@ -112,7 +113,11 @@ class BUMBLEBEEAPI():
         # implementation should make use of config_builder.update_yaml
         # as well as the bee_instance.update_config function. It should
         # also make use of the config_builder.load_yaml function.
-        pass
+        config_builder.update_yaml(
+            self.bee_instance.config_path, keypath, value)
+        updated_config = config_builder.laod_yaml(
+            self.bee_instance.config_path)
+        self.bee_instance.update_config(updated_config)
 
     def get_speech(self):
         """

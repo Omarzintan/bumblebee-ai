@@ -118,6 +118,7 @@ class BumblebeeWrapper():
             name=self.name,
             features=self.feature_list,
             config=self.config,
+            config_path=self.config_path,
             wake_word_detector=self.wake_word_detector,
             default_speech_mode=default_speech_mode,
             decision_strategy=self.decision_strategy

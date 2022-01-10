@@ -9,6 +9,7 @@ import os
 from utils.bumblebee_tag_deciders \
     import NeuralNetworkTagDecider, \
     RuleBasedTagTagDecider
+from helpers import bumblebee_root
 
 
 class Bee():
@@ -17,6 +18,8 @@ class Bee():
                  name: str = 'bumblebee',
                  features: list = ['default'],
                  config: dict = {},
+                 config_path: str = f"{bumblebee_root}/utils/config/ \
+                     config.yaml",
                  decision_strategy: str = 'rule-based',
                  wake_word_detector: WakeWordDetector = None,
                  default_speech_mode: str = 'voice'):
@@ -25,7 +28,7 @@ class Bee():
         self.speech = BumbleSpeech(speech_mode=default_speech_mode)
         self.graceful_runner = GracefulRunner(self)
         self.intents_filename = 'intents-'+self.name
-
+        self.config_path = config_path
         self.tag_decider = None
 
         assert config != {}
