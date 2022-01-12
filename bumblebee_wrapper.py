@@ -3,7 +3,6 @@ This is a class responsible for spawning a bee (virtual assistant).
 '''
 
 import os
-import yaml
 from bee import Bee
 from utils.wake_word_detector import WakeWordDetector
 from utils import config_builder, env
@@ -41,11 +40,10 @@ class BumblebeeWrapper():
             # Access config file
             # ------------------
             spinner.start(text="Accessing configuration file")
-            with open(self.config_path, "r") as ymlfile:
-                self.config = yaml.load(ymlfile)
-                # TODO: add exception to catch if the config file is
-                # corrupted/not of the right shape/vital configs are missing
-                spinner.succeed()
+            self.config = config_builder.laod_yaml(self.config_path)
+            # TODO: add exception to catch if the config file is
+            # corrupted/not of the right shape/vital configs are missing
+            spinner.succeed()
         except FileNotFoundError:
             # Build config file if it is not found.
             # -------------------------------------
@@ -61,8 +59,7 @@ class BumblebeeWrapper():
                 text="Configuration file built successfully at 'utils/" +
                 self.config_yaml_name+".yaml'"
             )
-            with open(self.config_path, "r") as ymlfile:
-                self.config = yaml.load(ymlfile)
+            self.config = config_builder.laod_yaml(self.config_path)
         finally:
             self.name = self.config["Preferences"]["wake_phrase"]
             # Ensure that necessary directories exist.
@@ -85,7 +82,8 @@ class BumblebeeWrapper():
             existing_api_key = self.config.get(
                 'Api_keys', {}).get('bumblebee_online', None)
 
-            if existing_api_key:
+            if existing_api_key and existing_api_key != \
+                    "YOUR_BUMBLEBEE_ONLINE_API_KEY":
                 spinner.succeed(text="Found Bumblebee token.")
             else:
                 spinner.fail(text="Bumblebee token not found.")
@@ -103,6 +101,8 @@ class BumblebeeWrapper():
                             self.config_path,
                             ['Api_keys', 'bumblebee_online'],
                             api_key)
+                        self.config = config_builder.laod_yaml(
+                            self.config_path)
 
                         spinner.succeed(
                             text="Api key successfully downloaded.")

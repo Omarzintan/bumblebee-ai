@@ -370,8 +370,8 @@ def run_by_tags(self, feature_tags: list, argmuments_list: list = []):
     Arguments: <list> feature_tags, <list<list>> arguments_list
     Returns: whatever the feature ran will return
     Example: 
-    feature_tags = [feature_1_tag, feature_2_tag, feature_3_tag, feature_4_tag]
-    arguments_list = [[arg1_for_feature1, arg2_for_feature1], [arg1_for_feature2, arg2_for_feature2, arg_3_for_feature2], [arg1_for_feature3], []]
+    feature_tags = [send_email, google_search, turn_on_voice_mode]
+    arguments_list = [[recipient, subject, message], [cool python features, chatbots, how to code], []]
     bumblebee_api.run_by_tags(feature_tags, arguments_list)
     """
 
