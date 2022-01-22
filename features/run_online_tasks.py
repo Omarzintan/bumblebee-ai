@@ -27,17 +27,36 @@ class Feature(BaseFeature):
 
         # Get list of tasks from online api.
         try:
-            headers = {"api_key": api_key}
+            headers = {
+                'accept': 'application/json',
+                'api_key': api_key,
+                'Content-Type': 'application/json',
+            }
             response = requests.get(
                 url=BUMBLEBEE_ONLINE_GET_COMMANDS_URL, headers=headers)
             if response.status_code == 200:
                 response_json = response.json()
-                commands_list = response_json["commands"]
-                if len(commands_list) == 0:
+                commands = response_json["commands"]
+                if len(commands) == 0:
                     self.bs.respond("There are no online tasks to run.")
                     return
+
                 # Run them using internal api.
-                self.api.run_by_input_list(commands_list)
+                list_of_commands = []
+                for command_item in commands:
+                    list_of_commands.append(command_item["command"])
+                self.api.run_by_input_list(list_of_commands)
+
+                # Tell the server that these commands have been run.
+                data = '{\n  "is_ran": true\n}'
+                for command_item in commands:
+                    command_id = str(command_item["id"])
+
+                    response = requests.patch(
+                        BUMBLEBEE_ONLINE_GET_COMMANDS_URL +
+                        f"/{command_id}/is-ran",
+                        headers=headers, data=data)
+                self.bs.respond("Finished running online tasks.")
                 return
             self.bs.respond(
                 f"Could not run online commands due to error code \
