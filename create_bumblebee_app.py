@@ -1,6 +1,6 @@
 from helpers import bumblebee_root, python3_path
 
-with open("bumblebee_app", "a+") as file:
+with open("bumblebee_app", "w") as file:
     file.write("#!/bin/sh\n")
     file.write("export BUMBLEBEE_PATH="+bumblebee_root+"\n")
     file.write("export PYTHON3_PATH="+python3_path+"\n")
