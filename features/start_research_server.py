@@ -1,6 +1,7 @@
 '''Feature to start research server.'''
 import json
 import threading
+import tempfile
 import subprocess
 from features.default import BaseFeature
 import PySimpleGUI as sg
@@ -31,7 +32,7 @@ class Feature(BaseFeature):
             return
         self.bs.respond('Starting research mode on {}'.format(topic))
         if self.bs.approve("Would you like to edit this?"):
-            edited_topic = self.topic_edit(topic)
+            edited_topic = self.term_topic_edit(topic)
             edited_json = json.loads(edited_topic)
             topic = edited_json["topic"]
         self.bs.respond('Starting server for research on {}'.format(topic))
@@ -41,6 +42,7 @@ class Feature(BaseFeature):
 
     def topic_edit(self, topic):
         '''
+        DEPRECATED.
         Opens a PySimpleGUI window to allow the user to edit the research
         topic as heard.
         Argument: <string> topic
@@ -56,6 +58,23 @@ class Feature(BaseFeature):
 
         topic_details = {}
         topic_details["topic"] = str(values['topic'])
+        topic_details_json = json.dumps(topic_details)
+        return topic_details_json
+
+    def term_topic_edit(self, topic):
+        '''
+        Allows user to edit the research topic from within the nano text
+        editor.
+        '''
+        f = tempfile.NamedTemporaryFile(mode='w+t', delete=False)
+        n = f.name
+        f.writelines([topic])
+        f.close()
+        subprocess.call(['nano', n])
+        with open(n, 'r') as f:
+            topic = f.readline()
+        topic_details = {}
+        topic_details["topic"] = topic
         topic_details_json = json.dumps(topic_details)
         return topic_details_json
 
