@@ -15,7 +15,7 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text, arguments_list: list = []):
         try:
-            self.add_contact_details()
+            self.term_add_contact_details()
             self.bs.respond('Added new contact successfully.')
         except Exception as exception:
             print(exception)
@@ -25,6 +25,7 @@ class Feature(BaseFeature):
 
     def add_contact_details(self):
         '''
+        DEPRECATED.
         Opens a PysimpleGUI window to allow the user to add a new contact
         to the database.
         Arguments: None
@@ -43,6 +44,23 @@ class Feature(BaseFeature):
         contact_details["name"] = str(values['name'].lower())
         contact_details["email"] = str(values['email'].lower())
         contact_details["phone"] = str(values['phone'])
+        self.contact_db.upsert(
+            contact_details, Entry.name == contact_details["name"]
+        )
+
+    def term_add_contact_details(self):
+        '''
+        Allows user to enter contact details through the terminal.
+        '''
+        name = self.bs.ask_question("Please enter a name for the contact:")
+        email = self.bs.ask_question("Please enter an email for the contact:")
+        phone = self.bs.ask_question(
+            "Please enter a phone number for the contact:")
+        Entry = Query()
+        contact_details = {}
+        contact_details["name"] = name.lower()
+        contact_details["email"] = email.lower()
+        contact_details["phone"] = phone
         self.contact_db.upsert(
             contact_details, Entry.name == contact_details["name"]
         )
