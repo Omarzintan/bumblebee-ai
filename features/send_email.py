@@ -1,6 +1,8 @@
 from features.default import BaseFeature
 import difflib
 import ezgmail
+import tempfile
+import subprocess
 import json
 import re
 import PySimpleGUI as sg
@@ -75,7 +77,8 @@ class Feature(BaseFeature):
 
         # edit email
         if self.bs.approve("Would you like to edit this?"):
-            edited_email = self.email_edit(recipient_email, subject, message)
+            edited_email = self.term_email_edit(
+                recipient_email, subject, message)
             edited_email_json = json.loads(edited_email)
             recipient_email = edited_email_json["recipient_email"]
             subject = edited_email_json["subject"]
@@ -88,7 +91,7 @@ class Feature(BaseFeature):
                 tokenFile=self.bumblebee_dir+'token.json',
                 credentialsFile=self.bumblebee_dir+'credentials.json'
             )
-            message += "\n\n\n Bumblebee (Zintan's ai assistant)"
+            message += "\n\n Bumblebee (Zintan's ai assistant)"
             ezgmail.send(recipient_email, subject, message)
             self.bs.respond('I have sent the email.')
         else:
@@ -109,6 +112,7 @@ class Feature(BaseFeature):
 
     def email_edit(self, recipient_email, subject, message):
         '''
+        DEPRECATED. Bubumblebee uses term_email_edit instead.
         Opens up a PySimpleGUI window with email details to allow the user to
         edit any of these details.
         Arguments: <string> recipient_email, <string> subject, <string> message
@@ -131,6 +135,27 @@ class Feature(BaseFeature):
         email_details["recipient_email"] = str(values['recipient_email'])
         email_details["subject"] = str(values["subject"])
         email_details["message"] = str(values["message"])
+        email_details_json = json.dumps(email_details)
+        return email_details_json
+
+    def term_email_edit(self, recipient_email, subject, message):
+        '''
+        Allows user to edit email details from within the nano text
+        editor.
+        '''
+        f = tempfile.NamedTemporaryFile(mode='w+t', delete=False)
+        n = f.name
+        f.writelines([recipient_email, '\n', subject, '\n', message])
+        f.close()
+        subprocess.call(['nano', n])
+        with open(n, 'r') as f:
+            recipient_email = f.readline()
+            subject = f.readline()
+            message = f.read()
+        email_details = {}
+        email_details["recipient_email"] = recipient_email
+        email_details["subject"] = subject
+        email_details["message"] = message
         email_details_json = json.dumps(email_details)
         return email_details_json
 
