@@ -60,7 +60,7 @@ class Feature(BaseFeature):
 
     def enter_zoom_details(self):
         '''
-        DEPRECATED. 
+        DEPRECATED.
         Allows user to enter zoom details in a GUI window.
         '''
         with ptg.WindowManager() as manager:
