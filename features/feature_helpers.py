@@ -1,5 +1,7 @@
 '''Contains helper functions that can be used by any feature.'''
+from rich.markdown import Markdown
 from nltk_utils import tokenize
+from utils.console import console
 
 
 def get_search_query(
@@ -76,3 +78,13 @@ def get_search_query(
     # This if useful for doing database searches on the query.
     query = query.strip()
     return query
+
+
+def markdown_viewer(filepath):
+    '''
+    Displays markdown file contents in the terminal given a filepath.
+    '''
+    with open(filepath, 'r') as mdfile:
+        contents = mdfile.read()
+        md = Markdown(contents)
+        console.print(md)

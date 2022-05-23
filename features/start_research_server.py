@@ -26,9 +26,8 @@ class Feature(BaseFeature):
         self.bs = self.api.get_speech()
 
     def action(self, spoken_text, arguments_list: list = []):
-        self.bs.respond('What is the topic of your research?')
-        topic = self.bs.hear()
-        if self.bs.interrupt_check(topic):
+        topic = self.bs.ask_question('What is the topic of your research?')
+        if not topic:
             return
         self.bs.respond('Starting research mode on {}'.format(topic))
         if self.bs.approve("Would you like to edit this?"):

@@ -7,7 +7,8 @@ from helpers import bumblebee_root
 from colorama import Fore
 from halo import Halo
 from collections import deque
-from rich.console import Console
+from utils.console import console
+from rich.prompt import Prompt
 
 
 class BumbleSpeech():
@@ -19,7 +20,6 @@ class BumbleSpeech():
         self.engine.setProperty(
             'voice', 'com.apple.speech.synthesis.voice.tessa')
         self.engine.setProperty('rate', 210)
-        self.console = Console()
         self.input_queue = deque()
         self.YES_TERMS = [
             "yes",
@@ -98,7 +98,7 @@ class BumbleSpeech():
 
         # For silent mode.
         if self.speech_mode == self.speech_modes[0]:
-            input_text = self.console.input(
+            input_text = console.input(
                 "[white]type your response here: ")
             return input_text
 
@@ -123,7 +123,7 @@ class BumbleSpeech():
                     spoken_text = recognizer.recognize_google(audio)
                     self.spinner.stop()
 
-                    self.console.print(
+                    console.print(
                         '[white]You said, ' + spoken_text)
                 except sr.UnknownValueError:
                     self.spinner.stop()
@@ -141,7 +141,7 @@ class BumbleSpeech():
         # If we are in silent mode or the input queue is being used.
         if self.speech_mode == self.speech_modes[0] or \
                 len(self.input_queue) > 0:
-            self.console.print("[yellow]" + output)
+            console.print("[yellow]" + output)
             return
 
         # Voice mode
@@ -188,6 +188,16 @@ class BumbleSpeech():
         '''
         self.respond(question)
         answer = self.hear()
+        if self.interrupt_check(answer):
+            return 0
+        return answer
+
+    def choice_prompt(self, prompt: str, choices: list, default: str):
+        '''
+        Asks the user a prompt and loops until the response is within the list
+        of choices.
+        '''
+        answer = Prompt.ask(prompt, choices=choices, default=default)
         if self.interrupt_check(answer):
             return 0
         return answer
