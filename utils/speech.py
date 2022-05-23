@@ -7,6 +7,7 @@ from helpers import bumblebee_root
 from colorama import Fore
 from halo import Halo
 from collections import deque
+from rich.console import Console
 
 
 class BumbleSpeech():
@@ -18,6 +19,7 @@ class BumbleSpeech():
         self.engine.setProperty(
             'voice', 'com.apple.speech.synthesis.voice.tessa')
         self.engine.setProperty('rate', 210)
+        self.console = Console()
         self.input_queue = deque()
         self.YES_TERMS = [
             "yes",
@@ -63,13 +65,12 @@ class BumbleSpeech():
     def set_speech_mode(self, mode: str):
         '''Function to set speech mode.'''
         if not isinstance(mode, (str)):
-            return -1
+            raise Exception(f'{mode} is not a string.')
         mode = mode.lower()
         if mode in self.speech_modes:
             self.speech_mode = mode
         else:
             raise Exception(f'Could not find {mode} mode.')
-            return -1
         return 0
 
     def infinite_speaking_chances(func):
@@ -97,7 +98,8 @@ class BumbleSpeech():
 
         # For silent mode.
         if self.speech_mode == self.speech_modes[0]:
-            input_text = input(Fore.WHITE + 'type your response here: ')
+            input_text = self.console.input(
+                "[white]type your response here: ")
             return input_text
 
         # For voice mode.
@@ -121,7 +123,8 @@ class BumbleSpeech():
                     spoken_text = recognizer.recognize_google(audio)
                     self.spinner.stop()
 
-                    print(Fore.WHITE + 'You said, ' + spoken_text)
+                    self.console.print(
+                        '[white]You said, ' + spoken_text)
                 except sr.UnknownValueError:
                     self.spinner.stop()
                     self.respond('Sorry I did not hear you, please repeat.')
@@ -138,7 +141,7 @@ class BumbleSpeech():
         # If we are in silent mode or the input queue is being used.
         if self.speech_mode == self.speech_modes[0] or \
                 len(self.input_queue) > 0:
-            print(Fore.YELLOW + output)
+            self.console.print("[yellow]" + output)
             return
 
         # Voice mode
