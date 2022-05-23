@@ -54,6 +54,8 @@ class Feature(BaseFeature):
         Allows the user to enter employer info through the terminal.
         '''
         name = self.bs.ask_question("Please enter a name for the employer:")
+        if not name:
+            return
         Entry = Query()
         employer_details = {}
         employer_details["name"] = name.lower()

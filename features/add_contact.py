@@ -53,9 +53,15 @@ class Feature(BaseFeature):
         Allows user to enter contact details through the terminal.
         '''
         name = self.bs.ask_question("Please enter a name for the contact:")
+        if not name:
+            return
         email = self.bs.ask_question("Please enter an email for the contact:")
+        if not email:
+            return
         phone = self.bs.ask_question(
             "Please enter a phone number for the contact:")
+        if not phone:
+            return
         Entry = Query()
         contact_details = {}
         contact_details["name"] = name.lower()

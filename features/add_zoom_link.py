@@ -84,7 +84,11 @@ class Feature(BaseFeature):
         Allows user to enter zoom details within the terminal
         '''
         name = self.bs.ask_question("What is the name for this zoom link?")
-        link = input("Please paste the zoom link here")
+        if not name:
+            return
+        link = self.bs.ask_question("Please paste the zoom link here")
+        if not link:
+            return
         password = input("Please enter the password for the zoom link. Press enter if \
             there is no password.")
         if self.bs.approve("Would you like to edit your entry?"):
