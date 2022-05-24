@@ -2,8 +2,8 @@ from tinydb import TinyDB
 from rich.table import Table
 from utils.console import console
 from features.default import BaseFeature
-from consolemenu import *
-from consolemenu.items import *
+from consolemenu import MultiSelectMenu, Screen
+from consolemenu.items import FunctionItem
 
 
 class Feature(BaseFeature):
