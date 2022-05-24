@@ -3,7 +3,8 @@
 conda env create --name bumblebee-ai --file environment_mac.yml --force
 conda activate bumblebee-ai
 pip install -r requirements.txt
-pip install -e git+git://github.com/Omarzintan/ChatterBot.git@master#egg=chatterbot
+pip install -e git+https://github.com/Omarzintan/ChatterBot.git@master#egg=chatterbot
+pip install -e git+https://github.com/Omarzintan/chatterbot-corpus.git@master#egg=chatterbot-corpus
 python -m spacy download en_core_web_sm
 
 BUMBLEBEE_APP_FILE=/usr/local/bin/bumblebee
