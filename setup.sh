@@ -4,6 +4,9 @@ conda env create --name bumblebee-ai --file environment_mac.yml --force
 conda activate bumblebee-ai
 pip install -r requirements.txt
 pip install -e git+https://github.com/Omarzintan/ChatterBot.git@master#egg=chatterbot
+
+# In case issues come with downloading chatterbot-corpus, go to this link for a possible solution:
+# https://github.com/man-group/pytest-plugins/issues/87#issuecomment-1123830409 
 pip install -e git+https://github.com/Omarzintan/chatterbot-corpus.git@master#egg=chatterbot-corpus
 python -m spacy download en_core_web_sm
 
