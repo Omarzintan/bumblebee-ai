@@ -9,7 +9,7 @@ from halo import Halo
 from collections import deque
 from utils.console import console
 from rich.prompt import Prompt
-import readline
+import readline  # noqa
 
 
 class BumbleSpeech():
