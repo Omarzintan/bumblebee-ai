@@ -7,6 +7,9 @@ from helpers import bumblebee_root
 from colorama import Fore
 from halo import Halo
 from collections import deque
+from utils.console import console
+from rich.prompt import Prompt
+import readline
 
 
 class BumbleSpeech():
@@ -63,13 +66,12 @@ class BumbleSpeech():
     def set_speech_mode(self, mode: str):
         '''Function to set speech mode.'''
         if not isinstance(mode, (str)):
-            return -1
+            raise Exception(f'{mode} is not a string.')
         mode = mode.lower()
         if mode in self.speech_modes:
             self.speech_mode = mode
         else:
             raise Exception(f'Could not find {mode} mode.')
-            return -1
         return 0
 
     def infinite_speaking_chances(func):
@@ -97,7 +99,8 @@ class BumbleSpeech():
 
         # For silent mode.
         if self.speech_mode == self.speech_modes[0]:
-            input_text = input(Fore.WHITE + 'type your response here: ')
+            input_text = console.input(
+                "[white]type your response here: ")
             return input_text
 
         # For voice mode.
@@ -121,7 +124,8 @@ class BumbleSpeech():
                     spoken_text = recognizer.recognize_google(audio)
                     self.spinner.stop()
 
-                    print(Fore.WHITE + 'You said, ' + spoken_text)
+                    console.print(
+                        '[white]You said, ' + spoken_text)
                 except sr.UnknownValueError:
                     self.spinner.stop()
                     self.respond('Sorry I did not hear you, please repeat.')
@@ -138,7 +142,7 @@ class BumbleSpeech():
         # If we are in silent mode or the input queue is being used.
         if self.speech_mode == self.speech_modes[0] or \
                 len(self.input_queue) > 0:
-            print(Fore.YELLOW + output)
+            console.print("[yellow]" + output)
             return
 
         # Voice mode
@@ -185,6 +189,16 @@ class BumbleSpeech():
         '''
         self.respond(question)
         answer = self.hear()
+        if self.interrupt_check(answer):
+            return 0
+        return answer
+
+    def choice_prompt(self, prompt: str, choices: list, default: str):
+        '''
+        Asks the user a prompt and loops until the response is within the list
+        of choices.
+        '''
+        answer = Prompt.ask(prompt, choices=choices, default=default)
         if self.interrupt_check(answer):
             return 0
         return answer

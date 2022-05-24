@@ -1,6 +1,6 @@
 from features.default import BaseFeature
 from rich.table import Table
-from rich.console import Console
+from utils.console import console
 import time
 
 
@@ -28,16 +28,15 @@ class Feature(BaseFeature):
         return
 
     def show_features(self):
-        # get access to the intents file
-        intents_json = self.api.get_intents()
+        list_of_features = self.api.get_features()
 
-        console = Console()
-
-        table = Table(show_header=True, header_style="yellow")
+        table = Table(show_lines=True, show_header=True,
+                      title="List of Bumblebee features",
+                      header_style="yellow")
         table.add_column("Feature")
         table.add_column("Patterns")
-        for item in intents_json['intents']:
-            tag = item['tag']
-            patterns = item['patterns']
-            table.add_row(tag, str(patterns))
+        for feature in list_of_features:
+            tag = feature.tag_name
+            patterns = feature.patterns
+            table.add_row(tag, ', '.join(patterns))
         console.print(table)

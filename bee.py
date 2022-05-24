@@ -155,9 +155,9 @@ class Bee():
         '''Get the BumbleSpeech instance.'''
         return self.speech
 
-    def get_intents(self):
-        '''Get the intents json file Bee is running with.'''
-        return self.intents_json
+    def get_features(self):
+        '''Get the list of features currently running in the Bee'''
+        return self._features
 
     def get_internal_state(self):
         return {

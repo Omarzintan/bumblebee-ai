@@ -121,12 +121,12 @@ class BUMBLEBEEAPI():
         """
         return self.bee_instance.get_speech()
 
-    def get_intents(self):
+    def get_features(self):
         """
-        Gets the intents json file being used by bee instance.
-        Return type: JSON file
+        Gets the list of features in bee instance.
+        Return type: list
         """
-        return self.bee_instance.get_intents()
+        return self.bee_instance.get_features()
 
     def get_name(self):
         """

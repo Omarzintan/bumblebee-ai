@@ -20,7 +20,7 @@ class Feature(BaseFeature):
 
     def action(self, spoken_text, arguments_list: list = []):
         try:
-            self.add_employer_details()
+            self.term_add_employer_details()
             self.bs.respond('Added new employer successfully.')
         except Exception as exception:
             print(exception)
@@ -30,6 +30,7 @@ class Feature(BaseFeature):
 
     def add_employer_details(self):
         '''
+        DEPRECATED.
         Opens a PySimpleGui window to allow the user to add a new employer to
         the database.
         Arguments: None
@@ -44,6 +45,20 @@ class Feature(BaseFeature):
         Entry = Query()
         employer_details = {}
         employer_details["name"] = str(values['name'].lower())
+        self.employer_db.upsert(
+            employer_details, Entry.name == employer_details["name"]
+        )
+
+    def term_add_employer_details(self):
+        '''
+        Allows the user to enter employer info through the terminal.
+        '''
+        name = self.bs.ask_question("Please enter a name for the employer:")
+        if not name:
+            return
+        Entry = Query()
+        employer_details = {}
+        employer_details["name"] = name.lower()
         self.employer_db.upsert(
             employer_details, Entry.name == employer_details["name"]
         )

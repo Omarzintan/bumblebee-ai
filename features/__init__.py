@@ -30,7 +30,9 @@ __all__ = [
     'load_routines',
     'run_routine',
     'internet_speed_test',
-    'run_online_tasks'
+    'run_online_tasks',
+    'show_database',
+    'display_research_file'
 ]
 
 '''Essential Features that should be included in every custon list.'''
