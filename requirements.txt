@@ -5,7 +5,7 @@ EZGmail==2021.2.4
 Flask==1.1.2
 halo==0.0.31
 mdutils==1.3.0
-nltk==3.5
+nltk==3.6.6
 numpy==1.19.5
 playsound==1.2.2
 pvporcupine==1.9.4
