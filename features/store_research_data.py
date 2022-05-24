@@ -36,12 +36,11 @@ class Feature(BaseFeature):
             self.bs.respond('Failed to store research data.')
             return
 
-    '''
-    Retrieves research data from server and stores the data in
-    the research database.
-    '''
-
     def store_data(self):
+        '''
+        Retrieves research data from server and stores the data in
+        the research database.
+        '''
         # The research files folder is gauranteed to exist.
         research_files_path = self.config['Folders']['research_files']
         server_url = self.config['Utilities']['research_server_url']
