@@ -14,7 +14,7 @@ pyfiglet==0.8.post1
 pyperclip==1.8.2
 PySimpleGUI==4.56.0
 pyttsx3==2.90
-PyYAML==3.13
+PyYAML==6.0
 requests==2.25.1
 rich==10.16.2
 spacy==3.0.6

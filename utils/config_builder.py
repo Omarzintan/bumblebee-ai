@@ -100,7 +100,7 @@ def update_yaml(filename: str, keypath: List[str], value: Any):
 
 def laod_yaml(filepath: str):
     with open(filepath, "r") as ymlfile:
-        return yaml.load(ymlfile)
+        return yaml.safe_load(ymlfile)
 
 
 def create_fake_config():
