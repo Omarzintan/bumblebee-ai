@@ -28,3 +28,4 @@ wikipedia==1.4.0
 wolframalpha==5.0.0
 python-dotenv==0.19.2
 console-menu==0.7.1
+transformers==4.20.1
