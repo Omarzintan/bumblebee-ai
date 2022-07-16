@@ -1,5 +1,4 @@
 from tinydb import TinyDB, Query
-import PySimpleGUI as sg
 from features.default import BaseFeature
 
 
@@ -22,31 +21,6 @@ class Feature(BaseFeature):
             self.bs.respond('Could not add new contact.')
 
         return
-
-    def add_contact_details(self):
-        '''
-        DEPRECATED.
-        Opens a PysimpleGUI window to allow the user to add a new contact
-        to the database.
-        Arguments: None
-        Return type: None
-        '''
-        sg.theme('DarkAmber')
-        layout = [[sg.Text("Name:"), sg.InputText(key="name")],
-                  [sg.Text("Email:"), sg.InputText(key="email")],
-                  [sg.Text("phone:"), sg.InputText(key="phone")],
-                  [sg.Submit(), sg.Cancel()]
-                  ]
-        event, values = sg.Window("Add Contact", layout).read(close=True)
-
-        Entry = Query()
-        contact_details = {}
-        contact_details["name"] = str(values['name'].lower())
-        contact_details["email"] = str(values['email'].lower())
-        contact_details["phone"] = str(values['phone'])
-        self.contact_db.upsert(
-            contact_details, Entry.name == contact_details["name"]
-        )
 
     def term_add_contact_details(self):
         '''

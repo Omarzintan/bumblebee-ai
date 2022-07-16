@@ -5,7 +5,6 @@ import tempfile
 import subprocess
 import json
 import re
-import PySimpleGUI as sg
 from tinydb import TinyDB, Query
 from features.feature_helpers import get_search_query
 
@@ -98,45 +97,16 @@ class Feature(BaseFeature):
             self.bs.respond('Okay.')
         return
 
-    '''
-    Returns summary information of email details as heard from user.
-    Arguments: <string> recipient, <string> subject, <string> message
-    Return type: <string> summary
-    '''
-
     def summary_email(self, recipient_email, subject, message):
+        '''
+        Returns summary information of email details as heard from user.
+        Arguments: <string> recipient, <string> subject, <string> message
+        Return type: <string> summary
+        '''
         summary = 'To: {}\nSubject: {}\nMessage: {}'.format(
             recipient_email, subject, message
         )
         return summary
-
-    def email_edit(self, recipient_email, subject, message):
-        '''
-        DEPRECATED. Bubumblebee uses term_email_edit instead.
-        Opens up a PySimpleGUI window with email details to allow the user to
-        edit any of these details.
-        Arguments: <string> recipient_email, <string> subject, <string> message
-        Return type: <JSON> email_details_json
-        '''
-        sg.theme('DarkAmber')
-        layout = [[sg.Text("To:"),
-                   sg.InputText(default_text=recipient_email,
-                                key="recipient_email")],
-                  [sg.Text("Subject:"),
-                   sg.InputText(default_text=subject, key="subject")],
-                  [sg.Text("Message:"),
-                   sg.InputText(default_text=message, size=(50, 10),
-                                key="message")],
-                  [sg.Submit(), sg.Cancel()]
-                  ]
-        event, values = sg.Window(
-            "Edit Email", layout).read(close=True)
-        email_details = {}
-        email_details["recipient_email"] = str(values['recipient_email'])
-        email_details["subject"] = str(values["subject"])
-        email_details["message"] = str(values["message"])
-        email_details_json = json.dumps(email_details)
-        return email_details_json
 
     def term_email_edit(self, recipient_email, subject, message):
         '''

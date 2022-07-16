@@ -4,7 +4,6 @@ import threading
 import tempfile
 import subprocess
 from features.default import BaseFeature
-import PySimpleGUI as sg
 
 
 class StoreKeys:
@@ -38,27 +37,6 @@ class Feature(BaseFeature):
         self.api.store_var(StoreKeys.RESEARCH_TOPIC, topic)
         # start python flask server in new thread
         threading.Thread(target=self.start_server).start()
-
-    def topic_edit(self, topic):
-        '''
-        DEPRECATED.
-        Opens a PySimpleGUI window to allow the user to edit the research
-        topic as heard.
-        Argument: <string> topic
-        Return type: <JSON> topic_details_json
-        '''
-        sg.theme('DarkAmber')
-        layout = [[sg.Text("Topic:"),
-                   sg.InputText(default_text=topic, key="topic")],
-                  [sg.Submit(), sg.Cancel()]
-                  ]
-        event, values = sg.Window(
-            "Edit Research Topic", layout).read(close=True)
-
-        topic_details = {}
-        topic_details["topic"] = str(values['topic'])
-        topic_details_json = json.dumps(topic_details)
-        return topic_details_json
 
     def term_topic_edit(self, topic):
         '''
