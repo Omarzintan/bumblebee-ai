@@ -1,6 +1,4 @@
 from features.default import BaseFeature
-import PySimpleGUI as sg
-import pytermgui as ptg
 from tinydb import TinyDB, Query
 import tempfile
 import subprocess
@@ -30,54 +28,6 @@ class Feature(BaseFeature):
             print(exception)
             self.bs.respond('Could not add zoom link.')
         return
-
-    def add_zoom_details(self):
-        '''
-        DEPRECATED.
-        Opens a PySimpleGUI window to allow the user to add a zoom link to the
-        database.
-        Arguments: None
-        Return type: None
-        This will be deprecated soon
-        '''
-        sg.theme('DarkAmber')
-        layout = [[sg.Text("Name:"), sg.InputText(key="name")],
-                  [sg.Text("Link:"), sg.InputText(key="link")],
-                  [sg.Text("Password (optional):"),
-                   sg.InputText(key="password")],
-                  [sg.Submit(), sg.Cancel()]
-                  ]
-        event, values = sg.Window("Add New Zoom link", layout).read(close=True)
-
-        Entry = Query()
-        zoom_details = {}
-        zoom_details["name"] = str(values['name'].lower())
-        zoom_details["link"] = str(values['link'].lower())
-        zoom_details["password"] = str(values['password'])
-        self.zoom_db.upsert(
-            zoom_details, Entry.name == zoom_details["name"]
-        )
-
-    def enter_zoom_details(self):
-        '''
-        DEPRECATED.
-        Allows user to enter zoom details in a GUI window.
-        '''
-        with ptg.WindowManager() as manager:
-            name_field = ptg.InputField(prompt="Name:", expect=str)
-            link_field = ptg.InputField(prompt="Link:", expect=str)
-            window = ptg.Window(
-                ptg.Label("[210 bold]Hello world!"),
-                ptg.Label(),
-                name_field,
-                link_field,
-                ptg.Label(),
-                ptg.Button("Submit!", lambda *_: manager.stop())
-            )
-            manager.add(window)
-            manager.run()
-            print(name_field.get_lines())
-            print(link_field.get_lines())
 
     def term_enter_zoom_details(self):
         '''

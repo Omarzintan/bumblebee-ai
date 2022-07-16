@@ -12,7 +12,6 @@ pvporcupine==1.9.4
 PyAudio==0.2.11
 pyfiglet==0.8.post1
 pyperclip==1.8.2
-PySimpleGUI==4.56.0
 pyttsx3==2.90
 PyYAML==6.0
 requests==2.25.1

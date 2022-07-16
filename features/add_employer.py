@@ -1,5 +1,4 @@
 from features.default import BaseFeature
-import PySimpleGUI as sg
 from tinydb import TinyDB, Query
 
 
@@ -27,27 +26,6 @@ class Feature(BaseFeature):
             self.bs.respond('Could not add new employer.')
 
         return
-
-    def add_employer_details(self):
-        '''
-        DEPRECATED.
-        Opens a PySimpleGui window to allow the user to add a new employer to
-        the database.
-        Arguments: None
-        Return type: None
-        '''
-        sg.theme('DarkAmber')
-        layout = [[sg.Text("Name:"), sg.InputText(key="name")],
-                  [sg.Submit(), sg.Cancel()]
-                  ]
-        event, values = sg.Window("Add Employer", layout).read(close=True)
-
-        Entry = Query()
-        employer_details = {}
-        employer_details["name"] = str(values['name'].lower())
-        self.employer_db.upsert(
-            employer_details, Entry.name == employer_details["name"]
-        )
 
     def term_add_employer_details(self):
         '''
