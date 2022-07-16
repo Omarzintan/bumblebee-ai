@@ -24,7 +24,6 @@ def build_config():
     config["Database"]["employers"] = bumblebee_root+"database/employers_db" \
                                                      ".json"
     config["Database"]["contacts"] = bumblebee_root+"database/contacts_db.json"
-    config["Database"]["chatbot"] = bumblebee_root+"database/chatbot.sqlite3"
     config["Database"]["routines"] = bumblebee_root+"database/routines_db.json"
 
     config["Api_keys"] = {}
@@ -98,7 +97,7 @@ def update_yaml(filename: str, keypath: List[str], value: Any):
         write_yaml(updated_data, filename)
 
 
-def laod_yaml(filepath: str):
+def load_yaml(filepath: str):
     with open(filepath, "r") as ymlfile:
         return yaml.safe_load(ymlfile)
 

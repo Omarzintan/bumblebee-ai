@@ -40,7 +40,7 @@ class BumblebeeWrapper():
             # Access config file
             # ------------------
             spinner.start(text="Accessing configuration file")
-            self.config = config_builder.laod_yaml(self.config_path)
+            self.config = config_builder.load_yaml(self.config_path)
             # TODO: add exception to catch if the config file is
             # corrupted/not of the right shape/vital configs are missing
             spinner.succeed()
@@ -59,7 +59,7 @@ class BumblebeeWrapper():
                 text="Configuration file built successfully at 'utils/" +
                 self.config_yaml_name+".yaml'"
             )
-            self.config = config_builder.laod_yaml(self.config_path)
+            self.config = config_builder.load_yaml(self.config_path)
         finally:
             self.name = self.config["Preferences"]["wake_phrase"]
             # Ensure that necessary directories exist.
@@ -101,7 +101,7 @@ class BumblebeeWrapper():
                             self.config_path,
                             ['Api_keys', 'bumblebee_online'],
                             api_key)
-                        self.config = config_builder.laod_yaml(
+                        self.config = config_builder.load_yaml(
                             self.config_path)
 
                         spinner.succeed(
