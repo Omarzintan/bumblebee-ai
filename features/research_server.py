@@ -1,13 +1,13 @@
 from flask import Flask, jsonify, request
 import time
 import sys
-from helpers import bumblebee_root
+from utils.helpers import bumblebee_root
 from logging.config import fileConfig
 
 '''
 This file contains server code to be used for researching.
 The server works hand in hand with a chrome extension to implement
-research mode. (Found in the extension folder)
+research mode. (Found in the chrome extension folder)
 '''
 
 app = Flask(__name__)

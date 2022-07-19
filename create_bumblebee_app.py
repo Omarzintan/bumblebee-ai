@@ -1,4 +1,4 @@
-from helpers import bumblebee_root, python3_path
+from utils.helpers import bumblebee_root, python3_path
 
 with open("bumblebee_app", "w") as file:
     file.write("#!/bin/sh\n")

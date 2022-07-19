@@ -1,6 +1,6 @@
 #!/bin/bash
 
-conda env create --name bumblebee-ai --file environment_mac.yml --force
+conda env create --name bumblebee-ai --file environment_setup/environment_mac.yml --force
 conda activate bumblebee-ai
 pip install -r requirements.txt
 

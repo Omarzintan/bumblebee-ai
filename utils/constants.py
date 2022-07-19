@@ -1,5 +1,5 @@
 "Centralized location for constants"
-import utils.env as env
+import environment_setup.env as env
 
 BUMBLEBEE_ONLINE_BASE_URL_PROD = 'https://bumblebee-online.herokuapp.com'
 BUMBLEBEE_ONLINE_BASE_URL_LOCAL = 'http://127.0.0.1:8000'

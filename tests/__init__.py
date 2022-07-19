@@ -1,7 +1,7 @@
 from utils.speech import BumbleSpeech
 from utils.bumblebee_internal_api import BUMBLEBEEAPI
 from utils import config_builder
-from helpers import bumblebee_root
+from utils.helpers import bumblebee_root
 
 
 class MockBee():

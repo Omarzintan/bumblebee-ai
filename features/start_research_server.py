@@ -61,7 +61,7 @@ class Feature(BaseFeature):
         bumblebee_dir = self.config['Common']['bumblebee_dir']
         # Create the subprocess for the flask server.
         research_server_proc = subprocess.Popen(
-            [python3_path, bumblebee_dir+'server.py'],
+            [python3_path, bumblebee_dir+'features/research_server.py'],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         self.api.store_var(

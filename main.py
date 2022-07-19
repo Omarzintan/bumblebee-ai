@@ -1,4 +1,4 @@
-from bumblebee_wrapper import BumblebeeWrapper
+from core.bumblebee_wrapper import BumblebeeWrapper
 
 if __name__ == "__main__":
     bee_wrapper = BumblebeeWrapper(

@@ -5,8 +5,7 @@ config/config.yaml
 '''
 from typing import Any, List
 import yaml
-from helpers import bumblebee_root
-from helpers import python3_path
+from utils.helpers import bumblebee_root, python3_path
 import copy
 
 
@@ -28,7 +27,6 @@ def build_config():
 
     config["Api_keys"] = {}
     config["Api_keys"]["wolframalpha"] = "YOUR_API_KEY_HERE"
-    config["Api_keys"]["gmail"] = "YOUR_PATH_TO_GMAIL_CREDENTIALS_FILE"
     config["Api_keys"]["bumblebee_online"] = "YOUR_BUMBLEBEE_ONLINE_API_KEY"
 
     config["Folders"] = {}
@@ -37,6 +35,8 @@ def build_config():
     config["Folders"]["models"] = bumblebee_root+"models/"
     config["Folders"]["routines"] = bumblebee_root+"routines/"
     config["Folders"]["intents"] = bumblebee_root+"utils/intents/"
+    config["Folders"]["gmail_credentials"] = bumblebee_root + \
+        "gmail_credentials/"
 
     config["Utilities"] = {}
     config["Utilities"]["research_server_url"] = "http://127.0.0.1:5000"

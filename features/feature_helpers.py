@@ -1,6 +1,6 @@
 '''Contains helper functions that can be used by any feature.'''
 from rich.markdown import Markdown
-from nltk_utils import tokenize
+from utils.nltk_utils import tokenize
 from utils.console import console
 
 

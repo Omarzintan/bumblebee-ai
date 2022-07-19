@@ -3,7 +3,7 @@
 import speech_recognition as sr
 import playsound
 import pyttsx3
-from helpers import bumblebee_root
+from utils.helpers import bumblebee_root
 from colorama import Fore
 from halo import Halo
 from collections import deque
