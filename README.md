@@ -1,5 +1,6 @@
 # bumblebee-ai
 Virtual Assistant in Python
+![](images/bumblebee-logo.png)
 
 ## About
 Bumblebee is a voice assistant that was made with the intention of automating certain boring or otherwise tedious tasks on the computer. Bumblebee was also made with the goal of being easily extendible. Bumblebee has two approached to inferring the intent of commands, namely a neural-network-based approach and a rule-based approach. 
