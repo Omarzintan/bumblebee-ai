@@ -3,7 +3,7 @@ Virtual Assistant in Python
 ![](images/bumblebee-logo.png)
 
 ## About
-Bumblebee is a voice assistant that was made with the intention of automating certain boring or otherwise tedious tasks on the computer. Bumblebee was also made with the goal of being easily extendible. Bumblebee has two approached to inferring the intent of commands, namely a neural-network-based approach and a rule-based approach. 
+Bumblebee is a voice assistant that was made with the intention of automating certain boring or otherwise tedious tasks on the computer. Bumblebee was also made with the goal of being easily extendible. Bumblebee has two approaches to inferring the intent of commands, namely a neural-network-based approach and a rule-based approach. 
 * The neural-network-based approach works with a Deep Neural Network that is trained on the input patterns of the all features (skills) that the assistant can perform. This trained Deep Neural Network is then used to infer which feature a user wants to run based on their input.
 * The rule-based approach basically examines the input text from a user to see if the input matches any of the input patterns of the features (skills).
 
