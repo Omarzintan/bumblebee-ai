@@ -6,9 +6,9 @@ import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
-from nltk_utils import bag_of_words, tokenize, stem
-from model import NeuralNet
-from helpers import bumblebee_root
+from utils.nltk_utils import bag_of_words, tokenize, stem
+from utils.model import NeuralNet
+from utils.helpers import bumblebee_root
 
 
 class IntentDataset(Dataset):

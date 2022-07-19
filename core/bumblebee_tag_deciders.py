@@ -1,11 +1,11 @@
 import json
 import os
-from nltk_utils import bag_of_words, tokenize
+from utils.nltk_utils import bag_of_words, tokenize
 import torch
-from model import NeuralNet
+from utils.model import NeuralNet
 
-from train import IntentsTrainer
-from helpers import spinner
+from utils.speech_model_train import IntentsTrainer
+from utils.helpers import spinner
 
 
 class TagDecider:

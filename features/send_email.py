@@ -1,3 +1,7 @@
+'''
+This feature sends an email to one of your contacts.
+Be sure to put your gmail credential files into the gmail_credentials folder.
+'''
 from features.default import BaseFeature
 import difflib
 import ezgmail
@@ -21,7 +25,7 @@ class Feature(BaseFeature):
 
         contacts_db_path = self.config['Database']['contacts']
         self.contacts_db = TinyDB(contacts_db_path)
-        self.bumblebee_dir = self.config['Common']['bumblebee_dir']
+        self.gmail_creds_folder = self.config['Folders']['gmail_credentials']
 
     def action(self, spoken_text, arguments_list: list = []):
         # Set the input queue of the speech object to the arguments list if it
@@ -87,8 +91,8 @@ class Feature(BaseFeature):
         if self.bs.approve("Would you like to send this email?"):
             # send email
             ezgmail.init(
-                tokenFile=self.bumblebee_dir+'token.json',
-                credentialsFile=self.bumblebee_dir+'credentials.json'
+                tokenFile=self.gmail_creds_folder+'token.json',
+                credentialsFile=self.gmail_creds_folder+'credentials.json'
             )
             message += "\n\n Bumblebee (Zintan's ai assistant)"
             ezgmail.send(recipient_email, subject, message)

@@ -3,10 +3,11 @@ This is a class responsible for spawning a bee (virtual assistant).
 '''
 
 import os
-from bee import Bee
+from core.bee import Bee
+from environment_setup import env
 from utils.wake_word_detector import WakeWordDetector
-from utils import config_builder, env
-from helpers import bumblebee_root, spinner, log_user_in, get_api_key
+from utils import config_builder
+from utils.helpers import bumblebee_root, spinner, log_user_in, get_api_key
 from features import feature_lists
 import pyfiglet
 

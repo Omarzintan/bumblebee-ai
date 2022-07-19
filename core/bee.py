@@ -6,7 +6,7 @@ from utils.bumblebee_internal_api import BUMBLEBEEAPI
 from utils.speech import BumbleSpeech
 import importlib
 import os
-from utils.bumblebee_tag_deciders \
+from core.bumblebee_tag_deciders \
     import NeuralNetworkTagDecider, \
     RuleBasedTagTagDecider
 

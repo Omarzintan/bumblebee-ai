@@ -19,7 +19,6 @@ dependencies:
   - xz=5.2.5=h1de35cc_0
   - zlib=1.2.11=h1de35cc_3
   - pip:
-    - en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0-py3-none-any.whl
     - pyobjc==7.1
     - pyobjc-core==7.1
     - pyobjc-framework-accessibility==7.1
